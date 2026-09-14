@@ -84,6 +84,20 @@ Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
 | 6.0 → 7.0 | 🔧 Migrasi & asset selesai, reindex ES sedang berjalan | [NOTES.md](hop-6.0-to-7.0/NOTES.md) (8 insiden: pkg-config, pnpm CI=true, krisis disk, Redis ≥6, bug urutan migrasi `recent_closes`, asset pipeline 500) · [CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md) · [RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md) |
 | 7.0 → 7.1.3 | ⬜ Belum |
 
+## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi)
+
+Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokumentasi
+"catat sambil eksekusi" selama upgrade masih berjalan. Setelah seluruh proses sampai
+7.1.3 selesai dan tervalidasi, terapkan:
+
+1. Migrasi semua `CHANGELOG.md` per-hop ke format standar
+   [Keep a Changelog](https://keepachangelog.com) (kategori Added/Changed/Fixed/Removed)
+   — saat ini masih pakai heading bebas per topik.
+2. Tambahkan daftar isi/ringkasan singkat di awal `NOTES.md` yang sudah panjang
+   (terutama hop 6.0→7.0 dengan 8 insiden), supaya lebih cepat dinavigasi.
+3. Review duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/`CHANGELOG.md`
+   per hop — pertimbangkan apakah perlu dipangkas atau dibiarkan (audiens beda-beda).
+
 ## Catatan keamanan
 
 **Jangan simpan password asli di file manapun di folder ini.** Semua `database.yml` di sini
