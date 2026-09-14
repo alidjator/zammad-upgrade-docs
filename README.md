@@ -97,6 +97,9 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
    (terutama hop 6.0→7.0 dengan 8 insiden), supaya lebih cepat dinavigasi.
 3. Review duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/`CHANGELOG.md`
    per hop — pertimbangkan apakah perlu dipangkas atau dibiarkan (audiens beda-beda).
+4. Bakukan bahasa di seluruh dokumen — saat ini masih semi-formal/informal teknis
+   (mis. "kalau" → "jika/apabila", "kita" dihindari atau diganti kalimat pasif,
+   "makanya"/"jadi" sebagai penghubung → "sehingga"/"oleh karena itu").
 
 ## Catatan keamanan
 
