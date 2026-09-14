@@ -1,4 +1,4 @@
-# Hop 6.0 → 7.0 — Catatan Lengkap (Status: 🔧 Migrasi & asset selesai, reindex ES sedang berjalan)
+# Hop 6.0 → 7.0 — Catatan Lengkap (Status: ✅ Selesai & Tervalidasi)
 
 ## Ringkasan requirement (hasil riset awal, tervalidasi lewat eksekusi nyata)
 
@@ -248,4 +248,8 @@ bisa dijadikan bukti tunggal):**
 - ✅ `assets:precompile` — sukses manual, halaman web `200 OK` setelah restart
 - ✅ `searchindex:rebuild` — selesai penuh setelah 2 kali retry (Insiden 8 & 9), semua
   model tereindeks, jumlah dokumen di ES cocok dengan data sumber
-- 🔧 Verifikasi UI/search penuh — menunggu konfirmasi pencarian tiket di browser
+- ✅ Verifikasi UI/search penuh — Admin → System → Version menampilkan "This is Zammad
+  version 7.0.0", pencarian tiket lewat UI (kata kunci "kehadiran") mengembalikan 964
+  hasil dengan data lengkap dan benar
+
+**Hop 6.0 → 7.0: SELESAI & TERVALIDASI.**
