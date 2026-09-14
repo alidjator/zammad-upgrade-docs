@@ -53,6 +53,9 @@ diarahkan ke environment staging.** Produksi asli (project Docker Compose `zamma
   masih dipakai sampai hop 3).
 - Node.js: bawaan Debian per hop 1-2, **mulai hop 3 (Zammad 6.0) wajib Node.js 18.x via
   NodeSource** karena adopsi Vite (build tool JS baru) yang mensyaratkan Node ≥16.
+  **Mulai hop 6.0→7.0, naik lagi ke Node.js 20.x, dan package manager JS berganti dari
+  Yarn ke pnpm** (Zammad mem-pin versi pnpm lewat `package.json`, di-fetch otomatis
+  pakai `corepack`).
 - Reverse proxy: nginx di host (bukan container), config di `/etc/nginx/conf.d/helpdesk.satu.solutions.conf`.
 
 ## Lokasi kerja di server
@@ -78,7 +81,7 @@ Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
 | 4.0 → 5.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-4.0-to-5.0/NOTES.md) (keputusan pindah ke MariaDB 10.11) · [CHANGELOG.md](hop-4.0-to-5.0/CHANGELOG.md) · [RUNBOOK.md](hop-4.0-to-5.0/RUNBOOK.md) |
 | 5.0 → 6.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-5.0-to-6.0/NOTES.md) (Redis hard dependency, Vite/Node.js 18) · [CHANGELOG.md](hop-5.0-to-6.0/CHANGELOG.md) · [RUNBOOK.md](hop-5.0-to-6.0/RUNBOOK.md) |
 | Migrasi MariaDB → PostgreSQL | ✅ **Selesai & tervalidasi** | [NOTES.md](postgres-migration/NOTES.md) (0 error, 11,3 juta baris) · [RUNBOOK.md](postgres-migration/RUNBOOK.md) |
-| 6.0 → 7.0 | 🔜 Siap dimulai |
+| 6.0 → 7.0 | 🔧 Riset requirement selesai, eksekusi belum dimulai | [NOTES.md](hop-6.0-to-7.0/NOTES.md) (Ruby 3.4.8, Rails loncat ke 8.0.4, Yarn→pnpm, MySQL dihapus total) · [CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md) · [RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md) |
 | 7.0 → 7.1.3 | ⬜ Belum |
 
 ## Catatan keamanan

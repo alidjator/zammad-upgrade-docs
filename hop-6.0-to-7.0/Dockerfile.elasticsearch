@@ -1,0 +1,7 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.28
+
+# Tidak berubah dari hop sebelumnya - requirement Zammad 7.0 adalah ES >=7.8, <10,
+# jadi 7.17.28 masih memenuhi. Volume data JUGA tidak perlu diganti (bukan pergantian
+# major version ES) - tapi tetap wajib rebuild index setelah hop ini karena Zammad 7.0
+# mengubah skema ASCII-folding di search index (lihat ROADMAP.md).
+RUN bin/elasticsearch-plugin install --batch ingest-attachment

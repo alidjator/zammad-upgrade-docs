@@ -1,0 +1,28 @@
+# TEMPLATE — jangan isi password asli di file ini.
+# Password asli hanya ada di server: /usr/local/src/zammad-staging/database.yml
+#
+# Sama seperti pasca migrasi PostgreSQL - MySQL/MariaDB sudah dihapus total dari
+# Zammad 7.0 (adapter mysql2 tidak ada lagi di Gemfile.lock), jadi tidak ada opsi
+# lain selain PostgreSQL mulai hop ini.
+
+default: &default
+  pool: 50
+  timeout: 5000
+  encoding: unicode
+  adapter: postgresql
+  username: __GANTI_DENGAN_USERNAME_ASLI__
+  password: __GANTI_DENGAN_PASSWORD_ASLI__
+  host: host.docker.internal
+  port: 5432
+
+production:
+  <<: *default
+  database: __GANTI_DENGAN_NAMA_DATABASE_ASLI__
+
+development:
+  <<: *default
+  database: zammad_development
+
+test:
+  <<: *default
+  database: zammad_test
