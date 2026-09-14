@@ -11,18 +11,18 @@ kemungkinan bisa lebih cepat dari angka ini.
 | Hop | Build image | Migrasi schema | Reindex ES | Total (kalau reindex ditunggu) |
 |---|---|---|---|---|
 | 3.4.0 → 4.0 | ~8 menit | 1m33s | ~4,6 jam | **~4,8 jam** |
-| 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam ⚠️ | **~4,5 jam** |
+| 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam | **~4,5 jam** |
 | 5.0 → 6.0 | ~11 menit | 9m25s | ~5,6 jam | **~5,9 jam** |
 | 6.0 → 7.0 | ~12 menit | belum terukur presisi ⚠️ | ~3,1 jam (11.201 detik) | **~3,3 jam** (perkiraan) |
 
-⚠️ **Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
-dengan cara yang sama untuk hop 3.4.0→4.0, 5.0→6.0, dan 6.0→7.0: menjumlahkan baris
-"done in X seconds" yang dicetak `Benchmark.realtime` bawaan rake task Zammad sendiri
-(`lib/tasks/zammad/search_index_es.rake`), didominasi step `Ticket` dan `User`. Untuk
-**hop 4.0→5.0**, breakdown detik per model TIDAK ditemukan tercatat di
-[hop-4.0-to-5.0/NOTES.md](hop-4.0-to-5.0/NOTES.md) — angka ~4,3 jam di baris itu
-kemungkinan diukur dengan cara sama tapi rinciannya tidak ikut didokumentasikan saat
-itu, jadi metodenya tidak bisa diverifikasi ulang dari dokumentasi yang ada. Untuk
+**Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
+dengan cara yang **sama untuk keempat hop**: menjumlahkan baris "done in X seconds"
+yang dicetak `Benchmark.realtime` bawaan rake task Zammad sendiri
+(`lib/tasks/zammad/search_index_es.rake`), didominasi step `Ticket` dan `User`.
+Rinciannya ada di NOTES.md masing-masing hop: 3.4.0→4.0 (`Ticket` 15.144s/~4,2 jam,
+`User` 1.296s/~21,6 menit), 4.0→5.0 (`Ticket` 13.570s/~3,8 jam, `User` 1.244s/~20,7
+menit), 5.0→6.0 (`Ticket` 18.260s/~5,1 jam, `User` 1.790s/~29,8 menit), 6.0→7.0
+(`Ticket` 9.600s/~2,7 jam, `User` 1.404s/~23,4 menit). Untuk
 **hop 6.0→7.0**, migrasi schema-nya sendiri belum diukur presisi (fokus saat eksekusi
 ada di debugging bug urutan migrasi `recent_closes` — lihat
 [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md) Insiden 6) — 78 migrasi historis
