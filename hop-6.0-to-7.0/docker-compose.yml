@@ -35,6 +35,10 @@ services:
 
   zammad-app:
     build: .
+    # image: sama di ketiga service (app/websocket/scheduler) supaya `docker compose
+    # build` cuma build SEKALI dan dipakai ulang - Dockerfile-nya identik, tanpa ini
+    # Compose akan build 3 image terpisah (~4GB x3) yang boros disk & waktu build.
+    image: zammad-staging-app:7.0.0
     depends_on: [zammad-redis, zammad-elasticsearch]
     # PostgreSQL ada di HOST (bukan container) sejak migrasi - butuh host.docker.internal.
     extra_hosts:
@@ -51,6 +55,7 @@ services:
 
   zammad-websocket:
     build: .
+    image: zammad-staging-app:7.0.0
     depends_on: [zammad-redis, zammad-elasticsearch]
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -65,6 +70,7 @@ services:
 
   zammad-scheduler:
     build: .
+    image: zammad-staging-app:7.0.0
     depends_on: [zammad-redis, zammad-elasticsearch]
     extra_hosts:
       - "host.docker.internal:host-gateway"
