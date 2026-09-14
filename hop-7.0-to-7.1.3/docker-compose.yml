@@ -1,0 +1,80 @@
+name: zammad-staging
+
+services:
+  # Dibiarkan tetap ada, tidak ada service yang depends_on ke sini sejak hop 6.0->7.0.
+  # Pertimbangkan dimatikan/dihapus setelah hop TERAKHIR ini stabil beberapa hari
+  # (lihat README.md - keputusan akhir proyek).
+  zammad-mariadb-legacy:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: __GANTI_DENGAN_ROOT_PASSWORD_ASLI__
+      MARIADB_DATABASE: zammad_staging
+      MARIADB_USER: zammad_staging
+      MARIADB_PASSWORD: __GANTI_DENGAN_PASSWORD_ASLI__
+    volumes: [mariadb-legacy-data:/var/lib/mysql]
+    restart: unless-stopped
+
+  zammad-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  zammad-elasticsearch:
+    build:
+      context: .
+      dockerfile: Dockerfile.elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes: [es-data-7:/usr/share/elasticsearch/data]
+    restart: unless-stopped
+
+  zammad-app:
+    build: .
+    image: zammad-staging-app:7.1.3
+    depends_on: [zammad-redis, zammad-elasticsearch]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://zammad-redis:6379
+      RAILS_SERVE_STATIC_FILES: 'true'
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    command: ["bash", "-c", "rm -f tmp/pids/server.pid; bundle exec rake assets:precompile RAILS_ENV=production; bundle exec rails server -b 0.0.0.0"]
+    ports: ["3010:3000"]
+    restart: unless-stopped
+
+  zammad-websocket:
+    build: .
+    image: zammad-staging-app:7.1.3
+    depends_on: [zammad-redis, zammad-elasticsearch]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://zammad-redis:6379
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    command: ["bash", "-c", "bundle exec ruby script/websocket-server.rb start -b 0.0.0.0 -p 6042"]
+    ports: ["127.0.0.1:16043:6042"]
+    restart: unless-stopped
+
+  zammad-scheduler:
+    build: .
+    image: zammad-staging-app:7.1.3
+    depends_on: [zammad-redis, zammad-elasticsearch]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://zammad-redis:6379
+      BACKGROUND_SERVICES_LOG_TO_STDOUT: '1'
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    command: ["bash", "-c", "bundle exec ruby script/background-worker.rb start"]
+    restart: unless-stopped
+
+volumes:
+  es-data-7:
+  mariadb-legacy-data:

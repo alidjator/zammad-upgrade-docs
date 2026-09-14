@@ -1,0 +1,8 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.28
+
+# Requirement Zammad 7.1.3 masih sama (>=7.8, <10) - ES 7.17.28 tetap dipakai.
+# CATATAN untuk masa depan (bukan blocker hop ini): BREAKING_CHANGES.md Zammad 7.1
+# resmi menyatakan "Elasticsearch 7 deprecated" - versi Zammad SETELAH 7.1.3 akan
+# mewajibkan ES 8+. Tidak relevan untuk hop ini (7.1.3 adalah rilis terakhir di
+# roadmap proyek ini), tapi dicatat untuk siapa pun yang melanjutkan upgrade nanti.
+RUN bin/elasticsearch-plugin install --batch ingest-attachment
