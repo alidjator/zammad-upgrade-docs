@@ -1,0 +1,29 @@
+# TEMPLATE — jangan isi password asli di file ini.
+# Password asli hanya ada di server: /usr/local/src/zammad-staging/database.yml
+#
+# Host di sini adalah nama SERVICE docker-compose (zammad-mariadb-legacy), BUKAN
+# host.docker.internal lagi - mulai hop ini, database staging jalan sebagai container
+# terpisah (MariaDB 10.11, seumuran era Zammad 5.0/6.0) untuk menghindari bug kompatibilitas
+# Rails 6.0 mysql2 adapter vs MariaDB 11.8.3 modern. Lihat NOTES.md untuk detail.
+
+default: &default
+  pool: 50
+  timeout: 5000
+  encoding: utf8
+  adapter: mysql2
+  username: zammad_staging
+  password: __GANTI_DENGAN_PASSWORD_ASLI__
+
+production:
+  <<: *default
+  database: zammad_staging
+  host: zammad-mariadb-legacy
+  port: 3306
+
+development:
+  <<: *default
+  database: zammad_development
+
+test:
+  <<: *default
+  database: zammad_test

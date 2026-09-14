@@ -1,0 +1,6 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+
+# Plugin ini dibutuhkan Zammad untuk ekstraksi teks dari attachment tiket
+# (search index pipeline). Tanpa ini, "searchindex:rebuild" gagal di step
+# create_pipeline dengan error "No processor type exists with name [attachment]".
+RUN bin/elasticsearch-plugin install --batch ingest-attachment

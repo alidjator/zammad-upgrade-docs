@@ -1,0 +1,5 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.28
+
+# Plugin ini dibutuhkan Zammad untuk ekstraksi teks dari attachment tiket (search index
+# pipeline). Sama seperti di ES 6.8.23, cuma base image-nya yang naik ke 7.x.
+RUN bin/elasticsearch-plugin install --batch ingest-attachment

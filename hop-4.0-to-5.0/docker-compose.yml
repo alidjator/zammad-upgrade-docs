@@ -1,0 +1,81 @@
+name: zammad-staging
+
+services:
+  zammad-redis:
+    image: redis:5
+    restart: unless-stopped
+
+  # MariaDB versi lama (seumuran rilis Zammad 5.0/6.0, ~2021-2023), dipakai KHUSUS untuk
+  # staging selama proses upgrade hop 4.0 -> 6.0. Ini BUKAN production database - production
+  # tetap di MariaDB 11.8.3 host (zammad_production), terisolasi total.
+  #
+  # Alasan: Rails 6.0's mysql2 adapter (era 2019-2021) punya beberapa bug parsing metadata
+  # kolom terhadap MariaDB 11.x (yang mengubah cara literal COLUMN_DEFAULT di-quote sejak
+  # 10.2.7, plus perubahan lain di protokol type-reporting). Menjalankan versi Zammad yang
+  # memang dirancang untuk era MariaDB ini menghindari seluruh kelas bug tersebut sekaligus.
+  # Setelah hop mencapai Zammad >=5.3, data di sini dimigrasikan ke PostgreSQL (sesuai
+  # rencana upgrade yang sudah ditetapkan, sebelum hop ke 7.0).
+  zammad-mariadb-legacy:
+    image: mariadb:10.11
+    environment:
+      # GANTI dengan password asli - jangan pernah commit password sungguhan ke repo.
+      # Password asli hanya ada di server (/usr/local/src/zammad-staging/docker-compose.yml).
+      MARIADB_ROOT_PASSWORD: __GANTI_DENGAN_ROOT_PASSWORD_ASLI__
+      MARIADB_DATABASE: zammad_staging
+      MARIADB_USER: zammad_staging
+      MARIADB_PASSWORD: __GANTI_DENGAN_PASSWORD_ASLI__
+    volumes: [mariadb-legacy-data:/var/lib/mysql]
+    restart: unless-stopped
+
+  zammad-elasticsearch:
+    build:
+      context: .
+      dockerfile: Dockerfile.elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # PENTING: volume BARU (es-data-7), bukan "es-data" lama dari hop 4.0 (ES 6.8.23).
+    # Format index Lucene tidak kompatibel lintas major version ES - jangan reuse volume lama.
+    volumes: [es-data-7:/usr/share/elasticsearch/data]
+    restart: unless-stopped
+
+  zammad-app:
+    build: .
+    depends_on: [zammad-redis, zammad-elasticsearch, zammad-mariadb-legacy]
+    environment:
+      RAILS_ENV: production
+      RAILS_SERVE_STATIC_FILES: 'true'
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    # assets:precompile dijalankan di sini (runtime), bukan di Dockerfile (build time) -
+    # lihat catatan di Dockerfile soal kenapa. Menambah waktu startup tiap kali container
+    # restart, tapi diperlukan karena DB baru bisa diakses saat container benar-benar jalan.
+    command: ["bash", "-c", "rm -f tmp/pids/server.pid; bundle exec rake assets:precompile RAILS_ENV=production; bundle exec rails server -b 0.0.0.0"]
+    ports: ["3010:3000"]
+    restart: unless-stopped
+
+  zammad-websocket:
+    build: .
+    depends_on: [zammad-redis, zammad-elasticsearch, zammad-mariadb-legacy]
+    environment:
+      RAILS_ENV: production
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    command: ["bash", "-c", "bundle exec ruby script/websocket-server.rb start -b 0.0.0.0 -p 6042"]
+    ports: ["127.0.0.1:16043:6042"]
+    restart: unless-stopped
+
+  zammad-scheduler:
+    build: .
+    depends_on: [zammad-redis, zammad-elasticsearch, zammad-mariadb-legacy]
+    environment:
+      RAILS_ENV: production
+    volumes:
+      - ./database.yml:/opt/zammad/config/database.yml:ro
+    command: ["bash", "-c", "bundle exec ruby script/scheduler.rb run"]
+    restart: unless-stopped
+
+volumes:
+  es-data-7:
+  mariadb-legacy-data:

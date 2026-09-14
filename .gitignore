@@ -1,0 +1,11 @@
+# Jangan pernah commit file berisi kredensial asli
+*.env
+.env.*
+*secret*
+*password*
+!*password*.example
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.swp

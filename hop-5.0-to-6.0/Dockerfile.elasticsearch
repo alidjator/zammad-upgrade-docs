@@ -1,0 +1,4 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.28
+
+# Tidak berubah dari hop sebelumnya - ES tidak perlu naik versi untuk requirement 6.0.
+RUN bin/elasticsearch-plugin install --batch ingest-attachment
