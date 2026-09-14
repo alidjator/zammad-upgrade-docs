@@ -47,18 +47,38 @@ akurat, tapi tidak seragam prosesnya:
   kemungkinan observasi manual atau output verbose Rails, tidak bisa diverifikasi ulang
   sekarang karena hop-nya sudah selesai).
 
-**Mulai hop 7.0→7.1.3 (dan setiap re-eksekusi hop manapun setelah ini), gunakan `time`
-untuk SEMUA tahap berwaktu** (build, migrate, reindex) — satu cara yang sama, tidak
-bergantung pada apakah aplikasi kebetulan mencatat timestamp yang bisa ditelusuri:
+**Keputusan: TIDAK pakai `time`.** `time` cuma mencetak hasilnya SEKALI ke layar begitu
+command selesai — kalau sesi `screen`-nya sempat tertimpa command lain sebelum sempat
+dibaca (persis yang terjadi ke `1142032.hop7-reindex` di hop ini), angkanya hilang
+selamanya dan tidak bisa direkonstruksi lagi. Bandingkan dengan migrasi hop 6.0→7.0 di
+atas — datanya masih bisa diselamatkan justru karena Rails **sendiri** sudah menulis
+timestamp ke file log (`log/production.log`), bukan cuma ke layar.
+
+**Mulai hop 7.0→7.1.3, prinsipnya: manfaatkan fitur pelaporan bawaan tiap command, dan
+pastikan outputnya disimpan ke FILE (bukan cuma layar) supaya tahan terhadap sesi
+`screen` yang tertimpa/terputus:**
+
 ```bash
-time docker compose build zammad-app
-time docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migrate
-time docker compose exec zammad-app env RAILS_ENV=production bundle exec rake zammad:searchindex:rebuild
+# Build — Docker Buildx sudah mencetak total durasi di baris ringkasannya sendiri
+# ("[+] Building 727.0s (13/13) FINISHED"), tinggal disimpan ke file dengan tee.
+docker compose build zammad-app 2>&1 | tee build-hop7.1.3.log
+
+# Migrate — TIDAK perlu redirect tambahan sama sekali. Rails.logger otomatis dan
+# selalu menulis tiap "Migrating to X" ke log/production.log secara persisten,
+# terlepas dari sesi terminal/screen apa pun. Ambil durasi kapan saja setelahnya:
+docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migrate
+docker compose exec zammad-app grep "Migrating to" log/production.log | head -1
+docker compose exec zammad-app grep "Migrating to" log/production.log | tail -1
+
+# Reindex — "done in X seconds" dari Benchmark.realtime cuma cetak ke STDOUT, TIDAK
+# otomatis masuk ke file log manapun. WAJIB di-tee supaya tidak bergantung buffer
+# screen yang terbatas.
+docker compose exec zammad-app env RAILS_ENV=production bundle exec rake zammad:searchindex:rebuild 2>&1 | tee reindex-hop7.1.3.log
 ```
-Catat angka `real` (wall-clock, bukan `user`/`sys`) dari output `time` sebagai angka
-resmi di RUNBOOK.md hop tersebut. Kalau proses dijalankan di dalam `screen` dan
-sempat di-detach, `time` tetap mencetak hasilnya ke layar begitu command selesai —
-tinggal `screen -r` atau `hardcopy` sebelum layar tertimpa command lain.
+
+Tetap jalankan ketiganya di dalam `screen` seperti biasa (untuk ketahanan terhadap
+koneksi SSH terputus), tapi jangan lagi bergantung pada buffer `screen` sebagai
+satu-satunya tempat data durasi tersimpan — `tee`/log Rails yang jadi sumber utama.
 
 ## Yang PALING menentukan durasi: reindex Elasticsearch
 
