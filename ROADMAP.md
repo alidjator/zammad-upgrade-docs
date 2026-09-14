@@ -11,8 +11,8 @@ serta `.ruby-version` & `Gemfile` di tiap tag GitHub `zammad/zammad`.
 | 5.0 | 2.7.4 | **≥7.8, <8** ⚠️ wajib upgrade ES sebelum hop ini | Postgres ≥9.3 / MySQL ≥5.5.8 | Node.js wajib untuk `assets:precompile` |
 | 6.0 | 3.1.3 | ≥7.8, <9 | Pengumuman resmi: MySQL akan di-drop mulai 7.0 | **Redis jadi hard dependency.** Reverse-proxy wajib dikonfigurasi ulang untuk WebSocket (`/cable`) |
 | — migrasi DB — | — | — | **MariaDB → PostgreSQL wajib selesai di sini** (tool migrasi `rake zammad:db:pgloader` baru ada mulai Zammad 5.3) | Lihat panduan resmi: migrate-to-postgresql.html |
-| 7.0 (rilis Maret 2026) | 3.4.8 | ≥7.8, <10 (ES7 mulai deprecated) | **MySQL/MariaDB dihapus total** — PostgreSQL satu-satunya opsi | Rebuild search index wajib (perubahan ASCII-folding). Repo paket berganti skema baru (`dl.packager.io` → `go.packager.io`) |
-| 7.1.3 (latest) | 3.4.9 | ≥7.8, <10 | PostgreSQL ≥13 | Redis ≥6 wajib |
+| 7.0 (rilis Maret 2026) | 3.4.8 | ≥7.8, <10 (ES7 mulai deprecated) | **MySQL/MariaDB dihapus total** — PostgreSQL satu-satunya opsi | **Redis ≥6 wajib saat boot** (ditemukan lewat crash loop nyata di hop 6.0→7.0, BUKAN dari `.ruby-version`/dokumentasi resmi — lihat [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md) Insiden 5). Rebuild search index wajib (perubahan ASCII-folding). Repo paket berganti skema baru (`dl.packager.io` → `go.packager.io`) |
+| 7.1.3 (latest) | 3.4.9 | ≥7.8, <10 | PostgreSQL ≥13 | Redis ≥6 (sudah wajib sejak 7.0, lihat baris di atas) |
 
 ## Titik kritis
 

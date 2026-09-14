@@ -18,12 +18,6 @@ Sumber: CHANGELOG resmi Zammad (github.com/zammad/zammad, tag `7.0.0`) + riset
 - **MySQL/MariaDB dihapus total** — gem `mysql2` sudah tidak ada di Gemfile.lock.
   PostgreSQL menjadi satu-satunya adapter didukung.
 
-## Search / Elasticsearch
-
-- Requirement versi tidak berubah (≥7.8, <10) — tapi **skema ASCII-folding index
-  berubah**, mewajibkan `searchindex:rebuild` penuh setelah upgrade meski versi ES-nya
-  sendiri tidak naik.
-
 ## Distribusi / packaging
 
 - Repo paket resmi berpindah skema dari `dl.packager.io` ke `go.packager.io` — tidak
@@ -53,13 +47,15 @@ Sumber: CHANGELOG resmi Zammad (github.com/zammad/zammad, tag `7.0.0`) + riset
   summarize, AI agents), penghapusan integrasi Twitter & Slack, checklist, webhook
   bearer token, dan banyak penyesuaian permission/UI kecil.
 
-## Search index
+## Search / Elasticsearch
 
-- **Wajib `searchindex:rebuild` penuh** meski versi ES tidak naik (tetap 7.17.28) —
-  perubahan skema ASCII-folding di 7.0. Rebuild otomatis (task rake) melakukan drop
-  index lama, tapi bisa meninggalkan index stale kalau ada race condition dengan
-  background job — verifikasi `_cat/indices` bersih sebelum rebuild kalau task gagal
-  dengan `resource_already_exists_exception`. Lihat [NOTES.md](NOTES.md) Insiden 8.
+- Requirement versi tidak berubah (≥7.8, <10, tetap 7.17.28) — tapi **skema
+  ASCII-folding index berubah**, mewajibkan `searchindex:rebuild` penuh setelah
+  upgrade meski versi ES-nya sendiri tidak naik.
+- Rebuild otomatis (task rake) melakukan drop index lama, tapi bisa meninggalkan index
+  stale kalau ada race condition dengan background job — verifikasi `_cat/indices`
+  bersih sebelum rebuild kalau task gagal dengan `resource_already_exists_exception`.
+  Lihat [NOTES.md](NOTES.md) Insiden 8.
 
 <!-- Tambahkan di sini kalau ada perubahan skema/tabel/kolom/fitur lain yang ditemukan
 selama eksekusi nyata (migrasi Rails, fitur baru/dihapus di UI, dsb). -->

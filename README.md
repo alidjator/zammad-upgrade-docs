@@ -119,6 +119,34 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
    `hop-6.0-to-7.0/NOTES.md` Insiden 6 (bug urutan migrasi `recent_closes`) untuk
    memperjelas — prioritas rendah/nice-to-have, prosa yang ada sekarang sudah cukup
    jelas.
+7. **Istilah ambigu** (hasil audit lintas-dokumen): tambahkan catatan kenapa index
+   Elasticsearch untuk staging tetap berprefix `zammad_production` (bukan
+   `zammad_staging`) — belum pernah dijelaskan di mana pun; ganti header kolom "Hop" di
+   tabel Status README jadi "Tahap" supaya konsisten dengan pemisahan yang sudah
+   dilakukan di penamaan git tag (migrasi Postgres eksplisit BUKAN hop); tambahkan satu
+   kalimat pengingat di awal `DOWNTIME_ESTIMATE.md` bahwa "staging" yang dimaksud saat
+   ini sedang melayani trafik user nyata (cross-reference ke README § Konteks);
+   tambahkan tabel kecil "penamaan resource" yang memetakan tiga nama mirip
+   (`zammad-staging` project Compose vs `zammad_staging` DB MariaDB vs
+   `zammad_staging_pg` DB PostgreSQL).
+8. **Boilerplate tersebar** — pindahkan nasihat manajemen disk generik (saat ini
+   diulang di RUNBOOK hop 4.0→5.0, 5.0→6.0, dan 6.0→7.0) ke `ROADMAP.md` §"Masalah yang
+   berulang tiap hop", tiap RUNBOOK cukup cross-reference + angka spesifik hop
+   tersebut. Pola serupa untuk boilerplate rollback di RUNBOOK 3 hop pertama —
+   pertimbangkan satu section umum (di README atau `ROLLBACK.md` baru) yang
+   di-cross-reference tiap RUNBOOK.
+9. **Redundansi `TODO.md` per-hop** (`hop-4.0-to-5.0/TODO.md`,
+   `hop-5.0-to-6.0/TODO.md`) — section "langkah yang terbukti perlu diulang tiap hop"
+   pada dasarnya menyalin ulang `ROADMAP.md` §"Masalah yang berulang tiap hop" dengan
+   kalimat berbeda; ganti jadi cross-reference + poin yang benar-benar spesifik hop
+   tersebut. `ROADMAP.md` §"Titik kritis" poin 1-2 juga merestate isi kolom "Catatan
+   wajib" di tabel yang sama persis di atasnya — pertimbangkan dipangkas jadi highlight
+   di tabel saja.
+10. **(Minor)** README § Konteks membingkai penghentian produksi sebagai keputusan
+    proaktif ("membebaskan resource"), padahal `hop-3.4.0-to-4.0/NOTES.md` mencatatnya
+    sebagai reaksi darurat setelah produksi sempat down 500 karena tekanan memori —
+    tidak kontradiktif, tapi tambahkan satu klausa di README yang mengarah ke NOTES.md
+    untuk kronologi lengkap.
 
 ## Catatan keamanan
 

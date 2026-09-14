@@ -5,8 +5,9 @@ panjang di [NOTES.md](NOTES.md). Dipakai untuk: (a) mengulang hop ini dari nol k
 staging perlu di-reset, atau (b) jadi template saat hop ini benar-benar dieksekusi ke
 instance produksi asli nanti.
 
-**Estimasi total waktu eksekusi:** ~5,5 jam (didominasi reindex ES). Detail per tahap
-ada di kolom "Durasi" tabel di bawah, dan lihat juga [../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md).
+**Estimasi total waktu eksekusi:** ~4,8 jam (didominasi reindex ES ~4,6 jam). Durasi per
+tahap tercantum inline di tiap langkah di bawah; rincian lengkap di
+[../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md).
 
 ## Pre-flight
 
