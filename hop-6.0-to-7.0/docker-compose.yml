@@ -1,8 +1,11 @@
 name: zammad-staging
 
 services:
+  # Zammad 7.0 mewajibkan Redis >=6 SAAT BOOT (ditemukan lewat crash loop nyata:
+  # "Error: incompatible Redis version (6+ required; 5.0.14 found)"), bukan cuma di
+  # 7.1.3 seperti dugaan awal riset .ruby-version/Gemfile.lock. Naik dari redis:5.
   zammad-redis:
-    image: redis:5
+    image: redis:7-alpine
     restart: unless-stopped
 
   # Dibiarkan tetap ada & jalan sebagai jaring pengaman rollback (lihat
