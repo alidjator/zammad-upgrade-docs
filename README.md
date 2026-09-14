@@ -100,6 +100,13 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
 4. Bakukan bahasa di seluruh dokumen — saat ini masih semi-formal/informal teknis
    (mis. "kalau" → "jika/apabila", "kita" dihindari atau diganti kalimat pasif,
    "makanya"/"jadi" sebagai penghubung → "sehingga"/"oleh karena itu").
+5. Tambahkan visualisasi di README.md: **Mermaid flowchart** untuk bagian "Roadmap
+   upgrade" (gantikan teks panah polos, warnai per status selesai/berjalan/belum) dan
+   **Mermaid diagram komponen** (`graph TD`) untuk bagian "Arsitektur" (gantikan bullet
+   list prosa, gambarkan hubungan app/DB/ES/Redis/reverse-proxy — penting karena
+   arsitektur sudah berubah beberapa kali, mis. MariaDB container → PostgreSQL host).
+   Tidak berlaku untuk `RUNBOOK.md` (ordered list step-by-step sudah tepat, jangan
+   diubah ke diagram) maupun `NOTES.md` (naratif insiden lebih jelas sebagai prosa).
 
 ## Catatan keamanan
 
