@@ -11,8 +11,24 @@ kemungkinan bisa lebih cepat dari angka ini.
 | Hop | Build image | Migrasi schema | Reindex ES | Total (kalau reindex ditunggu) |
 |---|---|---|---|---|
 | 3.4.0 → 4.0 | ~8 menit | 1m33s | ~4,6 jam | **~4,8 jam** |
-| 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam | **~4,5 jam** |
+| 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam ⚠️ | **~4,5 jam** |
 | 5.0 → 6.0 | ~11 menit | 9m25s | ~5,6 jam | **~5,9 jam** |
+| 6.0 → 7.0 | ~12 menit | belum terukur presisi ⚠️ | ~3,1 jam (11.201 detik) | **~3,3 jam** (perkiraan) |
+
+⚠️ **Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
+dengan cara yang sama untuk hop 3.4.0→4.0, 5.0→6.0, dan 6.0→7.0: menjumlahkan baris
+"done in X seconds" yang dicetak `Benchmark.realtime` bawaan rake task Zammad sendiri
+(`lib/tasks/zammad/search_index_es.rake`), didominasi step `Ticket` dan `User`. Untuk
+**hop 4.0→5.0**, breakdown detik per model TIDAK ditemukan tercatat di
+[hop-4.0-to-5.0/NOTES.md](hop-4.0-to-5.0/NOTES.md) — angka ~4,3 jam di baris itu
+kemungkinan diukur dengan cara sama tapi rinciannya tidak ikut didokumentasikan saat
+itu, jadi metodenya tidak bisa diverifikasi ulang dari dokumentasi yang ada. Untuk
+**hop 6.0→7.0**, migrasi schema-nya sendiri belum diukur presisi (fokus saat eksekusi
+ada di debugging bug urutan migrasi `recent_closes` — lihat
+[hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md) Insiden 6) — 78 migrasi historis
+kemungkinan besar di bawah 3 menit total berdasarkan durasi tiap migrasi individual
+yang sempat terlihat (mayoritas <1 detik, beberapa migrasi berat individual belasan
+detik), tapi ini perkiraan, bukan angka terukur.
 
 ## Yang PALING menentukan durasi: reindex Elasticsearch
 
@@ -44,6 +60,13 @@ tidak lengkap/kosong sampai reindex tuntas).
 - **Disk cleanup** (`docker builder prune`, dll) — sebaiknya dilakukan **sebelum** hop
   mulai, bukan dihitung sebagai bagian downtime, tapi perlu dialokasikan waktu terpisah
   di jadwal kalau disk sudah mepet
+- **Retry reindex akibat insiden** (hop 6.0→7.0) — angka ~3,1 jam di tabel di atas
+  cuma durasi PROSES BERSIH (percobaan yang berhasil). Total wall-clock sungguhan
+  jauh lebih lama karena 2 percobaan gagal sebelumnya (index stale, lalu ES masuk mode
+  read-only karena disk penuh — lihat NOTES.md Insiden 8 & 9) yang masing-masing perlu
+  diagnosis manual sebelum retry. Untuk perencanaan produksi, alokasikan buffer waktu
+  ekstra di luar angka "bersih" ini kalau kondisi disk server produksi belum dipastikan
+  lega jauh di bawah 90% sebelum reindex dimulai.
 
 ## Update dokumen ini
 
