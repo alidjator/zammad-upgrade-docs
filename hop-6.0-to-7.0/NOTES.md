@@ -202,12 +202,25 @@ data` saja, tidak termasuk drop/create index yang cepat): `Ticket` (termasuk sem
 satu kali proses bersih (di luar waktu terbuang akibat 2 retry sebelumnya karena
 Insiden 8 dan 9).
 
-**Verifikasi hasil akhir** (lewat `_cat/indices`, bukan cuma log): index
-`..._ticket` berisi **1.193.792 dokumen** = persis 161.894 tiket + 1.031.898 artikel
-(Zammad menyimpan Ticket dan Ticket::Article dalam index fisik yang sama). Index
-`..._organization` **1649 aktif + 202 dihapus = 1851**, cocok dengan jumlah asli.
-Index `..._user` **72.013**, hampir persis 72.014 (selisih wajar, data terus berubah
-selama staging melayani trafik).
+**Verifikasi hasil akhir — dilakukan lewat query langsung ke ES, bukan cuma baca log
+yang sempat terpotong (`screen hardcopy` cuma menangkap buffer layar terbatas, tidak
+bisa dijadikan bukti tunggal):**
+
+- `GET .../_count` pada index `..._ticket` → **tepat 161.894**, sama persis dengan
+  `Ticket.count` di database. (Angka `1.193.792` yang sempat muncul di `_cat/indices`
+  ternyata jumlah dokumen Lucene INTERNAL — Zammad menyimpan `Ticket::Article` sebagai
+  *nested document* di dalam tiket induknya, bukan dokumen top-level terpisah, jadi ES
+  menghitungnya sebagai 161.894 tiket + 1.031.898 artikel bersarang = 1.193.792 dokumen
+  Lucene, tapi `_count` yang relevan untuk validasi cuma menghitung tiket top-level.
+  Kedua angka konsisten dan saling menjelaskan, bukan kontradiksi.)
+- `GET .../_search` dengan query nomor tiket spesifik (`10149415`, tiket yang sama
+  yang muncul di payload error Insiden 8) → **ketemu 1 hit**, isinya lengkap dan benar:
+  8 artikel email tersimpan utuh (subjek, isi, tanggal, pengirim) persis sama dengan
+  data sumber. Ini bukti data BENAR-BENAR bisa di-query dengan isi yang akurat, bukan
+  cuma "jumlah dokumen kebetulan cocok".
+- Index `..._organization` **1649 aktif + 202 dihapus = 1851**, cocok dengan jumlah
+  asli. Index `..._user` **72.013**, hampir persis 72.014 (selisih wajar, data terus
+  berubah selama staging melayani trafik nyata).
 
 ## Verifikasi migrasi database
 
