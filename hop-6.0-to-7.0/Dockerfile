@@ -27,6 +27,10 @@ WORKDIR /opt/zammad
 
 # corepack akan otomatis fetch versi pnpm yang di-pin di package.json ("pnpm@10.29.1")
 # saat pertama kali dipanggil - tidak perlu install manual versi tertentu.
+# CI=true wajib di sini - tanpa ini pnpm minta konfirmasi TTY interaktif untuk hapus
+# node_modules (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY), yang mustahil dipenuhi
+# di build Docker non-interaktif.
+ENV CI=true
 RUN pnpm install --frozen-lockfile
 
 RUN gem install bundler -v '2.6.9' && \
