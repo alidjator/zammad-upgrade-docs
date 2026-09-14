@@ -36,3 +36,13 @@ beberapa masalah generik cenderung muncul lagi di tiap hop — cek dulu sebelum 
   Selalu tambahkan `bundle exec rake assets:precompile RAILS_ENV=production` di Dockerfile.
 - **Nama rake task search index berubah-ubah antar versi** — cek dulu dengan
   `bundle exec rake --tasks | grep -i -E "index|search"` sebelum asumsi nama task.
+- **Build 3 image terpisah untuk zammad-app/websocket/scheduler** — ternyata sudah
+  terjadi **sejak hop 3.4.0→4.0** (dikonfirmasi lewat penelusuran `journalctl -u
+  docker`, bukan cuma ditemukan pertama kali di hop 6.0→7.0 seperti dugaan awal —
+  lihat [DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)). Kalau `docker-compose.yml`
+  tidak diberi `image:` yang SAMA untuk ketiga service itu (Dockerfile-nya identik),
+  Compose akan build 3x terpisah alih-alih sekali — bisa melipatgandakan waktu build
+  sampai ~4-8x lebih lama dari seharusnya (hop 4.0→5.0 makan ~1 jam 2 menit karena ini).
+  Selalu cek `docker-compose.yml` hop baru sudah pakai pola `image:` bersama sebelum
+  build (lihat [hop-6.0-to-7.0/docker-compose.yml](hop-6.0-to-7.0/docker-compose.yml)
+  sebagai contoh).

@@ -10,10 +10,31 @@ kemungkinan bisa lebih cepat dari angka ini.
 
 | Hop | Build image | Migrasi schema | Reindex ES | Total (kalau reindex ditunggu) |
 |---|---|---|---|---|
-| 3.4.0 → 4.0 | ~8 menit | 1m33s | ~4,6 jam | **~4,8 jam** |
-| 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam | **~4,5 jam** |
-| 5.0 → 6.0 | ~11 menit | 9m25s | ~5,6 jam | **~5,9 jam** |
-| 6.0 → 7.0 | ~12 menit | 6m11s (151 migrasi) | ~3,1 jam (11.201 detik) | **~3,3 jam** |
+| 3.4.0 → 4.0 | **32m17s** | 1m33s | ~4,6 jam | **~5,2 jam** |
+| 4.0 → 5.0 | **62m2s (~1 jam 2 menit)** | 1m31s | ~4,3 jam | **~5,4 jam** |
+| 5.0 → 6.0 | **12m0s** | 9m25s | ~5,6 jam | **~6,0 jam** |
+| 6.0 → 7.0 | 12m7s | 6m11s (151 migrasi) | ~3,1 jam (11.201 detik) | **~3,4 jam** |
+
+⚠️ **Angka Build image untuk hop 3.4.0→4.0 dan 4.0→5.0 dikoreksi tanggal 15 Sept 2026** —
+sebelumnya tertulis "~8 menit" untuk keduanya, tidak berdasarkan sumber terverifikasi
+apa pun (lihat bagian "Standardisasi metode pengukuran" di bawah). Angka baru didapat
+dengan menelusuri **log daemon Docker (`journalctl -u docker`)**, yang ternyata masih
+tersimpan mundur sampai 15 hari (reboot harian server, tapi journal persisten lintas
+boot) — jauh melebihi ekspektasi awal. Metodenya: cari timestamp `"image pulled"`
+untuk base image tiap hop (`ruby:2.6.6-stretch`, `ruby:2.7.4-buster`, dst.), lalu cari
+timestamp `sbJoin` (container pertama terhubung ke network) untuk container
+`zammad-staging-zammad-app-1` setelahnya — selisihnya adalah durasi build+up total.
+Hop 5.0→6.0 dan 6.0→7.0 ternyata SUDAH dekat dengan angka lama (12m0s vs ~11 menit,
+12m7s vs ~12 menit) — cuma hop 1 dan 2 yang meleset jauh (4-8x lipat).
+
+**Temuan penting dari penelusuran ini:** log menunjukkan hop 3.4.0→4.0 (traceID sama
+untuk 3 span "exporting to image") dan hop 4.0→5.0 (3 traceID BERBEDA, masing-masing
+~12-17 menit terpisah) **SAMA-SAMA kena masalah "build 3 image terpisah"** yang baru
+kita sadari dan perbaiki di hop 6.0→7.0 (lihat [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md)
+Insiden 4) — bukan masalah baru khusus hop terakhir, tapi sudah ada sejak hop pertama.
+Hop 5.0→6.0 kelihatan sudah lebih efisien (beberapa span "exporting to image" berbagi
+traceID yang sama, tanda cache Docker terpakai across service), menjelaskan kenapa
+durasinya jauh lebih pendek dari hop 1-2 meski base image-nya lebih besar/baru.
 
 **Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
 dengan cara yang **sama untuk keempat hop**: menjumlahkan baris "done in X seconds"
@@ -82,12 +103,20 @@ satu-satunya tempat data durasi tersimpan — `tee`/log Rails yang jadi sumber u
 
 ## Yang PALING menentukan durasi: reindex Elasticsearch
 
-Di ketiga hop yang sudah selesai, reindex ES adalah **>90% dari total waktu**, didominasi
-satu tabel: `tickets` (161.884 baris → ~3,8-5,1 jam sendirian, cenderung naik tiap hop
-karena beban server bersama yang bertambah). Migrasi schema database biasanya sangat
-cepat (di bawah 2 menit) — KECUALI kalau satu hop mencakup banyak rilis minor sekaligus
-(hop 5.0→6.0 mencakup 5 rilis minor yang dilewati, migrasinya jadi 9m25s karena jumlah
-migrasi jauh lebih banyak, termasuk 2 migrasi berat individual >2 menit).
+Di keempat hop, reindex ES tetap **porsi terbesar dari total waktu (~80-93%,
+bervariasi per hop)**, didominasi satu tabel: `tickets` (161.894 baris → ~2,7-5,1 jam
+sendirian, sempat naik tiap hop karena beban server bersama yang bertambah, lalu turun
+lagi di hop 6.0→7.0 karena beban server saat itu lebih ringan). Migrasi schema
+database biasanya cepat (di bawah 10 menit) — KECUALI kalau satu hop mencakup banyak
+rilis minor sekaligus (hop 5.0→6.0 dan 6.0→7.0 sama-sama melompati banyak rilis minor,
+migrasinya jadi 9m25s dan 6m11s karena jumlah migrasi jauh lebih banyak).
+
+**Build image TIDAK selalu kecil** — koreksi setelah penelusuran journalctl (lihat
+tabel di atas): hop 4.0→5.0 build-nya sendiri makan **~1 jam 2 menit**, lebih lama dari
+migrasi schema hop manapun. Jangan asumsikan build cuma "beberapa menit" saat
+merencanakan window — cek dulu apakah compose-nya sudah pakai `image:` yang sama untuk
+app/websocket/scheduler (lihat [hop-6.0-to-7.0/RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md)),
+kalau belum, build bisa 3x lebih lama dari seharusnya.
 
 **Implikasi penting untuk perencanaan produksi:** UI Zammad (login, buka/edit tiket)
 sudah bisa dipakai normal **begitu migrasi schema selesai** (~2 menit) — TIDAK perlu
@@ -96,9 +125,12 @@ reindex berjalan cuma **fitur pencarian tiket** (search bisa menunjukkan hasil
 tidak lengkap/kosong sampai reindex tuntas).
 
 **Rekomendasi strategi maintenance window:**
-1. Window "keras" (user benar-benar tidak bisa akses): cuma untuk tahap build + migrate
-   → **~10 menit** per hop
-2. Reindex ES (~4-5 jam) bisa dijalankan **setelah** akses dibuka kembali, sebagai proses
+1. Window "keras" (user benar-benar tidak bisa akses): untuk tahap build + migrate
+   → **berkisar 18-64 menit per hop** (bukan "~10 menit" seperti perkiraan sebelumnya
+   yang ternyata tidak berdasar — lihat koreksi Build image di atas). Pastikan
+   `docker compose build` sudah dites dulu di staging untuk hop yang sama sebelum
+   menetapkan angka window produksi, jangan asumsikan cepat.
+2. Reindex ES (~3-6 jam) bisa dijalankan **setelah** akses dibuka kembali, sebagai proses
    background — informasikan ke user bahwa pencarian tiket mungkin belum akurat 100%
    sampai beberapa jam ke depan
 
