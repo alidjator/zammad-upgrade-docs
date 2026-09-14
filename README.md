@@ -84,6 +84,14 @@ Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
 | 6.0 → 7.0 | 🔧 Migrasi & asset selesai, reindex ES sedang berjalan | [NOTES.md](hop-6.0-to-7.0/NOTES.md) (8 insiden: pkg-config, pnpm CI=true, krisis disk, Redis ≥6, bug urutan migrasi `recent_closes`, asset pipeline 500) · [CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md) · [RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md) |
 | 7.0 → 7.1.3 | ⬜ Belum |
 
+## Penanda milestone (git tag)
+
+Setiap hop yang selesai & tervalidasi ditandai dengan git tag `hop-X-to-Y-done` (atau
+`postgres-migration-done` untuk migrasi database) — bukan version number formal, cuma
+penanda supaya bisa langsung `git checkout <tag>` untuk lihat kondisi dokumentasi
+persis saat milestone itu divalidasi, tanpa menelusuri histori commit. Lihat daftar
+lengkap di [halaman tags GitHub](https://github.com/alidjator/zammad-upgrade-docs/tags).
+
 ## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi)
 
 Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokumentasi
