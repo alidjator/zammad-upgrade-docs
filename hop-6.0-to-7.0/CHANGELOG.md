@@ -42,7 +42,12 @@ Sumber: CHANGELOG resmi Zammad (github.com/zammad/zammad, tag `7.0.0`) + riset
   dengan `PG::UndefinedTable`. Ini bug urutan/desain di source Zammad sendiri, muncul
   karena kita menjalankan puluhan migrasi historis sekaligus. Lihat
   [NOTES.md](NOTES.md) Insiden 6 untuk analisis lengkap.
-- Total 78 migrasi berjalan dari `TaskbarAddUniquenessIndex` (Nov 2024) sampai
+- **Total 151 migrasi berjalan** (dikonfirmasi lewat `grep "Migrating to"
+  log/production.log`, bukan 78 seperti dugaan awal — angka 78 keliru karena cuma
+  menghitung sisa migrasi "down" SETELAH percobaan pertama sempat berhasil menjalankan
+  puluhan migrasi lama 2022-2024 sebelum gagal di `recent_closes`), dari
+  `SettingAddStoreProviderS3` (Sept 2022 — baru jadi pending karena hop 5.0→6.0 pakai
+  tag `6.0.0` persis, migrasi ini masuk di rilis 6.x setelahnya) sampai
   `Pr5952FixTypos` (Feb 2026) — mencakup fitur AI Assistance (text tools, ticket
   summarize, AI agents), penghapusan integrasi Twitter & Slack, checklist, webhook
   bearer token, dan banyak penyesuaian permission/UI kecil.

@@ -224,8 +224,16 @@ bisa dijadikan bukti tunggal):**
 
 ## Verifikasi migrasi database
 
-- ✅ `db:migrate` — 78 migrasi berjalan lancar (setelah fix urutan `recent_closes`),
+- ✅ `db:migrate` — **151 migrasi total** berjalan lancar (dikonfirmasi lewat `grep
+  "Migrating to" log/production.log`; ~73 di antaranya dari percobaan pertama sebelum
+  gagal di `recent_closes`, sisanya 78 setelah fix urutan diterapkan),
   `db:migrate:status` bersih (semua "up")
+- **Durasi migrasi terukur presisi dari timestamp log**: migrasi pertama
+  (`SettingAddStoreProviderS3`) di `08:17:08`, migrasi terakhir (`Pr5952FixTypos`) di
+  `08:23:19` → total **6 menit 11 detik** untuk seluruh 151 migrasi (termasuk jeda
+  diagnosis Insiden 6 — jeda itu sendiri cuma 38 detik antara `CreateRecentCloses`
+  selesai dan `TaskbarAddUniquenessIndex` berhasil, jadi tidak signifikan menambah
+  total)
 - Dataset pasca-migrasi konsisten dengan hasil migrasi Postgres sebelumnya: 161.894
   tiket, 1.031.898 artikel, 72.014 user, 1.851 organisasi (bertambah sedikit dari
   aktivitas staging sejak migrasi Postgres — bukan kehilangan data)
@@ -235,7 +243,8 @@ bisa dijadikan bukti tunggal):**
 - ✅ `pnpm install` + `bundle install` — 0 error (setelah fix pkg-config, 128
   dependencies/252 gems)
 - ✅ Build image (strategi 1 image dipakai 3 service) — sukses, ~12 menit
-- ✅ `db:migrate` — 78 migrasi sukses (setelah fix urutan recent_closes)
+- ✅ `db:migrate` — 151 migrasi sukses total, ~6 menit 11 detik (setelah fix urutan
+  recent_closes)
 - ✅ `assets:precompile` — sukses manual, halaman web `200 OK` setelah restart
 - ✅ `searchindex:rebuild` — selesai penuh setelah 2 kali retry (Insiden 8 & 9), semua
   model tereindeks, jumlah dokumen di ES cocok dengan data sumber

@@ -13,7 +13,7 @@ kemungkinan bisa lebih cepat dari angka ini.
 | 3.4.0 → 4.0 | ~8 menit | 1m33s | ~4,6 jam | **~4,8 jam** |
 | 4.0 → 5.0 | ~8 menit | 1m31s | ~4,3 jam | **~4,5 jam** |
 | 5.0 → 6.0 | ~11 menit | 9m25s | ~5,6 jam | **~5,9 jam** |
-| 6.0 → 7.0 | ~12 menit | belum terukur presisi ⚠️ | ~3,1 jam (11.201 detik) | **~3,3 jam** (perkiraan) |
+| 6.0 → 7.0 | ~12 menit | 6m11s (151 migrasi) | ~3,1 jam (11.201 detik) | **~3,3 jam** |
 
 **Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
 dengan cara yang **sama untuk keempat hop**: menjumlahkan baris "done in X seconds"
@@ -22,13 +22,17 @@ yang dicetak `Benchmark.realtime` bawaan rake task Zammad sendiri
 Rinciannya ada di NOTES.md masing-masing hop: 3.4.0→4.0 (`Ticket` 15.144s/~4,2 jam,
 `User` 1.296s/~21,6 menit), 4.0→5.0 (`Ticket` 13.570s/~3,8 jam, `User` 1.244s/~20,7
 menit), 5.0→6.0 (`Ticket` 18.260s/~5,1 jam, `User` 1.790s/~29,8 menit), 6.0→7.0
-(`Ticket` 9.600s/~2,7 jam, `User` 1.404s/~23,4 menit). Untuk
-**hop 6.0→7.0**, migrasi schema-nya sendiri belum diukur presisi (fokus saat eksekusi
-ada di debugging bug urutan migrasi `recent_closes` — lihat
-[hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md) Insiden 6) — 78 migrasi historis
-kemungkinan besar di bawah 3 menit total berdasarkan durasi tiap migrasi individual
-yang sempat terlihat (mayoritas <1 detik, beberapa migrasi berat individual belasan
-detik), tapi ini perkiraan, bukan angka terukur.
+(`Ticket` 9.600s/~2,7 jam, `User` 1.404s/~23,4 menit).
+
+**Migrasi schema hop 6.0→7.0** juga terukur presisi lewat sumber lain — timestamp
+`Rails.logger` di `log/production.log` (baris "Migrating to X"), bukan dari
+`Benchmark.realtime` per-step seperti reindex. Migrasi pertama
+(`SettingAddStoreProviderS3`) tercatat `08:17:08`, migrasi terakhir
+(`Pr5952FixTypos`) `08:23:19` → total **6 menit 11 detik untuk 151 migrasi** (bukan 78
+seperti dugaan awal — lihat [hop-6.0-to-7.0/CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md)
+untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
+(bug urutan migrasi `recent_closes`) cuma menyumbang 38 detik dari total ini — tidak
+signifikan menambah durasi.
 
 ## Yang PALING menentukan durasi: reindex Elasticsearch
 
