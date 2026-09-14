@@ -55,6 +55,18 @@ untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
 (bug urutan migrasi `recent_closes`) cuma menyumbang 38 detik dari total ini — tidak
 signifikan menambah durasi.
 
+**Migrasi schema hop 1-3 (`1m33s`/`1m31s`/`9m25s`) TERBUKTI tidak bisa ditelusuri
+ulang** — dicek 15 Sept 2026 lewat `docker ps -a` dan `/var/lib/docker/containers/`,
+cuma ada 1 container `zammad-app` yang tersisa (dibuat 14 Sept, punya hop 6.0→7.0 ini).
+Beda dari waktu build (tercatat di *daemon* Docker level host, bertahan lintas
+penggantian container) atau migrasi hop 6.0→7.0 (tercatat di `log/production.log`,
+kebetulan container-nya masih hidup saat ditelusuri), log migrasi hop 1-3 tersimpan di
+filesystem container HOP ITU SENDIRI yang sudah lama diganti/dihapus oleh build hop
+berikutnya (`docker compose up -d` untuk image baru otomatis stop+hapus container
+lama beserta seluruh filesystem-nya, termasuk `log/`, karena tidak ada satu pun
+docker-compose.yml yang me-mount `log/` ke volume persisten). Ini kesimpulan final,
+bukan sekadar "belum ketemu" — sumber datanya memang sudah terbukti tidak ada lagi.
+
 ## Standardisasi metode pengukuran (mulai hop 7.0→7.1.3)
 
 Empat hop di atas diukur dengan **3 cara berbeda** yang kebetulan menghasilkan angka
@@ -63,10 +75,10 @@ akurat, tapi tidak seragam prosesnya:
   bawaan rake task Zammad sendiri.
 - Migrasi schema hop 6.0→7.0: hitung selisih timestamp `Rails.logger` di
   `log/production.log`.
-- Migrasi schema hop 1-3: metode tidak terdokumentasikan (angka `1m33s`/`1m31s`/`9m25s`
-  ada di NOTES.md/RUNBOOK.md tapi caranya diukur tidak pernah ditulis eksplisit —
-  kemungkinan observasi manual atau output verbose Rails, tidak bisa diverifikasi ulang
-  sekarang karena hop-nya sudah selesai).
+- Migrasi schema hop 1-3: metode tidak terdokumentasikan, dan **terbukti tidak bisa
+  ditelusuri ulang lagi** — sumbernya (`log/production.log` di container hop tersebut)
+  sudah dihapus permanen sejak container itu diganti oleh build hop berikutnya (detail
+  di atas).
 
 **Keputusan: TIDAK pakai `time`.** `time` cuma mencetak hasilnya SEKALI ke layar begitu
 command selesai — kalau sesi `screen`-nya sempat tertimpa command lain sebelum sempat
