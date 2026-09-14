@@ -1,5 +1,32 @@
 # Zammad Upgrade Project — 3.4.0 → 7.1.3 (latest)
 
+## Skill set yang dibutuhkan
+
+Bukan checklist formal — ini kemampuan yang **benar-benar terpakai** selama proses hop
+1-3 dan migrasi database, berdasarkan insiden nyata yang tercatat di tiap `NOTES.md`:
+
+- **Docker & Docker Compose** — build image, debug networking antar-container (bridge
+  network, `extra_hosts`/`host.docker.internal`), baca `docker compose logs`, kelola volume
+- **Command line Linux** — bash dasar, `sed` untuk edit file, `systemctl`/`firewalld`,
+  monitoring disk (`df`, `du`, `docker system df`) — disk penuh terjadi berkali-kali
+- **Baca stack trace Ruby/Rails** — beberapa bug (mis. hop 5.0→6.0's BigDecimal issue)
+  cuma bisa ditemukan akar masalahnya dengan menelusuri backtrace sampai ke kode
+  ActiveRecord/gem, bukan cuma baca pesan error baris pertama
+- **Administrasi database dasar** — SQL basic, beda konsep MySQL/MariaDB vs PostgreSQL,
+  backup/restore (`mysqldump`, `pgloader`), grant/privilege user, **selalu verifikasi
+  integritas backup** (jangan asumsikan selesai = valid)
+- **Konsep dasar Elasticsearch** — cluster health, disk watermark, index lifecycle
+  (drop/create/reload) — bukan expertise ES penuh, tapi cukup untuk diagnosa block/error umum
+- **Git** dasar (commit, push) — dan kedisiplinan tidak commit credential asli
+- **Kesabaran & pola pikir sistematis** — beberapa masalah (versi-gap MariaDB) butuh
+  pivot strategi besar, bukan cuma tambal-sulam satu bug demi satu bug. Kemampuan
+  mengenali kapan "tambal lagi" sudah tidak masuk akal dan perlu pendekatan berbeda
+  itu lebih penting daripada hafal solusi teknis spesifik.
+
+**Yang TIDAK wajib:** expertise mendalam di Ruby/Rails internals atau tuning ES
+production-grade — sejauh ini cukup dengan riset terarah (baca source code Zammad/gem
+di GitHub, cross-check dengan dokumentasi resmi) saat menemukan bug baru.
+
 ## Konteks
 
 Self-hosted Zammad di server `Koi-Server-Dev` (CentOS Stream 9), berjalan via Docker Compose
