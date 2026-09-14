@@ -1,4 +1,15 @@
-# Hop 7.0 → 7.1.3 — Catatan (Status: 🔜 Riset requirement selesai, eksekusi belum dimulai)
+# Hop 7.0 → 7.1.3 — Catatan (Status: 🔧 Uji bundle/pnpm install tervalidasi, build image belum)
+
+## Verifikasi `bundle install` + `pnpm install` di container sementara (tervalidasi)
+
+Dijalankan di `ruby:3.4.9-bookworm` — **sukses penuh di percobaan pertama, tanpa
+insiden baru**, karena semua pelajaran dari hop 6.0→7.0 (pkg-config, `CI=true`) sudah
+dimasukkan proaktif ke Dockerfile template sebelum eksekusi:
+- `apt-get update` di Bookworm tetap mulus (sama seperti hop sebelumnya)
+- `pnpm install` — Node.js 24.21.0, pnpm 10.33.3 (auto via corepack), 0 error
+- `bundle install --without development test` — **`Bundle complete! 127 Gemfile
+  dependencies, 250 gems now installed.`**, 0 error (gem `rszr` yang dulu bermasalah
+  di hop 6.0→7.0 kali ini langsung sukses karena `pkg-config` sudah ada dari awal)
 
 ## Ringkasan requirement (hasil riset di tag `7.1.3` GitHub)
 
