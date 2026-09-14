@@ -10,10 +10,13 @@ kemungkinan bisa lebih cepat dari angka ini.
 
 | Hop | Build image | Migrasi schema | Reindex ES | Total (kalau reindex ditunggu) |
 |---|---|---|---|---|
-| 3.4.0 → 4.0 | **32m17s** | 1m33s | ~4,6 jam | **~5,2 jam** |
-| 4.0 → 5.0 | **62m2s (~1 jam 2 menit)** | 1m31s | ~4,3 jam | **~5,4 jam** |
-| 5.0 → 6.0 | **12m0s** | 9m25s | ~5,6 jam | **~6,0 jam** |
-| 6.0 → 7.0 | 12m7s | 6m11s (151 migrasi) | ~3,1 jam (11.201 detik) | **~3,4 jam** |
+| 3.4.0 → 4.0 | 32m17s | 1m33s | ~4,6 jam | **~5,2 jam** |
+| 4.0 → 5.0 | 62m2s | 1m31s | ~4,3 jam | **~5,4 jam** |
+| 5.0 → 6.0 | 12m0s | 9m25s | ~5,6 jam | **~6,0 jam** |
+| 6.0 → 7.0 | 12m7s | 6m11s | ~3,1 jam | **~3,4 jam** |
+
+*(Format konsisten: durasi utama saja di tiap sel. Rincian tambahan — jumlah migrasi,
+breakdown detik per model, dll — ada di catatan prosa di bawah, bukan di dalam tabel.)*
 
 ⚠️ **Angka Build image untuk hop 3.4.0→4.0 dan 4.0→5.0 dikoreksi tanggal 15 Sept 2026** —
 sebelumnya tertulis "~8 menit" untuk keduanya, tidak berdasarkan sumber terverifikasi
@@ -54,6 +57,11 @@ seperti dugaan awal — lihat [hop-6.0-to-7.0/CHANGELOG.md](hop-6.0-to-7.0/CHANG
 untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
 (bug urutan migrasi `recent_closes`) cuma menyumbang 38 detik dari total ini — tidak
 signifikan menambah durasi.
+
+**Jumlah migrasi per hop** (kalau tercatat): 3.4.0→4.0 — **33 migrasi**
+([hop-3.4.0-to-4.0/RUNBOOK.md](hop-3.4.0-to-4.0/RUNBOOK.md)); 4.0→5.0 dan 5.0→6.0 —
+tidak pernah dicatat jumlahnya di dokumentasi manapun; 6.0→7.0 — **151 migrasi**
+(lihat di atas).
 
 **Migrasi schema hop 1-3 (`1m33s`/`1m31s`/`9m25s`) TERBUKTI tidak bisa ditelusuri
 ulang** — dicek 15 Sept 2026 lewat `docker ps -a` dan `/var/lib/docker/containers/`,
