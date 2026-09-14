@@ -169,6 +169,46 @@ API ES (`DELETE /localhost.localdomain_zammad_production_*`), verifikasi cuma
 `.geoip_databases` (index sistem, bukan punya Zammad) yang tersisa, baru jalankan
 ulang `searchindex:rebuild` dari kondisi benar-benar bersih.
 
+## Insiden 9 — Elasticsearch masuk mode `read_only_allow_delete` di tengah reload data
+
+Setelah fix Insiden 8, `searchindex:rebuild` diulang dan berhasil melewati tahap
+`Creating indexes`, tapi gagal lagi di tengah `Reloading data` (tahap `Ticket`, berhenti
+di baris ke-12.400 dari 161.894) dengan `cluster_block_exception: disk usage exceeded
+flood-stage watermark, index has read-only-allow-delete block`. Root cause: disk
+staging (`/`) sempat kembali ke 95% terpakai selama proses berjalan lama ini (akumulasi
+dari krisis disk Insiden 4 yang belum sepenuhnya reda) — begitu melewati ambang
+*flood-stage watermark* default ES, cluster otomatis mem-block semua operasi tulis ke
+seluruh index demi mencegah korupsi data, dan **block ini TIDAK otomatis lepas** meski
+disk kemudian dibersihkan lagi.
+
+**Fix:**
+1. Bersihkan disk dulu (`docker builder prune -af`, hapus image lama spesifik by-name —
+   **bukan** `docker image prune -af` yang berisiko menghapus image aktif, lihat
+   Insiden 4) sampai jauh di bawah 95%.
+2. Hapus block secara manual (wajib, tidak otomatis lepas):
+   ```bash
+   docker compose exec zammad-elasticsearch curl -s -X PUT "http://localhost:9200/_all/_settings" \
+     -H "Content-Type: application/json" -d '{"index.blocks.read_only_allow_delete": null}'
+   ```
+3. Jalankan ulang `searchindex:rebuild` dari awal (aman diulang — operasi ES bersifat
+   upsert per `_doc/<id>`, tidak menghasilkan duplikat).
+
+Setelah fix ini, proses berjalan sampai tuntas: seluruh model dari `AI::Agent` sampai
+`Webhook` selesai tanpa error lain. Timing resmi dari log per-model (tahap `Reloading
+data` saja, tidak termasuk drop/create index yang cepat): `Ticket` (termasuk semua
+`Ticket::Article` bersarang di index yang sama) **9600 detik (~2 jam 40 menit)**,
+`User` **1404 detik (~23 menit)**, `Cti::Log` 119 detik, `Organization` 40 detik,
+`StatsStore` 23 detik, sisanya di bawah 15 detik. Total tahap reload ~3,1 jam untuk
+satu kali proses bersih (di luar waktu terbuang akibat 2 retry sebelumnya karena
+Insiden 8 dan 9).
+
+**Verifikasi hasil akhir** (lewat `_cat/indices`, bukan cuma log): index
+`..._ticket` berisi **1.193.792 dokumen** = persis 161.894 tiket + 1.031.898 artikel
+(Zammad menyimpan Ticket dan Ticket::Article dalam index fisik yang sama). Index
+`..._organization` **1649 aktif + 202 dihapus = 1851**, cocok dengan jumlah asli.
+Index `..._user` **72.013**, hampir persis 72.014 (selisih wajar, data terus berubah
+selama staging melayani trafik).
+
 ## Verifikasi migrasi database
 
 - ✅ `db:migrate` — 78 migrasi berjalan lancar (setelah fix urutan `recent_closes`),
@@ -184,5 +224,6 @@ ulang `searchindex:rebuild` dari kondisi benar-benar bersih.
 - ✅ Build image (strategi 1 image dipakai 3 service) — sukses, ~12 menit
 - ✅ `db:migrate` — 78 migrasi sukses (setelah fix urutan recent_closes)
 - ✅ `assets:precompile` — sukses manual, halaman web `200 OK` setelah restart
-- 🔧 `searchindex:rebuild` — sedang berjalan ulang setelah cleanup index stale
-- ⬜ Verifikasi UI/search penuh — menunggu reindex selesai
+- ✅ `searchindex:rebuild` — selesai penuh setelah 2 kali retry (Insiden 8 & 9), semua
+  model tereindeks, jumlah dokumen di ES cocok dengan data sumber
+- 🔧 Verifikasi UI/search penuh — menunggu konfirmasi pencarian tiket di browser
