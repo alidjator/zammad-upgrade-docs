@@ -34,6 +34,32 @@ untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
 (bug urutan migrasi `recent_closes`) cuma menyumbang 38 detik dari total ini — tidak
 signifikan menambah durasi.
 
+## Standardisasi metode pengukuran (mulai hop 7.0→7.1.3)
+
+Empat hop di atas diukur dengan **3 cara berbeda** yang kebetulan menghasilkan angka
+akurat, tapi tidak seragam prosesnya:
+- Reindex ES (semua hop): baca baris "done in X seconds" dari `Benchmark.realtime`
+  bawaan rake task Zammad sendiri.
+- Migrasi schema hop 6.0→7.0: hitung selisih timestamp `Rails.logger` di
+  `log/production.log`.
+- Migrasi schema hop 1-3: metode tidak terdokumentasikan (angka `1m33s`/`1m31s`/`9m25s`
+  ada di NOTES.md/RUNBOOK.md tapi caranya diukur tidak pernah ditulis eksplisit —
+  kemungkinan observasi manual atau output verbose Rails, tidak bisa diverifikasi ulang
+  sekarang karena hop-nya sudah selesai).
+
+**Mulai hop 7.0→7.1.3 (dan setiap re-eksekusi hop manapun setelah ini), gunakan `time`
+untuk SEMUA tahap berwaktu** (build, migrate, reindex) — satu cara yang sama, tidak
+bergantung pada apakah aplikasi kebetulan mencatat timestamp yang bisa ditelusuri:
+```bash
+time docker compose build zammad-app
+time docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migrate
+time docker compose exec zammad-app env RAILS_ENV=production bundle exec rake zammad:searchindex:rebuild
+```
+Catat angka `real` (wall-clock, bukan `user`/`sys`) dari output `time` sebagai angka
+resmi di RUNBOOK.md hop tersebut. Kalau proses dijalankan di dalam `screen` dan
+sempat di-detach, `time` tetap mencetak hasilnya ke layar begitu command selesai —
+tinggal `screen -r` atau `hardcopy` sebelum layar tertimpa command lain.
+
 ## Yang PALING menentukan durasi: reindex Elasticsearch
 
 Di ketiga hop yang sudah selesai, reindex ES adalah **>90% dari total waktu**, didominasi
