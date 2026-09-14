@@ -107,6 +107,10 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
    arsitektur sudah berubah beberapa kali, mis. MariaDB container → PostgreSQL host).
    Tidak berlaku untuk `RUNBOOK.md` (ordered list step-by-step sudah tepat, jangan
    diubah ke diagram) maupun `NOTES.md` (naratif insiden lebih jelas sebagai prosa).
+6. Tambahkan tabel kecil "urutan normal vs. urutan fix" di
+   `hop-6.0-to-7.0/NOTES.md` Insiden 6 (bug urutan migrasi `recent_closes`) untuk
+   memperjelas — prioritas rendah/nice-to-have, prosa yang ada sekarang sudah cukup
+   jelas.
 
 ## Catatan keamanan
 
