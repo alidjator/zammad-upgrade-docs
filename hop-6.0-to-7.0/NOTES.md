@@ -1,4 +1,4 @@
-# Hop 6.0 → 7.0 — Catatan (Status: 🔜 Riset selesai, eksekusi belum dimulai)
+# Hop 6.0 → 7.0 — Catatan (Status: 🔧 Uji `bundle install`/`pnpm install` tervalidasi, build image penuh belum)
 
 ## Requirement (dari riset `.ruby-version`, `Gemfile.lock`, `package.json` di tag `7.0.0`)
 
@@ -53,12 +53,38 @@ sudah tidak ada satupun service yang `depends_on` ke sana mulai hop ini.
   relevan untuk kita** karena kita build dari source (`git clone`), bukan install lewat
   repo paket resmi.
 
-## Rencana verifikasi sebelum build penuh
+## Verifikasi `bundle install` + `pnpm install` di container sementara (tervalidasi)
 
-Sebelum menulis Dockerfile final, uji dulu `bundle install` dan `pnpm install` di
-container sementara berbasis `ruby:3.4.8-bookworm` — pola yang sama yang selalu
-dipakai di setiap hop untuk menangkap masalah gem/paket lebih awal tanpa menunggu
-build image penuh.
+Dijalankan di `ruby:3.4.8-bookworm` sebelum menulis Dockerfile final — pola yang sama
+dipakai di setiap hop untuk menangkap masalah gem/paket lebih awal.
 
-<!-- Lanjutkan bagian ini dengan hasil eksekusi nyata: error yang ditemukan, fix yang
-dipakai, hasil validasi UI/search setelah hop ini benar-benar dijalankan di server. -->
+- **`apt-get update` di Debian Bookworm berjalan mulus, TIDAK perlu workaround
+  `archive.debian.org`** — beda dari semua image Buster (hop 1-3) yang selalu butuh
+  redirect ke archive EOL. Bookworm masih dalam masa dukungan resmi Debian saat hop
+  ini dieksekusi (2026).
+- **`pnpm install --frozen-lockfile` sukses 100% di percobaan pertama** — `corepack
+  enable` berhasil auto-fetch pnpm 10.29.1 sesuai pin `packageManager` di
+  `package.json`, tidak perlu install manual versi tertentu.
+- **Bug ditemukan: gem `rszr` (image resizing, dependency Zammad) gagal build native
+  extension** — `checking for pkg-config for imlib2... not found`. Root cause: paket
+  `pkg-config` sendiri tidak ter-install (Debian tidak menyertakannya secara default),
+  jadi meskipun `libimlib2-dev` sudah ada di rencana Dockerfile, extconf tidak bisa
+  mendeteksinya tanpa binary `pkg-config`. **Fix:** tambahkan paket `pkg-config` ke
+  daftar `apt-get install` di [Dockerfile](Dockerfile) (sebelum `libimlib2-dev`).
+  Setelah fix, `bundle install --without development test` sukses penuh: **128
+  Gemfile dependencies, 252 gems terinstall, `Bundle complete!`**.
+- Peringatan `platform specific gems ... Please run bundle lock
+  --normalize-platforms` muncul (untuk `pg`, `ffi`, `nokogiri`) — ini cuma saran
+  housekeeping dari Bundler, bukan error, aman diabaikan untuk staging.
+
+## Hasil validasi
+
+- ✅ `pnpm install --frozen-lockfile` — 0 error
+- ✅ `bundle install --without development test` — 0 error (setelah fix `pkg-config`)
+- ⬜ Build image Docker penuh — belum dilakukan
+- ⬜ Migrasi `db:migrate` — belum dilakukan
+- ⬜ `searchindex:rebuild` — belum dilakukan
+- ⬜ Verifikasi UI/search — belum dilakukan
+
+<!-- Lanjutkan bagian ini dengan hasil eksekusi nyata berikutnya: error build image,
+migrasi, reindex, dan hasil validasi UI/search setelah hop ini benar-benar selesai. -->

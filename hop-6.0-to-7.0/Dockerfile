@@ -15,7 +15,7 @@ FROM ruby:3.4.8-bookworm
 RUN apt-get update && apt-get install -y \
        curl gnupg git build-essential libpq-dev \
        imagemagick poppler-utils ca-certificates shared-mime-info \
-       libimlib2-dev \
+       pkg-config libimlib2-dev \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && corepack enable \
