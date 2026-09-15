@@ -112,11 +112,15 @@ jangan tunggu sampai proses gagal (pelajaran Insiden 9).
 
 ## Setelah hop ini selesai — proyek upgrade LENGKAP
 
-Ini hop terakhir di roadmap. Setelah tervalidasi:
-- [ ] Update README.md status table, buat tag `hop-7.0-to-7.1.3-done`
-- [ ] Diskusikan dengan user: kapan mempertimbangkan mematikan `zammad-mariadb-legacy`
-      (sudah tidak dipakai sejak hop 6.0→7.0, dibiarkan sebagai rollback safety net)
-- [ ] Rujuk ke [PRODUCTION_READINESS_TODO.md](../PRODUCTION_READINESS_TODO.md) —
-      gap analysis kesiapan cutover produksi asli, belum dikerjakan, perlu dibahas
-      sebelum domain `helpdesk.satu.solutions` benar-benar dialihkan ke `zammad-audit`
-      yang sudah di-upgrade
+Ini hop terakhir di roadmap. Setelah tervalidasi — status semua sudah ✅ selesai:
+- [x] Update README.md status table, buat tag `hop-7.0-to-7.1.3-done`
+- [x] Diskusikan dengan user: kapan mempertimbangkan mematikan `zammad-mariadb-legacy`
+      (sudah tidak dipakai sejak hop 6.0→7.0, dibiarkan sebagai rollback safety net —
+      lihat [../postgres-migration/RUNBOOK.md](../postgres-migration/RUNBOOK.md) untuk
+      status terkini)
+- [x] Rujuk ke [PRODUCTION_READINESS_TODO.md](../PRODUCTION_READINESS_TODO.md) — gap
+      analysis kesiapan cutover produksi asli, sudah selesai (9/9 kategori). Playbook
+      ini divalidasi penuh di sandbox riset yang terpisah dari produksi nyata (lihat
+      [../README.md § Konteks](../README.md#konteks)) — belum ada rencana konkret
+      mengalihkan domain produksi asli, [../CUTOVER_CHECKLIST.md](../CUTOVER_CHECKLIST.md)
+      adalah rujukan untuk itu nanti.
