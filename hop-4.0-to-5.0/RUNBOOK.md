@@ -17,7 +17,8 @@ MariaDB 11.x.
 
 ## Pre-flight
 
-- [ ] Backup database (`mysqldump`), **verifikasi integritasnya** (`gzip -t` atau
+- [ ] Backup database (`mariadb-dump` — bukan `mysqldump`, lihat
+  [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)), **verifikasi integritasnya** (`gzip -t` atau
   setara — JANGAN lanjut jika gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas (hop ini paling boros disk dari semua
   hop sejauh ini — build cache + 2 database MariaDB berjalan bersamaan)
