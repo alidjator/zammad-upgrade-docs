@@ -46,9 +46,19 @@ syarat mutlak sebelum ada tindakan yang menyentuh sistem produksi nyata.
 Ikuti urutan hop yang sama seperti yang divalidasi di sandbox — **tidak boleh
 melompati major version**:
 
+```mermaid
+flowchart LR
+    A["3.4.0"] --> B["4.0"]
+    B --> C["5.0"]
+    C --> D["6.0"]
+    D --> E["Migrasi DB<br/>MariaDB → PostgreSQL"]
+    E --> F["7.0"]
+    F --> G["7.1.3<br/>(latest)"]
 ```
-3.4.0 → 4.0 → 5.0 → 6.0 → [migrasi MariaDB→PostgreSQL] → 7.0 → 7.1.3
-```
+
+(Diagram sama dengan [README.md § Roadmap upgrade](README.md#roadmap-upgrade) — di
+sini urutan yang SAMA persis diterapkan ke produksi nyata, bukan yang sudah selesai
+di sandbox.)
 
 Untuk tiap hop, ikuti `hop-X-to-Y/RUNBOOK.md` yang relevan. Catatan penting hasil
 sandbox yang WAJIB diperhatikan (ringkasan — detail lengkap di NOTES.md tiap hop):

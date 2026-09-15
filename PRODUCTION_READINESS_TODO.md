@@ -230,7 +230,7 @@ asal-usul gap.
   sendiri di masa depan, atau pihak lain yang mengambil alih) yang belum pernah
   menyentuh proyek ini. README saat ini campuran reference+explanation, bukan
   panduan berpandu. → Tambahkan "Mulai di sini" pendek di README (5-10 menit
-  orientasi: baca README → ROADMAP → tabel status → pilih hop).
+  orientasi: 1. baca README, 2. ROADMAP, 3. tabel status, 4. pilih hop).
 - **CHANGELOG lintas-hop tersebar** di 5 file terpisah tanpa satu ringkasan/agregat
   "apa saja yang berubah total dari 3.4.0 ke 7.1.3". → Pertimbangkan satu tabel/daftar
   agregat perubahan skema besar lintas-hop.
