@@ -1,0 +1,33 @@
+Copyright (c) 2026 alidjator. All Rights Reserved.
+
+Repositori ini ("zammad-upgrade-docs") berisi log teknis pribadi/internal dari
+sebuah proyek riset upgrade Zammad, dipublikasikan secara terbuka sebagai bahan
+referensi bacaan — BUKAN sebagai proyek open-source.
+
+TIDAK ADA LISENSI yang diberikan untuk menggunakan ulang, menyalin, memodifikasi,
+mendistribusikan ulang, atau membuat karya turunan dari konten repositori ini
+(termasuk seluruh berkas Markdown, contoh Dockerfile/docker-compose.yml, dan
+potongan skrip) baik untuk tujuan komersial maupun non-komersial, tanpa izin
+tertulis eksplisit dari pemilik hak cipta.
+
+Yang DIPERBOLEHKAN tanpa izin:
+- Membaca dan mengutip sebagian kecil dengan atribusi yang jelas ke sumber asli,
+  sepanjang wajar untuk tujuan diskusi, ulasan, atau riset (kutipan wajar).
+
+Yang TIDAK DIPERBOLEHKAN tanpa izin tertulis dari pemilik:
+- Menyalin atau mem-fork ulang seluruh maupun sebagian besar konten ke tempat lain
+  seolah-olah karya sendiri.
+- Menjadikan konten ini dasar panduan/produk resmi, berbayar, atau komersial.
+- Menghapus atau menyamarkan atribusi kepemilikan saat mengutip.
+
+TIDAK ADA JAMINAN. Konten dibagikan APA ADANYA ("AS IS"), tanpa jaminan dalam
+bentuk apa pun — baik tersirat maupun tersurat — termasuk namun tidak terbatas
+pada jaminan kelayakan untuk tujuan tertentu, akurasi, atau kesesuaian untuk
+diterapkan di lingkungan/instance Zammad lain. Banyak detail di sini spesifik ke
+satu server penelitian tertentu (lihat README.md § Konteks); menerapkannya
+mentah-mentah di lingkungan lain adalah risiko pengguna sendiri sepenuhnya.
+Pemilik repositori tidak bertanggung jawab atas kerugian apa pun yang timbul dari
+penggunaan konten ini.
+
+Pertanyaan atau permintaan izin penggunaan: hubungi alidjator@gmail.com atau buka
+issue di https://github.com/alidjator/zammad-upgrade-docs/issues.
