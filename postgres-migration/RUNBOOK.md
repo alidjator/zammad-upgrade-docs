@@ -9,7 +9,7 @@ Ini migrasi database, BUKAN hop upgrade Zammad — tidak ada `assets:precompile`
 versi itu). Jika eksekusi ke produksi nanti, pastikan PostgreSQL target sudah disiapkan
 dan reachable dari container SEBELUM memulai.
 
-Langkah backup di § Pre-flight ini adalah SUMBER ASLI pelajaran verifikasi integritas
+Langkah backup di [§ Pre-flight](#pre-flight) ini adalah SUMBER ASLI pelajaran verifikasi integritas
 yang sekarang jadi standar di semua RUNBOOK proyek ini — lihat
 [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) untuk referensi cepat lintas hop.
 

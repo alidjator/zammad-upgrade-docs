@@ -32,7 +32,8 @@ menyatukan semuanya jadi satu alur keputusan untuk eksekusi produksi nyata.
 - [ ] Owner/eksekutor proses ditetapkan jelas, dengan kontak eskalasi jika proses
       berjam-jam (reindex ES) butuh keputusan saat eksekutor utama tidak tersedia
 - [ ] Stakeholder (agent/tim support, jika relevan pelanggan) sudah diberi tahu
-      jadwal maintenance window — lihat § 5 Komunikasi Stakeholder di bawah
+      jadwal maintenance window — lihat [§ 5. Komunikasi stakeholder](#5-komunikasi-stakeholder)
+      di bawah
 - [ ] Playbook (RUNBOOK per hop) sudah dibaca ulang dari awal, termasuk semua catatan
       insiden di NOTES.md tiap hop — jangan asumsikan hafal dari eksekusi sandbox
 
@@ -89,7 +90,8 @@ tengah tekanan:
 - [ ] **Integritas data**: jika ada indikasi migrasi merusak/menghilangkan data
       (row count tidak cocok, error data corruption), **rollback WAJIB**, bukan opsi —
       tidak ada fix-forward yang aman untuk kerusakan data.
-- [ ] Cara rollback: restore dari backup pre-cutover (§0), revert DNS/reverse-proxy ke
+- [ ] Cara rollback: restore dari backup pre-cutover ([§ 0. Sebelum menjadwalkan
+      tanggal cutover](#0-sebelum-menjadwalkan-tanggal-cutover)), revert DNS/reverse-proxy ke
       sistem produksi lama. Pastikan proses restore ini SENDIRI sudah pernah diuji
       (bukan cuma diasumsikan bekerja) sebelum hari-H.
 

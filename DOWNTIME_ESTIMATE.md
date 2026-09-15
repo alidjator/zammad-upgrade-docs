@@ -7,10 +7,11 @@ produksi nyata nanti — dengan 2 catatan penting:
    runner, dll), sehingga di server produksi yang lebih lega, kemungkinan bisa lebih
    cepat dari angka ini.
 2. **Data yang diuji adalah snapshot produksi yang diambil di masa lalu** (lihat
-   README.md § Konteks), bukan volume data produksi yang berjalan saat ini — durasi
-   reindex ES terbukti berbanding lurus dengan jumlah tiket, sehingga jika data produksi
-   nyata sudah jauh lebih banyak, **skalakan ulang angka di bawah**, jangan pakai
-   langsung apa adanya. Lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0.
+   [README.md § Konteks](README.md#konteks)), bukan volume data produksi yang berjalan
+   saat ini — durasi reindex ES terbukti berbanding lurus dengan jumlah tiket, sehingga
+   jika data produksi nyata sudah jauh lebih banyak, **skalakan ulang angka di bawah**,
+   jangan pakai langsung apa adanya. Lihat [CUTOVER_CHECKLIST.md § 0. Sebelum
+   menjadwalkan tanggal cutover](CUTOVER_CHECKLIST.md#0-sebelum-menjadwalkan-tanggal-cutover).
 
 ## Ringkasan per hop
 

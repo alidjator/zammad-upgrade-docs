@@ -143,7 +143,8 @@ atas dan coba lagi dari kondisi benar-benar bersih.
 
 Hop ini paling boros disk dari semua hop (base image lebih besar + Vite build + build
 tripel jika langkah 4 di atas tidak diikuti). Urutan pembersihan aman standar ada di
-[../ROADMAP.md](../ROADMAP.md) § "Pelajaran operasional lintas-hop".
+[../ROADMAP.md § "Pelajaran operasional
+lintas-hop"](../ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source).
 
 ## Jika gagal / perlu mundur
 

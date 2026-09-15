@@ -10,7 +10,7 @@
 
 **Status: ✅ Playbook upgrade 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA di
 sandbox riset** (seluruh 4 hop + migrasi database, lihat tabel Status di bawah).
-Sandbox ini terpisah dari produksi nyata (lihat § Konteks). **Kesiapan produksi juga
+Sandbox ini terpisah dari produksi nyata (lihat [§ Konteks](#konteks)). **Kesiapan produksi juga
 sudah ditangani** — lihat [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md)
 (gap analysis, 9/9 kategori selesai) dan [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)
 (checklist eksekusi saat playbook ini benar-benar diterapkan ke produksi nyata nanti).
@@ -96,7 +96,8 @@ server — ini juga bagian dari sandbox, bukan sistem produksi sungguhan. Keputu
 awalnya reaksi darurat (server berbagi RAM 7,5GB dengan banyak layanan lain, sempat
 membuat stack "produksi" simulasi error 500 karena tekanan memori saat 2 stack Zammad
 jalan bersamaan), bukan cuma keputusan proaktif — kronologi lengkap di
-[hop-3.4.0-to-4.0/NOTES.md](hop-3.4.0-to-4.0/NOTES.md) § "Insiden operasional".
+[hop-3.4.0-to-4.0/NOTES.md § "Insiden operasional selama proses
+ini"](hop-3.4.0-to-4.0/NOTES.md#insiden-operasional-selama-proses-ini).
 
 ## Arsitektur
 
@@ -239,17 +240,20 @@ Daftar asli (dibuat sebelum dikerjakan) beserta status penyelesaiannya:
 7. ✅ **Selesai.** Istilah ambigu diperjelas: catatan prefix index ES
    `zammad_production` ditambahkan; header kolom "Hop" di tabel Status README
    diganti "Tahap"; framing "staging" dikoreksi total setelah klarifikasi user
-   (lihat § Konteks — sandbox riset terpisah, bukan trafik produksi nyata); tabel
+   (lihat [§ Konteks](#konteks) — sandbox riset terpisah, bukan trafik produksi nyata); tabel
    "penamaan resource" (`zammad-staging` vs `zammad_staging` vs
    `zammad_staging_pg`) ditambahkan.
-8. ✅ **Selesai.** Boilerplate manajemen disk dipusatkan di `ROADMAP.md` §"Pelajaran
-   operasional lintas-hop", RUNBOOK per-hop tinggal cross-reference. Boilerplate
+8. ✅ **Selesai.** Boilerplate manajemen disk dipusatkan di [ROADMAP.md § "Pelajaran
+   operasional lintas-hop"](ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source),
+   RUNBOOK per-hop tinggal cross-reference. Boilerplate
    backup/restore dan rollback dipusatkan di [BACKUP_RESTORE.md](BACKUP_RESTORE.md).
 9. ✅ **Selesai.** `hop-4.0-to-5.0/TODO.md` dan `hop-5.0-to-6.0/TODO.md` dihapus
-   (redundan dengan `ROADMAP.md` §"Masalah yang berulang tiap hop", mengikuti
-   preseden `postgres-migration/TODO.md`). `ROADMAP.md` §"Titik kritis" dipangkas
-   jadi pointer ke tabel requirement (⚠️ langsung di baris tabel).
-10. ✅ **Selesai.** § Konteks README kini menyertakan framing reaksi darurat
+   (redundan dengan [ROADMAP.md § "Masalah yang berulang tiap
+   hop"](ROADMAP.md#masalah-yang-berulang-tiap-hop-build-from-source), mengikuti
+   preseden `postgres-migration/TODO.md`). [ROADMAP.md § "Titik
+   kritis"](ROADMAP.md#titik-kritis) dipangkas jadi pointer ke tabel requirement
+   (⚠️ langsung di baris tabel).
+10. ✅ **Selesai.** [§ Konteks](#konteks) README kini menyertakan framing reaksi darurat
     (bukan cuma "membebaskan resource") dengan cross-reference ke
     `hop-3.4.0-to-4.0/NOTES.md` untuk kronologi lengkap.
 
@@ -278,6 +282,7 @@ bebas. Perlakukan dengan kehati-hatian yang sama seperti data produksi sungguhan
   detail nama/kredensial di file publik ini — isi secara internal/terpisah dari repo
   jika perlu didokumentasikan lebih lanjut.)
 - Jika nanti bekerja dengan **data produksi TERKINI** (lihat
-  [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0), kebijakan yang sama berlaku —
+  [CUTOVER_CHECKLIST.md § 0. Sebelum menjadwalkan tanggal
+  cutover](CUTOVER_CHECKLIST.md#0-sebelum-menjadwalkan-tanggal-cutover)), kebijakan yang sama berlaku —
   bahkan lebih ketat, karena itu representasi langsung dari data produksi yang sedang
   berjalan, bukan snapshot historis.

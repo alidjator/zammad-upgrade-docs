@@ -112,7 +112,7 @@ disatukan di sana. Poin di bawah ini disimpan sebagai catatan asal-usul gap.
 
 ## 3. Penanganan Data & Keamanan Selama Migrasi
 
-✅ **Sudah ditangani** — lihat README.md § "Catatan keamanan" (diperluas 15 Sept
+✅ **Sudah ditangani** — lihat [README.md § "Catatan keamanan"](README.md#catatan-keamanan) (diperluas 15 Sept
 2026): kebijakan retensi dump database dan catatan kontrol akses sekarang eksplisit
 di sana, termasuk penegasan bahwa data snapshot di sandbox ini tetap PII sungguhan
 meski server-nya terpisah dari produksi live. Poin di bawah disimpan sebagai catatan
@@ -189,12 +189,14 @@ untuk dipakai ulang). Poin di bawah disimpan sebagai catatan asal-usul gap.
 
 ## 8. Sintesis Lintas-Hop / Lessons Learned
 
-✅ **Sudah ditangani** — lihat [ROADMAP.md](ROADMAP.md) § "Pelajaran operasional
-lintas-hop" (ditambahkan 15 Sept 2026): index ES stale, kejutan versi Redis, "Container
+✅ **Sudah ditangani** — lihat [ROADMAP.md § "Pelajaran operasional
+lintas-hop"](ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source)
+(ditambahkan 15 Sept 2026): index ES stale, kejutan versi Redis, "Container
 Up ≠ sehat", dan krisis disk berulang sekarang disatukan jadi satu referensi. Poin di
 bawah disimpan sebagai catatan asal-usul gap.
 
-ROADMAP.md § "Masalah yang berulang tiap hop" secara eksplisit hanya mencakup isu
+[ROADMAP.md § "Masalah yang berulang tiap
+hop"](ROADMAP.md#masalah-yang-berulang-tiap-hop-build-from-source) secara eksplisit hanya mencakup isu
 build-from-source (gem yang di-yank, asset belum precompile, nama rake task berubah).
 Ini sempit dibanding pola operasional yang benar-benar berulang lintas hop:
 - **Index Elasticsearch stale/nyangkut memblokir rebuild** — terjadi berulang di hop
@@ -209,14 +211,18 @@ Ini sempit dibanding pola operasional yang benar-benar berulang lintas hop:
   relevan untuk hop 7.0→7.1.3 dan cutover produksi nyata, tapi cuma tertulis di NOTES
   satu hop, belum jadi prinsip umum.
 
-→ Perluas ROADMAP.md § "Masalah yang berulang" (atau tambah section baru "Pelajaran
+→ Perluas [ROADMAP.md § "Masalah yang
+berulang"](ROADMAP.md#masalah-yang-berulang-tiap-hop-build-from-source) (atau tambah section baru "Pelajaran
 operasional lintas-hop") dengan 3 poin di atas.
 
 ## 9. Kelengkapan Gaya Diátaxis
 
-✅ **Sudah ditangani** — README.md § "Mulai di sini" (orientasi 10 menit) dan
-ROADMAP.md § "Ringkasan perubahan besar 3.4.0 → 7.1.3" (agregat lintas-hop) sudah
-ditambahkan (15 Sept 2026). Poin di bawah disimpan sebagai catatan asal-usul gap.
+✅ **Sudah ditangani** — [README.md § "Mulai di
+sini"](README.md#mulai-di-sini-orientasi-10-menit) (orientasi 10 menit) dan
+[ROADMAP.md § "Ringkasan perubahan besar 3.4.0 →
+7.1.3"](ROADMAP.md#ringkasan-perubahan-besar-340--713-agregat-lintas-hop) (agregat
+lintas-hop) sudah ditambahkan (15 Sept 2026). Poin di bawah disimpan sebagai catatan
+asal-usul gap.
 
 **Ini menyelesaikan seluruh 9 kategori gap analysis di file ini.**
 

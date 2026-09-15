@@ -69,8 +69,8 @@ docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/l
 
 ## Jika perlu mundur (rollback)
 
-Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
-per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 5** — sebelum itu
+Pola umum ada di [../BACKUP_RESTORE.md § "Pola umum rollback
+per hop upgrade"](../BACKUP_RESTORE.md#pola-umum-rollback-per-hop-upgrade). Untuk hop ini: titik baginya adalah **tahap 5** — sebelum itu
 tinggal hapus container/image (database masih di state hop 5.0), setelah itu wajib
 restore dari backup pre-flight.
 
@@ -78,5 +78,6 @@ restore dari backup pre-flight.
 
 Image hop ini jauh lebih besar dari hop-hop sebelumnya (node_modules), krisis disk
 terjadi 2x — lihat [NOTES.md](NOTES.md). Urutan pembersihan aman standar ada di
-[../ROADMAP.md](../ROADMAP.md) § "Pelajaran operasional lintas-hop" — jalankan lebih
+[../ROADMAP.md § "Pelajaran operasional
+lintas-hop"](../ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source) — jalankan lebih
 sering selama proses debugging, jangan tunggu sampai kritis.

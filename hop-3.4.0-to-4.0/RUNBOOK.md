@@ -72,6 +72,6 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake searchi
 
 ## Jika perlu mundur (rollback)
 
-Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
-per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 6 (migrate)** — sebelum
+Pola umum ada di [../BACKUP_RESTORE.md § "Pola umum rollback
+per hop upgrade"](../BACKUP_RESTORE.md#pola-umum-rollback-per-hop-upgrade). Untuk hop ini: titik baginya adalah **tahap 6 (migrate)** — sebelum
 itu tinggal hapus container/image, setelah itu wajib restore dari backup pre-flight.

@@ -7,7 +7,9 @@ tidak perlu menelusuri hop mana dulu jika kondisi darurat butuh restore cepat. S
 **Aturan mutlak, berlaku untuk SEMUA backup di proyek ini (staging maupun produksi
 nyata nanti):** setiap backup WAJIB diverifikasi integritasnya sebelum dianggap valid
 — jangan asumsikan sukses hanya karena command selesai tanpa error terlihat. Ini bukan
-teori: pernah terjadi insiden nyata di proyek ini (lihat § Insiden nyata di bawah)
+teori: pernah terjadi insiden nyata di proyek ini (lihat
+[§ Insiden nyata — kenapa verifikasi integritas ini bukan formalitas](#insiden-nyata--kenapa-verifikasi-integritas-ini-bukan-formalitas)
+di bawah)
 di mana koneksi terputus di tengah proses menghasilkan file backup yang TERLIHAT ada
 tapi isinya korup/terpotong.
 
@@ -76,14 +78,18 @@ migrate, nama container/database yang relevan):
   pun sampai `db:migrate` benar-benar dijalankan).
 - **Setelah tahap migrate schema dijalankan**: rollback TIDAK sesederhana itu lagi —
   migrasi Rails tidak didesain untuk di-reverse otomatis. **Satu-satunya jalan mundur
-  yang aman adalah restore dari backup pre-flight** (§ Restore di atas), bukan
-  mencoba downgrade schema manual.
+  yang aman adalah restore dari backup pre-flight** ([§ Restore — dari backup
+  PostgreSQL](#restore--dari-backup-postgresql) atau [§ Restore — dari backup
+  MariaDB](#restore--dari-backup-mariadb) di atas, sesuai jenis database yang
+  dipakai saat itu), bukan mencoba downgrade schema manual.
 
 ## Jika butuh restore SEKARANG (kondisi darurat)
 
 1. Cari backup TERAKHIR yang lolos verifikasi `gzip -t` — jangan pakai backup yang
    belum diverifikasi meski tampak paling baru.
-2. Stop service yang connect ke database (lihat § Restore di atas).
+2. Stop service yang connect ke database (lihat [§ Restore — dari backup
+   PostgreSQL](#restore--dari-backup-postgresql) atau [§ Restore — dari backup
+   MariaDB](#restore--dari-backup-mariadb) di atas).
 3. Restore sesuai jenis database (PostgreSQL atau MariaDB, lihat section masing-masing
    di atas).
 4. Verifikasi row count tabel utama (`tickets`, `ticket_articles`, `users`,
