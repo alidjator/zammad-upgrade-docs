@@ -15,8 +15,10 @@ nodejs` biasa yang cuma dapat versi lama dari Debian Buster), plus `yarn`.
   lanjut jika gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas — image hop ini jauh lebih besar dari
   sebelumnya karena `node_modules` (build context ~1.1GB, vs puluhan-ratusan MB di hop lain)
-- [ ] jika eksekusi ke produksi: window ~15 menit untuk build+migrate, reindex (~5,6 jam)
-  bisa di background
+- [ ] jika eksekusi ke produksi: window **~21 menit** untuk build+migrate (build 12m0s +
+  migrate 9m25s, angka nyata dari sandbox — lihat
+  [../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md)), reindex (~5,6 jam) bisa di
+  background
 
 ## Langkah eksekusi
 
