@@ -38,6 +38,10 @@ satu pun hop.
 
 ## Top 5 prioritas (paling penting sebelum cutover produksi asli)
 
+✅ **Item 1-6 di bawah sudah ditangani** — lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)
+(dibuat 15 Sept 2026). Disimpan di sini sebagai catatan asal-usul gap yang mendasari
+checklist tersebut.
+
 1. **Rencana monitoring pasca-cutover** — tanpa ini, regresi halus di produksi nyata
    (mis. email diam-diam gagal kirim) bisa tidak terdeteksi berhari-hari.
 2. **Go/no-go checklist final untuk cutover produksi** — terpisah dari checklist
@@ -85,6 +89,11 @@ teknis langsung.)*
   tegas ("STOP kalau ini gagal") bukan cuma checklist centang.
 
 ## 2. Kesiapan Cutover Produksi
+
+✅ **Sudah ditangani** — lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) (dibuat 15
+Sept 2026): gate go/no-go, kriteria keputusan rollback, verifikasi fungsional
+diperluas, rencana monitoring pasca-cutover, dan komunikasi stakeholder semua sudah
+disatukan di sana. Poin di bawah ini disimpan sebagai catatan asal-usul gap.
 
 - **Tidak ada rencana monitoring pasca-cutover** — apa yang dipantau (error rate, log
   email channel, job scheduler, disk/ES health), berapa lama observasi, ambang yang

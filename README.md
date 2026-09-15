@@ -1,9 +1,11 @@
 # Zammad Upgrade Project — 3.4.0 → 7.1.3 (latest)
 
-**Status: ✅ Upgrade staging 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA**
-(seluruh 4 hop + migrasi database, lihat tabel Status di bawah). Yang belum
-dikerjakan: kesiapan cutover ke produksi asli — lihat
-[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md).
+**Status: ✅ Playbook upgrade 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA di
+sandbox riset** (seluruh 4 hop + migrasi database, lihat tabel Status di bawah).
+Sandbox ini terpisah dari produksi nyata (lihat § Konteks). Yang belum dikerjakan:
+kesiapan menerapkan playbook ini ke produksi nyata — lihat
+[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md) (gap analysis) dan
+[CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) (checklist eksekusi saat hari-H nanti).
 
 ## Skill set yang dibutuhkan
 
