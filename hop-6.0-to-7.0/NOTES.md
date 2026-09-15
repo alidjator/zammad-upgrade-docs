@@ -244,7 +244,7 @@ bisa dijadikan bukti tunggal):**
   cuma "jumlah dokumen kebetulan cocok".
 - Index `..._organization` **1649 aktif + 202 dihapus = 1851**, cocok dengan jumlah
   asli. Index `..._user` **72.013**, hampir persis 72.014 (selisih wajar, data terus
-  berubah selama staging melayani trafik nyata).
+  berubah dari interaksi admin/pengujian selama proses upgrade sandbox berjalan).
 
 ## Verifikasi migrasi database
 
