@@ -19,6 +19,26 @@ sudah ditangani** — lihat [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_
 **Dikelola oleh:** [alidjator](https://github.com/alidjator) — pertanyaan lewat
 alidjator@gmail.com atau [issue di repo ini](https://github.com/alidjator/zammad-upgrade-docs/issues).
 
+📦 **Status proyek: ARSIP** — seluruh playbook riset ini final per 15 Sept 2026,
+tidak ada rencana update konten baru kecuali muncul temuan baru saat playbook ini
+benar-benar diterapkan ke produksi nyata nanti (lihat
+[CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)).
+
+## Daftar isi
+
+- [Tutorial (orientasi ~10 menit)](#tutorial-orientasi-10-menit)
+- [Peta dokumen](#peta-dokumen)
+- [Skill set yang dibutuhkan](#skill-set-yang-dibutuhkan)
+- [Konteks](#konteks)
+- [Arsitektur](#arsitektur)
+- [Lokasi kerja di server](#lokasi-kerja-di-server)
+- [Roadmap upgrade](#roadmap-upgrade)
+- [Status](#status)
+- [Penanda milestone (git tag)](#penanda-milestone-git-tag)
+- [Kesiapan produksi](#kesiapan-produksi---selesai-99-kategori)
+- [TODO — polish dokumentasi](#todo--polish-dokumentasi-setelah-hop-713-selesai--tervalidasi---selesai)
+- [Catatan keamanan](#catatan-keamanan)
+
 ## Tutorial (orientasi ~10 menit)
 
 Baru pertama kali buka repo ini (termasuk jika ini "diri sendiri di masa depan" yang
@@ -38,6 +58,36 @@ lupa detailnya)? Urutan baca yang disarankan:
 6. Mau menerapkan ke produksi nyata? Baca
    **[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md)** dan
    **[CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)** dulu sebelum RUNBOOK per hop.
+7. Nemu istilah yang tidak familiar? Cek **[GLOSSARY.md](GLOSSARY.md)**. Mau tahu
+   apakah suatu error pernah terjadi sebelumnya? Cek
+   **[INCIDENT_INDEX.md](INCIDENT_INDEX.md)** — indeks semua insiden lintas-hop.
+
+## Peta dokumen
+
+**Root (lintas-hop):**
+
+| File | Isi |
+|---|---|
+| `README.md` | Dokumen ini — entry point, konteks, roadmap, status |
+| `ROADMAP.md` | Matriks requirement per hop + pelajaran operasional lintas-hop |
+| `DOWNTIME_ESTIMATE.md` | Angka durasi nyata per hop untuk perencanaan maintenance window |
+| `CUTOVER_CHECKLIST.md` | Checklist eksekusi saat playbook diterapkan ke produksi nyata |
+| `BACKUP_RESTORE.md` | Referensi cepat darurat backup/restore |
+| `PRODUCTION_READINESS_TODO.md` | Gap analysis kesiapan produksi (histori — sudah 9/9 selesai) |
+| `INCIDENT_INDEX.md` | Indeks semua insiden lintas-hop untuk lookup cepat |
+| `GLOSSARY.md` | Istilah teknis yang dipakai berulang di seluruh dokumentasi |
+| `LICENSE` | Ketentuan penggunaan konten repo ini |
+
+**Per hop (folder `hop-X-to-Y/`, sama pola di tiap folder):**
+
+| File | Isi |
+|---|---|
+| `NOTES.md` | Catatan lengkap: insiden nyata yang ditemukan + fix-nya, kronologis |
+| `CHANGELOG.md` | Perubahan versi/skema (format [Keep a Changelog](https://keepachangelog.com)) |
+| `RUNBOOK.md` | Langkah eksekusi final tervalidasi — dipakai untuk mengulang hop ini |
+
+`postgres-migration/` mengikuti pola yang sama (`NOTES.md`, `RUNBOOK.md`) tanpa
+`CHANGELOG.md` karena ini migrasi database, bukan upgrade versi aplikasi.
 
 ## Skill set yang dibutuhkan
 
