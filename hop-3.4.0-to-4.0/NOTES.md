@@ -161,8 +161,8 @@ lanjut** — cek di Admin Panel → Roles jika ada fitur baru 4.0 yang terasa hi
 
 Server (`Koi-Server-Dev`) ternyata **shared** dengan banyak service lain di luar Zammad (OCR
 frontend/middleware/mariadb, Headscale, Falco, dll) — total RAM 7.5GB dibagi banyak pihak.
-Menjalankan produksi + staging Zammad bersamaan (2x Elasticsearch + 2x Rails) sempat membuat
-produksi (`helpdesk.satu.solutions`) error 500 karena tekanan memori. **Keputusan yang diambil:**
-matikan produksi (`zammad-audit`) selama seluruh proses upgrade berlangsung, dan arahkan domain
-produksi ke staging lewat nginx — supaya tidak perlu jalankan 2 stack bersamaan sampai hop 7
-selesai.
+Menjalankan stack "produksi" simulasi + staging Zammad bersamaan (2x Elasticsearch + 2x
+Rails) sempat membuat "produksi" simulasi (`helpdesk.satu.solutions`) error 500 karena
+tekanan memori. **Keputusan yang diambil:** matikan "produksi" simulasi (`zammad-audit`)
+selama seluruh proses upgrade berlangsung, dan arahkan domain simulasi ke staging lewat
+nginx — supaya tidak perlu jalankan 2 stack bersamaan sampai hop 7 selesai.
