@@ -68,15 +68,15 @@ lupa detailnya)? Urutan baca yang disarankan:
 
 | File | Isi |
 |---|---|
-| `README.md` | Dokumen ini — entry point, konteks, roadmap, status |
-| `ROADMAP.md` | Matriks requirement per hop + pelajaran operasional lintas-hop |
-| `DOWNTIME_ESTIMATE.md` | Angka durasi nyata per hop untuk perencanaan maintenance window |
-| `CUTOVER_CHECKLIST.md` | Checklist eksekusi saat playbook diterapkan ke produksi nyata |
-| `BACKUP_RESTORE.md` | Referensi cepat darurat backup/restore |
-| `PRODUCTION_READINESS_TODO.md` | Gap analysis kesiapan produksi (histori — sudah 9/9 selesai) |
-| `INCIDENT_INDEX.md` | Indeks semua insiden lintas-hop untuk lookup cepat |
-| `GLOSSARY.md` | Istilah teknis yang dipakai berulang di seluruh dokumentasi |
-| `LICENSE` | Ketentuan penggunaan konten repo ini |
+| `README.md` (dokumen ini) | Entry point, konteks, roadmap, status |
+| [`ROADMAP.md`](ROADMAP.md) | Matriks requirement per hop + pelajaran operasional lintas-hop |
+| [`DOWNTIME_ESTIMATE.md`](DOWNTIME_ESTIMATE.md) | Angka durasi nyata per hop untuk perencanaan maintenance window |
+| [`CUTOVER_CHECKLIST.md`](CUTOVER_CHECKLIST.md) | Checklist eksekusi saat playbook diterapkan ke produksi nyata |
+| [`BACKUP_RESTORE.md`](BACKUP_RESTORE.md) | Referensi cepat darurat backup/restore |
+| [`PRODUCTION_READINESS_TODO.md`](PRODUCTION_READINESS_TODO.md) | Gap analysis kesiapan produksi (histori — sudah 9/9 selesai) |
+| [`INCIDENT_INDEX.md`](INCIDENT_INDEX.md) | Indeks semua insiden lintas-hop untuk lookup cepat |
+| [`GLOSSARY.md`](GLOSSARY.md) | Istilah teknis yang dipakai berulang di seluruh dokumentasi |
+| [`LICENSE`](LICENSE) | Ketentuan penggunaan konten repo ini |
 
 **Per hop (folder `hop-X-to-Y/`, sama pola di tiap folder):**
 
