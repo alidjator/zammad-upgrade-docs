@@ -34,7 +34,7 @@ seperti sebelumnya, tanpa git source).
 - **Elasticsearch 7 resmi dinyatakan deprecated** — bukan requirement keras di 7.1.3
   (masih ≥7.8,<10, ES 7.17.28 kita tetap valid), tapi Zammad mengumumkan versi
   SETELAH 7.1.3 akan mewajibkan ES 8+. Tidak relevan untuk hop ini (7.1.3 adalah
-  rilis terakhir di roadmap proyek), dicatat untuk referensi kalau proyek dilanjutkan.
+  rilis terakhir di roadmap proyek), dicatat untuk referensi jika proyek dilanjutkan.
 - **Fulltext search asciifolding** — sudah diaktifkan sejak 7.0 (bukan baru di 7.1),
   sudah kita tangani saat hop sebelumnya.
 - **nginx wajib `proxy_http_version 1.1;` di `location /`** (berlaku sejak 7.0) —
@@ -59,7 +59,7 @@ seperti sebelumnya, tanpa git source).
   hop 6.0→7.0: container bisa "Up" padahal asset pipeline gagal diam-diam).
 - Cek `_cat/indices` bersih sebelum `searchindex:rebuild` — index stale dari percobaan
   gagal sebelumnya bisa memblokir rebuild (Insiden 8).
-- Pantau disk selama reindex — ES bisa masuk mode `read_only_allow_delete` kalau disk
+- Pantau disk selama reindex — ES bisa masuk mode `read_only_allow_delete` jika disk
   lewat flood-stage watermark, dan block ini TIDAK otomatis lepas (Insiden 9).
 
 ## Metode pengukuran waktu (standar baru, lihat DOWNTIME_ESTIMATE.md)
@@ -91,7 +91,7 @@ baru (~5,87GB) menumpuk di atas disk yang sudah mepet sejak awal (95% sebelum bu
 **Temuan tambahan:** `zammad-mariadb-legacy` yang sebelumnya sengaja di-`stop` (bukan
 dihapus) untuk hemat resource **otomatis ter-start lagi** oleh `docker compose up -d`
 — perilaku normal Compose (menyalakan SEMUA service yang terdaftar di file, tidak
-mengingat status manual sebelumnya). Perlu di-`stop` ulang setelah tiap `up -d` kalau
+mengingat status manual sebelumnya). Perlu di-`stop` ulang setelah tiap `up -d` jika
 memang ingin dibiarkan mati.
 
 ## Verifikasi build & boot

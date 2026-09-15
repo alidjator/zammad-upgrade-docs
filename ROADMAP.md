@@ -56,7 +56,7 @@ beberapa masalah generik cenderung muncul lagi di tiap hop — cek dulu sebelum 
 - **Gem yang di-yank dari rubygems.org** (seperti `mimemagic 0.3.5`) — perlu dicek per-versi apakah
   masih ada gem lama yang sudah tidak bisa diinstall, lalu patch `Gemfile.lock` manual.
 - **Gem git-sourced dengan commit yang sudah hilang** (seperti `tcr` dari `zammad-deps/tcr`) — cek
-  apakah masih bisa di-fetch sebelum build; kalau gem itu cuma dipakai untuk testing (grup `test`),
+  apakah masih bisa di-fetch sebelum build; jika gem itu cuma dipakai untuk testing (grup `test`),
   aman dihapus dari `Gemfile` karena kita build dengan `--without development test`.
 - **Asset belum pernah di-precompile** — git clone TIDAK menyertakan hasil compile CSS/JS.
   Selalu tambahkan `bundle exec rake assets:precompile RAILS_ENV=production` di Dockerfile.
@@ -65,7 +65,7 @@ beberapa masalah generik cenderung muncul lagi di tiap hop — cek dulu sebelum 
 - **Build 3 image terpisah untuk zammad-app/websocket/scheduler** — ternyata sudah
   terjadi **sejak hop 3.4.0→4.0** (dikonfirmasi lewat penelusuran `journalctl -u
   docker`, bukan cuma ditemukan pertama kali di hop 6.0→7.0 seperti dugaan awal —
-  lihat [DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)). Kalau `docker-compose.yml`
+  lihat [DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)). Jika `docker-compose.yml`
   tidak diberi `image:` yang SAMA untuk ketiga service itu (Dockerfile-nya identik),
   Compose akan build 3x terpisah alih-alih sekali — bisa melipatgandakan waktu build
   sampai ~4-8x lebih lama dari seharusnya (hop 4.0→5.0 makan ~1 jam 2 menit karena ini).
@@ -92,7 +92,7 @@ sini — cek semuanya sebelum eksekusi hop manapun berikutnya:
   requirement ke Redis ≥6 (hop 6.0→7.0) sama-sama baru ketahuan lewat **crash loop
   nyata saat boot**, bukan dari riset `.ruby-version`/`Gemfile.lock` di awal.
   **Pelajaran**: riset requirement dari file dependency itu perlu, tapi tidak cukup —
-  selalu siap diagnosis cepat kalau container crash-loop pasca-boot dengan pesan error
+  selalu siap diagnosis cepat jika container crash-loop pasca-boot dengan pesan error
   yang jelas menyebut versi service pendukung (Redis, DB, dst.), jangan asumsikan
   riset awal sudah menangkap semua requirement.
 - **"Container Up ≠ sehat"** — pelajaran eksplisit dari Insiden 7 hop 6.0→7.0:

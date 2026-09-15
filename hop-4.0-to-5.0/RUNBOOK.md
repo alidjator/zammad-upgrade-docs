@@ -8,20 +8,20 @@ pindah database, bukan ditambal satu-satu).
 [../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md).
 
 **PENTING — prasyarat database:** hop ini **WAJIB** jalan di atas MariaDB era 2021-2023
-(10.6/10.11), BUKAN MariaDB 11.x. Kalau dijalankan di MariaDB 11.x, kemungkinan besar akan
+(10.6/10.11), BUKAN MariaDB 11.x. Jika dijalankan di MariaDB 11.x, kemungkinan besar akan
 kena 3 bug yang didokumentasikan di NOTES.md #2 (parsing versi, BigDecimal, timestamp).
-Kalau ini dieksekusi ke **produksi sungguhan** nanti dan produksi masih di MariaDB 11.8.3,
-**migrasi database dulu ke MariaDB 10.x (atau langsung ke PostgreSQL kalau sudah di versi
+Jika ini dieksekusi ke **produksi sungguhan** nanti dan produksi masih di MariaDB 11.8.3,
+**migrasi database dulu ke MariaDB 10.x (atau langsung ke PostgreSQL jika sudah di versi
 Zammad ≥5.3) sebelum menjalankan hop ini** — jangan coba jalankan langsung di atas
 MariaDB 11.x.
 
 ## Pre-flight
 
 - [ ] Backup database (`mysqldump`), **verifikasi integritasnya** (`gzip -t` atau
-  setara — JANGAN lanjut kalau gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
+  setara — JANGAN lanjut jika gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas (hop ini paling boros disk dari semua
   hop sejauh ini — build cache + 2 database MariaDB berjalan bersamaan)
-- [ ] Kalau eksekusi ke produksi: siapkan window ~10 menit untuk tahap 1-8 (build+migrate),
+- [ ] jika eksekusi ke produksi: siapkan window ~10 menit untuk tahap 1-8 (build+migrate),
   reindex ES (~4 jam) bisa jalan di background setelah UI kembali bisa diakses
 
 ## Langkah eksekusi
@@ -32,7 +32,7 @@ mimemagic & tcr sudah dibenahi Zammad sendiri)
 git clone --branch 5.0.0 --depth 1 https://github.com/zammad/zammad.git app
 ```
 
-**2. Kalau database masih MariaDB versi baru (11.x)** — siapkan dulu MariaDB 10.11
+**2. Jika database masih MariaDB versi baru (11.x)** — siapkan dulu MariaDB 10.11
 terpisah dan restore data ke situ (lihat `docker-compose.yml` di folder ini untuk service
 `zammad-mariadb-legacy`, dan restore pakai `root`, BUKAN user aplikasi — dump berisi
 trigger dengan `DEFINER` yang butuh privilege SUPER):
@@ -54,7 +54,7 @@ docker compose build
 docker compose up -d
 ```
 Tunggu ~15-20 menit untuk `assets:precompile` selesai sebelum container `app` benar-benar
-listening (normal, bukan hang — cek `docker stats` kalau ragu, CPU harusnya tinggi/aktif).
+listening (normal, bukan hang — cek `docker stats` jika ragu, CPU harusnya tinggi/aktif).
 
 **5. Verifikasi koneksi database**
 ```bash
@@ -71,7 +71,7 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migr
 ```bash
 docker compose exec zammad-app env RAILS_ENV=production bundle exec rake searchindex:rebuild
 ```
-Kalau gagal dengan `resource_already_exists_exception` (sisa index dari percobaan
+Jika gagal dengan `resource_already_exists_exception` (sisa index dari percobaan
 sebelumnya), hapus manual dulu sebelum retry:
 ```bash
 docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/localhost.localdomain_zammad_production_*"
@@ -84,7 +84,7 @@ docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/l
 - [ ] Console browser tidak ada error baru (warning CSP/notification permission yang
   sudah dikenal, aman diabaikan)
 
-## Kalau perlu mundur (rollback)
+## Jika perlu mundur (rollback)
 
 Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
 per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 6** — sebelum itu tinggal

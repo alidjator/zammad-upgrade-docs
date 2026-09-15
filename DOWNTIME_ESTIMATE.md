@@ -8,13 +8,13 @@ produksi nyata nanti — dengan 2 catatan penting:
    cepat dari angka ini.
 2. **Data yang diuji adalah snapshot produksi yang diambil di masa lalu** (lihat
    README.md § Konteks), bukan volume data produksi yang berjalan saat ini — durasi
-   reindex ES terbukti berbanding lurus dengan jumlah tiket, jadi kalau data produksi
+   reindex ES terbukti berbanding lurus dengan jumlah tiket, jadi jika data produksi
    nyata sudah jauh lebih banyak, **skalakan ulang angka di bawah**, jangan pakai
    langsung apa adanya. Lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0.
 
 ## Ringkasan per hop
 
-| Hop | Build image | Migrasi schema | Reindex ES | Total (kalau reindex ditunggu) |
+| Hop | Build image | Migrasi schema | Reindex ES | Total (jika reindex ditunggu) |
 |---|---|---|---|---|
 | 3.4.0 → 4.0 | 32m17s | 1m33s | ~4,6 jam | **~5,2 jam** |
 | 4.0 → 5.0 | 62m2s | 1m31s | ~4,3 jam | **~5,4 jam** |
@@ -71,7 +71,7 @@ untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
 (bug urutan migrasi `recent_closes`) cuma menyumbang 38 detik dari total ini — tidak
 signifikan menambah durasi.
 
-**Jumlah migrasi per hop** (kalau tercatat): 3.4.0→4.0 — **33 migrasi**
+**Jumlah migrasi per hop** (jika tercatat): 3.4.0→4.0 — **33 migrasi**
 ([hop-3.4.0-to-4.0/RUNBOOK.md](hop-3.4.0-to-4.0/RUNBOOK.md)); 4.0→5.0 dan 5.0→6.0 —
 tidak pernah dicatat jumlahnya di dokumentasi manapun; 6.0→7.0 — **151 migrasi**
 (lihat di atas).
@@ -102,7 +102,7 @@ akurat, tapi tidak seragam prosesnya:
   di atas).
 
 **Keputusan: TIDAK pakai `time`.** `time` cuma mencetak hasilnya SEKALI ke layar begitu
-command selesai — kalau sesi `screen`-nya sempat tertimpa command lain sebelum sempat
+command selesai — jika sesi `screen`-nya sempat tertimpa command lain sebelum sempat
 dibaca (persis yang terjadi ke `1142032.hop7-reindex` di hop ini), angkanya hilang
 selamanya dan tidak bisa direkonstruksi lagi. Bandingkan dengan migrasi hop 6.0→7.0 di
 atas — datanya masih bisa diselamatkan justru karena Rails **sendiri** sudah menulis
@@ -140,7 +140,7 @@ Di keempat hop, reindex ES tetap **porsi terbesar dari total waktu (~80-93%,
 bervariasi per hop)**, didominasi satu tabel: `tickets` (161.894 baris → ~2,7-5,1 jam
 sendirian, sempat naik tiap hop karena beban server bersama yang bertambah, lalu turun
 lagi di hop 6.0→7.0 karena beban server saat itu lebih ringan). Migrasi schema
-database biasanya cepat (di bawah 10 menit) — KECUALI kalau satu hop mencakup banyak
+database biasanya cepat (di bawah 10 menit) — KECUALI jika satu hop mencakup banyak
 rilis minor sekaligus (hop 5.0→6.0 dan 6.0→7.0 sama-sama melompati banyak rilis minor,
 migrasinya jadi 9m25s dan 6m11s karena jumlah migrasi jauh lebih banyak).
 
@@ -149,7 +149,7 @@ tabel di atas): hop 4.0→5.0 build-nya sendiri makan **~1 jam 2 menit**, lebih 
 migrasi schema hop manapun. Jangan asumsikan build cuma "beberapa menit" saat
 merencanakan window — cek dulu apakah compose-nya sudah pakai `image:` yang sama untuk
 app/websocket/scheduler (lihat [hop-6.0-to-7.0/RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md)),
-kalau belum, build bisa 3x lebih lama dari seharusnya.
+Jika belum, build bisa 3x lebih lama dari seharusnya.
 
 **Implikasi penting untuk perencanaan produksi:** UI Zammad (login, buka/edit tiket)
 sudah bisa dipakai normal **begitu migrasi schema selesai** (~2 menit) — TIDAK perlu
@@ -169,18 +169,18 @@ tidak lengkap/kosong sampai reindex tuntas).
 
 ## Faktor lain yang menambah waktu (di luar angka tabel)
 
-- **Restore database** (kalau harus restore ke database baru, misal saat migrasi ke
+- **Restore database** (jika harus restore ke database baru, misal saat migrasi ke
   MariaDB legacy di hop 4.0→5.0): ~18-20 menit untuk ~800MB dump terkompresi
   (161rb tiket, 1 juta+ ticket_article)
 - **Disk cleanup** (`docker builder prune`, dll) — sebaiknya dilakukan **sebelum** hop
   mulai, bukan dihitung sebagai bagian downtime, tapi perlu dialokasikan waktu terpisah
-  di jadwal kalau disk sudah mepet
+  di jadwal jika disk sudah mepet
 - **Retry reindex akibat insiden** (hop 6.0→7.0) — angka ~3,1 jam di tabel di atas
   cuma durasi PROSES BERSIH (percobaan yang berhasil). Total wall-clock sungguhan
   jauh lebih lama karena 2 percobaan gagal sebelumnya (index stale, lalu ES masuk mode
   read-only karena disk penuh — lihat NOTES.md Insiden 8 & 9) yang masing-masing perlu
   diagnosis manual sebelum retry. Untuk perencanaan produksi, alokasikan buffer waktu
-  ekstra di luar angka "bersih" ini kalau kondisi disk server produksi belum dipastikan
+  ekstra di luar angka "bersih" ini jika kondisi disk server produksi belum dipastikan
   lega jauh di bawah 90% sebelum reindex dimulai.
 
 ## Update dokumen ini

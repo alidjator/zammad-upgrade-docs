@@ -28,5 +28,5 @@ GitHub `zammad/zammad`.
   `Exceptions::UnprocessableContent` (akan dihapus di Zammad 8.0). Tidak relevan —
   tidak ada integrasi custom yang memanggil exception class ini secara langsung.
 
-<!-- Tambahkan di sini kalau ada perubahan skema/tabel/kolom/fitur yang ditemukan
+<!-- Tambahkan di sini jika ada perubahan skema/tabel/kolom/fitur yang ditemukan
 selama eksekusi nyata. -->

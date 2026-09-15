@@ -20,7 +20,7 @@ alidjator@gmail.com atau [issue di repo ini](https://github.com/alidjator/zammad
 
 ## Mulai di sini (orientasi ~10 menit)
 
-Baru pertama kali buka repo ini (termasuk kalau ini "diri sendiri di masa depan" yang
+Baru pertama kali buka repo ini (termasuk jika ini "diri sendiri di masa depan" yang
 lupa detailnya)? Urutan baca yang disarankan:
 
 1. **Konteks** (di bawah) — pahami dulu ini sandbox riset, bukan produksi nyata.
@@ -29,7 +29,7 @@ lupa detailnya)? Urutan baca yang disarankan:
    `RUNBOOK.md` (langkah eksekusi tervalidasi) untuk hop yang menarik.
 3. **[ROADMAP.md](ROADMAP.md)** — matriks requirement per versi + pelajaran operasional
    lintas-hop (index ES stale, kejutan versi dependency, dsb).
-4. **[DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)** — kalau butuh angka durasi nyata
+4. **[DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)** — jika butuh angka durasi nyata
    untuk perencanaan.
 5. Mau eksekusi ulang salah satu hop? Buka `hop-X-to-Y/RUNBOOK.md` langsung — sudah
    berisi langkah final yang terbukti berhasil, tidak perlu baca `NOTES.md` dulu
@@ -225,7 +225,7 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
 3. Review duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/`CHANGELOG.md`
    per hop — pertimbangkan apakah perlu dipangkas atau dibiarkan (audiens beda-beda).
 4. Bakukan bahasa di seluruh dokumen — saat ini masih semi-formal/informal teknis
-   (mis. "kalau" → "jika/apabila", "kita" dihindari atau diganti kalimat pasif,
+   (mis. "jika" → "jika/apabila", "kita" dihindari atau diganti kalimat pasif,
    "makanya"/"jadi" sebagai penghubung → "sehingga"/"oleh karena itu").
 5. Tambahkan visualisasi di README.md: **Mermaid flowchart** untuk bagian "Roadmap
    upgrade" (gantikan teks panah polos, warnai per status selesai/berjalan/belum) dan
@@ -284,14 +284,14 @@ bebas. Perlakukan dengan kehati-hatian yang sama seperti data produksi sungguhan
   berisi PII lengkap (email, nama, isi tiket). Setelah suatu proses (migrasi, backup
   pre-flight hop) selesai dan diverifikasi berhasil, **hapus dump-nya** — jangan
   dibiarkan menumpuk di server (juga jadi penyebab disk penuh berkali-kali di proyek
-  ini). Kalau perlu disimpan sebagai arsip, jangan simpan di luar server tanpa
+  ini). Jika perlu disimpan sebagai arsip, jangan simpan di luar server tanpa
   enkripsi, dan batasi siapa yang punya akses ke lokasi penyimpanannya.
 - **Kontrol akses ke server & database sandbox**: catat siapa saja yang punya akses
   SSH ke `Koi-Server-Dev` dan siapa yang bisa query database `zammad_staging_pg`
   secara langsung — data di dalamnya tetap PII nyata. (Catatan ini sengaja tidak diisi
   detail nama/kredensial di file publik ini — isi secara internal/terpisah dari repo
-  kalau perlu didokumentasikan lebih lanjut.)
-- Kalau nanti bekerja dengan **data produksi TERKINI** (lihat
+  jika perlu didokumentasikan lebih lanjut.)
+- Jika nanti bekerja dengan **data produksi TERKINI** (lihat
   [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0), kebijakan yang sama berlaku —
   bahkan lebih ketat, karena itu representasi langsung dari data produksi yang sedang
   berjalan, bukan snapshot historis.

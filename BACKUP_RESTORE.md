@@ -1,7 +1,7 @@
 # Backup & Restore — Referensi Darurat
 
 Satu tempat rujukan cepat untuk backup/restore, dipisah dari RUNBOOK per hop supaya
-tidak perlu menelusuri hop mana dulu kalau kondisi darurat butuh restore cepat. Setiap
+tidak perlu menelusuri hop mana dulu jika kondisi darurat butuh restore cepat. Setiap
 `RUNBOOK.md` per hop cross-reference ke sini untuk langkah backup pre-flight-nya.
 
 **Aturan mutlak, berlaku untuk SEMUA backup di proyek ini (staging maupun produksi
@@ -21,7 +21,7 @@ pg_dump -h host.docker.internal -U <user> <db> | gzip > backup_$(date +%Y%m%d_%H
 gzip -t backup_*.sql.gz && echo "GZIP OK — aman dilanjutkan" || echo "GAGAL — ulangi backup, JANGAN lanjut"
 ```
 
-## Backup — database MariaDB (kalau masih relevan, mis. `zammad-mariadb-legacy`)
+## Backup — database MariaDB (jika masih relevan, mis. `zammad-mariadb-legacy`)
 
 ```bash
 docker compose exec <service_mariadb> mariadb-dump -u root -p'<root_password>' <database> | gzip > backup_$(date +%Y%m%d_%H%M%S).sql.gz
@@ -79,7 +79,7 @@ migrate, nama container/database yang relevan):
   yang aman adalah restore dari backup pre-flight** (§ Restore di atas), bukan
   mencoba downgrade schema manual.
 
-## Kalau butuh restore SEKARANG (kondisi darurat)
+## Jika butuh restore SEKARANG (kondisi darurat)
 
 1. Cari backup TERAKHIR yang lolos verifikasi `gzip -t` — jangan pakai backup yang
    belum diverifikasi meski tampak paling baru.

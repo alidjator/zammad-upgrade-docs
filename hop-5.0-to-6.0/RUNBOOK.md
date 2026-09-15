@@ -12,10 +12,10 @@ nodejs` biasa yang cuma dapat versi lama dari Debian Buster), plus `yarn`.
 ## Pre-flight
 
 - [ ] Backup database, **verifikasi integritasnya** (`gzip -t` atau setara — JANGAN
-  lanjut kalau gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
+  lanjut jika gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas — image hop ini jauh lebih besar dari
   sebelumnya karena `node_modules` (build context ~1.1GB, vs puluhan-ratusan MB di hop lain)
-- [ ] Kalau eksekusi ke produksi: window ~15 menit untuk build+migrate, reindex (~5,6 jam)
+- [ ] jika eksekusi ke produksi: window ~15 menit untuk build+migrate, reindex (~5,6 jam)
   bisa di background
 
 ## Langkah eksekusi
@@ -37,7 +37,7 @@ docker compose build
 docker compose up -d
 ```
 Tunggu ~10-15 menit untuk `assets:precompile` (Sprockets + Vite build) selesai. Cek
-`docker stats` kalau ragu — CPU harus tinggi/aktif, bukan diam.
+`docker stats` jika ragu — CPU harus tinggi/aktif, bukan diam.
 
 **4. Verifikasi koneksi database**
 ```bash
@@ -55,7 +55,7 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migr
 ```bash
 docker compose exec zammad-app env RAILS_ENV=production bundle exec rake zammad:searchindex:rebuild
 ```
-Kalau gagal karena disk/index nyangkut, hapus manual dulu:
+Jika gagal karena disk/index nyangkut, hapus manual dulu:
 ```bash
 docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/localhost.localdomain_zammad_production_*"
 ```
@@ -64,10 +64,10 @@ docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/l
 
 - [ ] Admin Panel → System → Version menunjukkan "Zammad version 6.0.0"
 - [ ] Search tiket berfungsi
-- [ ] Kalau ada background job kustom yang bergantung ke `script/scheduler.rb` (misal
+- [ ] jika ada background job kustom yang bergantung ke `script/scheduler.rb` (misal
   systemd unit di produksi asli, bukan Docker) — update ke `script/background-worker.rb start`
 
-## Kalau perlu mundur (rollback)
+## Jika perlu mundur (rollback)
 
 Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
 per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 5** — sebelum itu

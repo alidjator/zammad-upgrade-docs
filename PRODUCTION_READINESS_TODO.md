@@ -49,7 +49,7 @@ checklist tersebut.
 3. **Kriteria KEPUTUSAN rollback** (bukan cuma langkah teknisnya) — pola nyata sejauh
    ini selalu "tambal di tempat lalu lanjut" (8 insiden hop 6.0→7.0 semua di-fix-forward,
    belum pernah rollback sungguhan); tanpa ambang eksplisit, berisiko debugging tanpa
-   batas kalau terjadi di produksi asli.
+   batas jika terjadi di produksi asli.
 4. **Verifikasi fungsi bisnis inti** — email kirim/terima, trigger/automation, minimal
    satu cek kolom yang sudah berganti nama (CHANGELOG hop 6.0→7.0 sendiri sudah
    memperingatkan ini tapi belum ada langkah verifikasi yang menutup peringatan itu).
@@ -75,18 +75,18 @@ teknis langsung.)*
 ## 1. Kelengkapan Runbook
 
 - **Tidak ada kriteria DECISION untuk rollback**, hanya langkah "cara"-nya. Semua
-  RUNBOOK punya bagian "Kalau perlu mundur" yang menjelaskan *bagaimana* (restore
+  RUNBOOK punya bagian "jika perlu mundur" yang menjelaskan *bagaimana* (restore
   backup, hapus container), tapi tidak pernah menjelaskan *kapan* seharusnya benar-benar
   memutuskan mundur vs. lanjut fix-forward. → Tambahkan sub-bagian "Kapan harus mundur"
-  dengan ambang konkret (mis. "kalau downtime keras >X jam", "kalau N percobaan fix
-  gagal", "kalau migrasi merusak data").
+  dengan ambang konkret (mis. "jika downtime keras >X jam", "jika N percobaan fix
+  gagal", "jika migrasi merusak data").
 - **Tidak ada owner/kontak dan jalur eskalasi** di RUNBOOK manapun. Wajar untuk usaha
-  solo, tapi relevan untuk cutover nyata terutama proses berjam-jam (reindex ES) kalau
+  solo, tapi relevan untuk cutover nyata terutama proses berjam-jam (reindex ES) jika
   sesuatu perlu keputusan saat eksekutor tidak tersedia. → Baris singkat
   "Owner: [nama/kontak]" di header tiap RUNBOOK.
 - **Go/no-go sebelum mulai bersifat implisit** (checklist pre-flight), tidak menyatakan
-  eksplisit konsekuensi kalau satu item gagal. → Untuk cutover produksi, buat gate
-  tegas ("STOP kalau ini gagal") bukan cuma checklist centang.
+  eksplisit konsekuensi jika satu item gagal. → Untuk cutover produksi, buat gate
+  tegas ("STOP jika ini gagal") bukan cuma checklist centang.
 
 ## 2. Kesiapan Cutover Produksi
 
@@ -135,7 +135,7 @@ sekarang jadi langkah wajib eksplisit di SEMUA RUNBOOK (sebelumnya cuma di
 `postgres-migration`). Poin di bawah disimpan sebagai catatan asal-usul gap.
 
 - **Tidak ada satu referensi backup/restore darurat** — langkah backup tersebar
-  sebagai bullet pre-flight di 5 RUNBOOK berbeda. Kalau kondisi darurat produksi nyata
+  sebagai bullet pre-flight di 5 RUNBOOK berbeda. Jika kondisi darurat produksi nyata
   butuh restore cepat, orang harus menelusuri RUNBOOK mana dulu. → `BACKUP_RESTORE.md`
   ringkas di root, cross-reference dari tiap RUNBOOK.
 - **Pelajaran verifikasi integritas backup tidak digeneralisasi** — `postgres-migration`
@@ -168,7 +168,7 @@ asal-usul gap.
 
 Tidak ada pernyataan di mana pun soal siapa memelihara proyek ini, siapa punya akses
 ke kredensial produksi, atau kontak untuk pertanyaan. Sesuai dugaan untuk usaha solo,
-tapi karena repo publik, tetap dicatat — relevan kalau nanti perlu serah terima. →
+tapi karena repo publik, tetap dicatat — relevan jika nanti perlu serah terima. →
 Satu baris di README ("Dikelola oleh [nama], pertanyaan lewat [kanal]").
 
 ## 7. Kebersihan Repo Publik

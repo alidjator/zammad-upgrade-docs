@@ -113,8 +113,8 @@ cluster_block_exception: blocked by: [FORBIDDEN/12/index read-only / allow delet
 ```
 ES otomatis mengunci index (block `read_only_allow_delete`) begitu node melewati *flood-stage
 watermark* (default 95% disk usage) — proteksi bawaan supaya tidak ada write baru saat disk
-kritis. **Detail penting:** block ini baru terlepas otomatis kalau disk usage turun di bawah
-*high watermark* (90%, BUKAN 95%) — jadi kalau disk masih di 94%, block akan terus muncul lagi
+kritis. **Detail penting:** block ini baru terlepas otomatis jika disk usage turun di bawah
+*high watermark* (90%, BUKAN 95%) — jadi jika disk masih di 94%, block akan terus muncul lagi
 walau sudah dibuka manual.
 
 **Investigasi:** `df -h` → root partition (`/dev/vda3`, 130G) sudah terisi backup SQL 3.8GB
@@ -124,7 +124,7 @@ server ini juga dipakai untuk banyak proyek lain di luar Zammad.
 
 **Fix permanen:** bebaskan disk sampai jelas di bawah watermark (idealnya <85%).
 
-**Stopgap kalau disk belum bisa dibereskan cepat** (dipakai untuk lanjutkan testing hop ini):
+**Stopgap jika disk belum bisa dibereskan cepat** (dipakai untuk lanjutkan testing hop ini):
 ```bash
 # longgarkan watermark sementara
 docker compose exec zammad-elasticsearch curl -X PUT "http://localhost:9200/_cluster/settings" \
@@ -143,7 +143,7 @@ mendekati penuh berisiko ke MariaDB/Docker juga, bukan cuma ES.
 dalam dokumen ticket, bukan index terpisah): total sekitar **4,6 jam**, didominasi step
 `reload Ticket` sendirian (**15144 detik / ~4,2 jam**) dan `reload User` (1296 detik / ~21,6
 menit). Model lain semua di bawah 3 menit. **Ini jadi angka acuan penting untuk maintenance
-window kalau hop ini nanti dieksekusi ke produksi sungguhan** — reindex ES adalah tahap paling
+window jika hop ini nanti dieksekusi ke produksi sungguhan** — reindex ES adalah tahap paling
 lama dari seluruh proses upgrade, jauh melebihi migrasi schema database (1m33s).
 
 ## Konfigurasi nginx (domain diarahkan ke staging selama proses upgrade)
@@ -157,7 +157,7 @@ ini bug yang sempat kejadian di draft awal, sudah dikoreksi.
 Console browser menunjukkan `App.route dashboard:(error) | No permission for *` — kemungkinan
 terkait permission baru dari migrasi `AddMissingPermissions`/`AgentCustomerPermission` yang belum
 otomatis ter-assign ke role lama. Dashboard tetap render sempurna. **Belum diinvestigasi lebih
-lanjut** — cek di Admin Panel → Roles kalau ada fitur baru 4.0 yang terasa hilang.
+lanjut** — cek di Admin Panel → Roles jika ada fitur baru 4.0 yang terasa hilang.
 
 ## Insiden operasional selama proses ini
 

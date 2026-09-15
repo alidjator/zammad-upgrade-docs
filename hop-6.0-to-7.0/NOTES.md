@@ -67,7 +67,7 @@ Staging disk (`/`, 130GB) berulang kali mepet 93-100% selama proses build:
   di [docker-compose.yml](docker-compose.yml), lalu build **hanya satu service**
   (`docker compose build zammad-app`) sebelum `docker compose up -d` — Compose otomatis
   memakai image yang sama untuk service lain tanpa build ulang. Ini pola yang seharusnya
-  diterapkan juga ke hop-hop sebelumnya kalau upgrade diulang dari awal.
+  diterapkan juga ke hop-hop sebelumnya jika upgrade diulang dari awal.
 - **Insiden tambahan yang HARUS diwaspadai:** `docker image prune -af` yang dijalankan
   SEBELUM `docker compose up -d` (saat image baru belum dipakai container manapun)
   **menghapus image yang baru saja di-build**, karena dari sudut pandang Docker image
@@ -172,7 +172,7 @@ zammad-app`) supaya Puma memuat ulang manifest yang baru ada. Restart kedua ini 
 ada perubahan sejak build manual barusan. Setelah restart: `curl` mengonfirmasi
 `200 OK`.
 
-**Pelajaran untuk hop berikutnya (7.0→7.1.3) dan dokumentasi produksi nanti:** kalau
+**Pelajaran untuk hop berikutnya (7.0→7.1.3) dan dokumentasi produksi nanti:** jika
 `assets:precompile` gagal sekali karena alasan APAPUN (bukan cuma Redis) saat boot
 otomatis, container akan tetap "Up" (karena `rails server` bisa jalan independen) tapi
 500 di semua halaman — **selalu verifikasi `public/assets/` benar-benar berisi

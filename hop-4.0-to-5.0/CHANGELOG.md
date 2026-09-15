@@ -57,9 +57,9 @@ github.com/zammad/zammad, disaring.
 ## Catatan untuk admin/user Zammad (bukan cuma developer)
 
 Setelah upgrade ini, ada baiknya sosialisasikan ke tim agent/admin:
-- **Core Workflow** tersedia — kalau tim punya kebutuhan form kondisional yang selama
+- **Core Workflow** tersedia — jika tim punya kebutuhan form kondisional yang selama
   ini "susah diatur", ini waktunya explore fitur ini di Admin → Manage → Core Workflows.
-- Default **session timeout berubah jadi 4 minggu** — kalau kebijakan keamanan internal
+- Default **session timeout berubah jadi 4 minggu** — jika kebijakan keamanan internal
   butuh timeout lebih pendek, perlu diset manual di Admin → Security.
-- Kalau ada yang pakai channel **Google**, cek ulang permission granular yang baru —
+- Jika ada yang pakai channel **Google**, cek ulang permission granular yang baru —
   role lama mungkin perlu di-assign ulang permission spesifik channel Google.

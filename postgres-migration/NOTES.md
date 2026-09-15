@@ -43,7 +43,7 @@ saat Zammad sudah di versi 6.0.0 (memenuhi syarat minimum ≥5.3 untuk tool resm
 4. Jalankan pgloader via container terpisah (`dimitri/pgloader`), join network Docker
    Compose (`zammad-staging_default`) + `--add-host host.docker.internal:host-gateway`
 5. **Proses memakan waktu lama (43 menit) — dijalankan di dalam `screen`** supaya tidak
-   terputus kalau koneksi SSH/laptop pengguna bermasalah lagi (permintaan eksplisit user
+   terputus jika koneksi SSH/laptop pengguna bermasalah lagi (permintaan eksplisit user
    setelah insiden backup terputus di atas)
 6. Validasi row count MariaDB vs PostgreSQL untuk tabel utama
 7. Ubah `database.yml` ke adapter `postgresql`, restart container

@@ -6,7 +6,7 @@ Langkah final yang terbukti benar, hasil saringan dari [NOTES.md](NOTES.md).
 Ini migrasi database, BUKAN hop upgrade Zammad — tidak ada `assets:precompile`/reindex ES.
 
 **Prasyarat:** Zammad harus sudah ≥5.3 (tool `rake zammad:db:pgloader` baru ada mulai
-versi itu). Kalau eksekusi ke produksi nanti, pastikan PostgreSQL target sudah disiapkan
+versi itu). Jika eksekusi ke produksi nanti, pastikan PostgreSQL target sudah disiapkan
 dan reachable dari container SEBELUM memulai.
 
 Langkah backup di § Pre-flight ini adalah SUMBER ASLI pelajaran verifikasi integritas
@@ -16,7 +16,7 @@ yang sekarang jadi standar di semua RUNBOOK proyek ini — lihat
 ## Pre-flight
 
 - [ ] PostgreSQL target sudah terpasang, versi ≥13 (dicek: `psql --version`)
-- [ ] Buat database + user terisolasi khusus (jangan reuse punya aplikasi lain kalau
+- [ ] Buat database + user terisolasi khusus (jangan reuse punya aplikasi lain jika
   instance PostgreSQL dipakai bersama)
 - [ ] Konfirmasi `listen_addresses` dan `pg_hba.conf` mengizinkan koneksi dari network Docker
 - [ ] Backup MariaDB source, **verifikasi integritas backup** (`gzip -t`) sebelum lanjut
@@ -35,10 +35,10 @@ EOF
 **2. Backup MariaDB source (WAJIB verifikasi integritas)**
 ```bash
 docker compose exec <service_mariadb> mariadb-dump -u root -p'<root_password>' <database> | gzip > backup.sql.gz
-gzip -t backup.sql.gz && echo "GZIP OK"   # JANGAN lanjut kalau ini gagal
+gzip -t backup.sql.gz && echo "GZIP OK"   # JANGAN lanjut jika ini gagal
 ```
 
-**3. Tambah `extra_hosts` ke docker-compose.yml** (kalau PostgreSQL di host, bukan container)
+**3. Tambah `extra_hosts` ke docker-compose.yml** (jika PostgreSQL di host, bukan container)
 ```yaml
 extra_hosts:
   - "host.docker.internal:host-gateway"
@@ -58,7 +58,7 @@ docker run --rm --network <nama_network_compose> --add-host host.docker.internal
 ```
 
 **6. Jalankan migrasi sungguhan — WAJIB di dalam `screen`/`tmux`** (proses lama, ~40+ menit,
-jangan sampai terputus kalau koneksi SSH bermasalah)
+jangan sampai terputus jika koneksi SSH bermasalah)
 ```bash
 screen -S pgloader
 docker run --rm --network <nama_network_compose> --add-host host.docker.internal:host-gateway \
@@ -67,7 +67,7 @@ docker run --rm --network <nama_network_compose> --add-host host.docker.internal
 ```
 
 **7. Validasi row count** (source vs target, tabel-tabel utama) — jangan lanjut ke
-langkah 8 kalau ada yang tidak cocok.
+langkah 8 jika ada yang tidak cocok.
 
 **8. Ubah `database.yml` ke adapter `postgresql`, restart**
 ```bash
@@ -80,7 +80,7 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rails runner
   'puts ActiveRecord::Base.connection.adapter_name'
 docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migrate:status | grep -v "^   up"
 ```
-(command kedua harus TIDAK menampilkan baris apa pun selain header — kalau ada baris
+(command kedua harus TIDAK menampilkan baris apa pun selain header — jika ada baris
 `down`, ada migrasi yang belum jalan)
 
 ## Verifikasi akhir
@@ -89,7 +89,7 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migr
 - [ ] `db:migrate:status` semua `up`
 - [ ] UI & search berfungsi normal
 
-## Kalau perlu mundur (rollback)
+## Jika perlu mundur (rollback)
 
 Selama `database.yml` masih bisa dikembalikan ke config MariaDB lama DAN container
 MariaDB source belum dihapus — tinggal revert `database.yml`, restart. Data MariaDB

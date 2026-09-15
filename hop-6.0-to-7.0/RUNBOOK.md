@@ -1,7 +1,7 @@
 # Runbook — Hop 6.0 → 7.0
 
 Langkah final yang terbukti benar di staging, hasil saringan dari [NOTES.md](NOTES.md)
-(8 insiden ditemukan & diperbaiki selama eksekusi nyata). Ikuti urutan ini persis kalau
+(8 insiden ditemukan & diperbaiki selama eksekusi nyata). Ikuti urutan ini persis jika
 mengulang hop ini dari awal.
 
 **Prasyarat:** hop 5.0→6.0 sudah selesai & tervalidasi, migrasi PostgreSQL sudah
@@ -9,11 +9,11 @@ selesai & tervalidasi (staging sudah berjalan di atas PostgreSQL host, bukan Mar
 
 ## Pre-flight
 
-- [ ] Cek disk space (`df -h /`, `docker system df`) — kalau di bawah ~15GB tersisa,
+- [ ] Cek disk space (`df -h /`, `docker system df`) — jika di bawah ~15GB tersisa,
       bersihkan dulu SEBELUM mulai build (lihat bagian Disk di bawah). Hop ini adalah
       yang paling boros disk dari semua hop sejauh ini.
 - [ ] Backup database PostgreSQL staging (`pg_dump`), **verifikasi integritasnya**
-      (`gzip -t` atau setara — JANGAN lanjut kalau gagal). Detail lengkap:
+      (`gzip -t` atau setara — JANGAN lanjut jika gagal). Detail lengkap:
       [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 
 ## Langkah eksekusi
@@ -26,7 +26,7 @@ git clone --branch 7.0.0 --depth 1 https://github.com/zammad/zammad.git app
 ```
 
 **2. Sync `Dockerfile`, `Dockerfile.elasticsearch`, `docker-compose.yml` ke server**
-dari folder `hop-6.0-to-7.0/` ini. **Perhatikan 3 hal wajib di Dockerfile** (kalau
+dari folder `hop-6.0-to-7.0/` ini. **Perhatikan 3 hal wajib di Dockerfile** (jika
 menulis ulang manual, jangan sampai lupa — semua ini penyebab kegagalan nyata):
 - paket `pkg-config` di daftar `apt-get install` (gem `rszr` butuh ini untuk detect
   imlib2, bukan cuma `libimlib2-dev` saja)
@@ -61,7 +61,7 @@ Harus selesai dengan `Bundle complete!` (128 dependencies, 252 gems) tanpa error
 **4. Build image — HANYA SATU SERVICE, lalu `up -d` LANGSUNG (jangan ada prune di
 antaranya)**
 
-⚠️ **Kritis:** `zammad-app`/`websocket`/`scheduler` pakai Dockerfile identik. Kalau
+⚠️ **Kritis:** `zammad-app`/`websocket`/`scheduler` pakai Dockerfile identik. Jika
 `image:` di compose tidak dibuat sama, Compose akan build 3 image terpisah (~4-5GB x3)
 DAN meng-export layer 3x secara paralel — di server dengan disk mepet ini pernah
 membuat disk 100% penuh (`no space left on device`) di tengah build. Dengan `image:`
@@ -81,7 +81,7 @@ container yang memakainya), memaksa build ulang dari nol (~12 menit terbuang).
 docker compose ps
 docker compose logs zammad-app --tail 50
 ```
-Kalau ada `Error: incompatible Redis version` di log dan container terus "Restarting"
+Jika ada `Error: incompatible Redis version` di log dan container terus "Restarting"
 — pastikan `zammad-redis` sudah pakai image `redis:7-alpine`, bukan `redis:5`.
 
 **6. Migrasi database — WAJIB urut khusus karena bug migrasi resmi Zammad**
@@ -101,14 +101,14 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migr
 **7. Verifikasi asset pipeline benar-benar ter-precompile — JANGAN cuma percaya status
 container "Up"**
 
-Container bisa "Up" dan `rails server` jalan normal, TAPI kalau `assets:precompile`
+Container bisa "Up" dan `rails server` jalan normal, TAPI jika `assets:precompile`
 gagal diam-diam di boot pertama (misal karena race dengan crash-loop Redis di langkah
 sebelumnya), semua halaman akan 500. Selalu verifikasi:
 ```bash
 docker compose exec zammad-app ls public/assets/ | grep -E "application-.*\.css"
 curl -sI http://localhost:3010/
 ```
-Kalau `curl` mengembalikan 500 atau tidak ada file `application-*.css`, jalankan
+Jika `curl` mengembalikan 500 atau tidak ada file `application-*.css`, jalankan
 precompile manual lalu restart:
 ```bash
 docker compose exec zammad-app env RAILS_ENV=production bundle exec rake assets:precompile
@@ -120,7 +120,7 @@ curl -sI http://localhost:3010/   # harus 200 OK
 ```bash
 docker compose exec zammad-elasticsearch curl -s "http://localhost:9200/_cat/indices?v"
 ```
-Kalau ada index `localhost.localdomain_zammad_production_*` yang seharusnya sudah tidak
+Jika ada index `localhost.localdomain_zammad_production_*` yang seharusnya sudah tidak
 ada (dari percobaan rebuild sebelumnya yang gagal di tengah jalan), hapus dulu:
 ```bash
 docker compose exec zammad-elasticsearch curl -s -X DELETE "http://localhost:9200/localhost.localdomain_zammad_production_*"
@@ -130,7 +130,7 @@ Baru jalankan rebuild (lama, jalankan di `screen`):
 screen -S hop7-reindex
 docker compose exec zammad-app env RAILS_ENV=production bundle exec rake zammad:searchindex:rebuild
 ```
-Kalau gagal lagi dengan `resource_already_exists_exception`, ulangi cleanup index di
+Jika gagal lagi dengan `resource_already_exists_exception`, ulangi cleanup index di
 atas dan coba lagi dari kondisi benar-benar bersih.
 
 **9. Verifikasi akhir**
@@ -142,10 +142,10 @@ atas dan coba lagi dari kondisi benar-benar bersih.
 ## Disk — pembersihan sebelum/selama hop ini
 
 Hop ini paling boros disk dari semua hop (base image lebih besar + Vite build + build
-tripel kalau langkah 4 di atas tidak diikuti). Urutan pembersihan aman standar ada di
+tripel jika langkah 4 di atas tidak diikuti). Urutan pembersihan aman standar ada di
 [../ROADMAP.md](../ROADMAP.md) § "Pelajaran operasional lintas-hop".
 
-## Kalau gagal / perlu mundur
+## Jika gagal / perlu mundur
 
 `zammad-mariadb-legacy` tidak lagi dipakai service manapun di hop ini, tapi datanya
 masih utuh sebagai jaring pengaman terakhir. Untuk mundur satu langkah (ke image

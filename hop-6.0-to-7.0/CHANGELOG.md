@@ -46,5 +46,5 @@ Sumber: CHANGELOG resmi Zammad (github.com/zammad/zammad, tag `7.0.0`) + riset
   PostgreSQL menjadi satu-satunya adapter didukung.
 - Penghapusan integrasi Twitter & Slack.
 
-<!-- Tambahkan di sini kalau ada perubahan skema/tabel/kolom/fitur lain yang ditemukan
+<!-- Tambahkan di sini jika ada perubahan skema/tabel/kolom/fitur lain yang ditemukan
 selama eksekusi nyata (migrasi Rails, fitur baru/dihapus di UI, dsb). -->

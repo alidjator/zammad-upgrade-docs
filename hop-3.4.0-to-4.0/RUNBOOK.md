@@ -1,7 +1,7 @@
 # Runbook — Hop 3.4.0 → 4.0
 
 Ini adalah **langkah final yang terbukti benar**, hasil saringan dari proses debugging
-panjang di [NOTES.md](NOTES.md). Dipakai untuk: (a) mengulang hop ini dari nol kalau
+panjang di [NOTES.md](NOTES.md). Dipakai untuk: (a) mengulang hop ini dari nol jika
 staging perlu di-reset, atau (b) jadi template saat hop ini benar-benar dieksekusi ke
 instance produksi asli nanti.
 
@@ -12,11 +12,11 @@ tahap tercantum inline di tiap langkah di bawah; rincian lengkap di
 ## Pre-flight
 
 - [ ] Backup database produksi (`mysqldump`), **verifikasi integritasnya** (`gzip -t`
-  atau setara — JANGAN lanjut kalau gagal), simpan di luar server kalau memungkinkan.
+  atau setara — JANGAN lanjut jika gagal), simpan di luar server jika memungkinkan.
   Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 20GB bebas sebelum mulai (lihat insiden disk di
   NOTES.md — build cache Docker gampang menumpuk banyak selama proses)
-- [ ] Kalau ini eksekusi ke **produksi sungguhan** (bukan staging): jadwalkan maintenance
+- [ ] jika ini eksekusi ke **produksi sungguhan** (bukan staging): jadwalkan maintenance
   window ~1 jam untuk tahap 1-6 (migrasi schema saja cepat, ~1,5 menit), TAPI reindex ES
   di tahap 7 butuh ~4,6 jam tambahan — pertimbangkan jalankan reindex di background
   setelah UI sudah bisa diakses kembali (pencarian tidak akurat sementara sampai reindex
@@ -70,7 +70,7 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake searchi
 - [ ] Coba search tiket — hasil muncul dengan benar
 - [ ] Cek Admin Panel → System → Version menunjukkan versi yang benar
 
-## Kalau perlu mundur (rollback)
+## Jika perlu mundur (rollback)
 
 Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
 per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 6 (migrate)** — sebelum

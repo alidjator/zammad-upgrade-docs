@@ -33,7 +33,7 @@ detail rilis 5.1-5.4 lihat link compare di bagian bawah.
   Debian Buster, tidak dipakai serius) — `package.json` mensyaratkan `>=16`
 - **Build tool JS: Sprockets saja → Sprockets + Vite** (baru)
 - `tokens.name` → `token`, `tokens.label` → `name` (rename membingungkan, perhatikan
-  kalau ada integrasi yang query langsung ke kolom ini)
+  jika ada integrasi yang query langsung ke kolom ini)
 - `email_addresses.realname` → `name`
 - Banyak `change_column` presisi/panjang string (translations, organizations,
   http_logs)
@@ -53,11 +53,11 @@ detail rilis 5.1-5.4 lihat link compare di bagian bawah.
 
 ## Catatan untuk admin/user Zammad
 
-- **Fitur Karma/gamifikasi sudah dihapus total** dari Zammad — kalau tim pernah pakai
+- **Fitur Karma/gamifikasi sudah dihapus total** dari Zammad — jika tim pernah pakai
   ini, datanya sudah hilang bersama tabelnya (tidak ada cara mundur selain restore
   backup lama)
-- Kalau ada integrasi eksternal yang baca langsung tabel `tokens` atau
+- Jika ada integrasi eksternal yang baca langsung tabel `tokens` atau
   `email_addresses` di database (bukan lewat API resmi), **cek ulang** — nama
   kolomnya berubah di hop ini
-- **Pre-defined webhooks** baru tersedia — kalau tim sering setup webhook manual
+- **Pre-defined webhooks** baru tersedia — jika tim sering setup webhook manual
   berulang, worth dicek apakah sudah ada template siap pakai untuk kasusnya

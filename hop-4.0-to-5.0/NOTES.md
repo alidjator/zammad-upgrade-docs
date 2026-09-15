@@ -45,7 +45,7 @@ tiap restart), tapi ini satu-satunya cara robust karena DB baru bisa diakses saa
 sebagai Integer, bukan String.
 
 **Bug 2b:** `create_time_zone_conversion_attribute?(name, cast_type)` dipanggil dengan
-`name` berupa BigDecimal, bukan nama atribut — cuma muncul kalau ada model yang schema-nya
+`name` berupa BigDecimal, bukan nama atribut — cuma muncul jika ada model yang schema-nya
 di-load (`inherited` hook ActiveRecord).
 
 **Bug 2c:** Setelah bug 2b ditambal, muncul lagi: `ArgumentError: invalid value for
@@ -109,7 +109,7 @@ baru) juga harus dihapus segera, bukan dibiarkan menumpuk.
 
 Setelah disk dibereskan dan watermark dibuka lagi, retry `searchindex:rebuild` gagal lagi
 dengan `resource_already_exists_exception` untuk index `user` — sisa index dari percobaan
-sebelumnya yang gagal di tengah jalan (drop index di awal rebuild tidak selalu bersih kalau
+sebelumnya yang gagal di tengah jalan (drop index di awal rebuild tidak selalu bersih jika
 proses sebelumnya terhenti paksa). **Fix:** hapus manual semua index Zammad by wildcard
 sebelum retry:
 ```bash
@@ -123,7 +123,7 @@ docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/l
 ## Nama rake task search index (masih sama seperti hop sebelumnya)
 
 Namespace `searchindex:` (bukan `zammad:searchindex:`), tidak muncul di `rake --tasks`
-karena tidak ada deskripsi — selalu cek `lib/tasks/search_index_es.rake` langsung kalau
+karena tidak ada deskripsi — selalu cek `lib/tasks/search_index_es.rake` langsung jika
 ragu nama task berubah lagi di versi berikutnya.
 
 ## Verifikasi akhir
