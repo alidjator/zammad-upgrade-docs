@@ -42,7 +42,7 @@ untuk base image tiap hop (`ruby:2.6.6-stretch`, `ruby:2.7.4-buster`, dst.), lal
 timestamp `sbJoin` (container pertama terhubung ke network) untuk container
 `zammad-staging-zammad-app-1` setelahnya — selisihnya adalah durasi build+up total.
 Hop 5.0→6.0 dan 6.0→7.0 ternyata SUDAH dekat dengan angka lama (12m0s vs ~11 menit,
-12m7s vs ~12 menit) — cuma hop 1 dan 2 yang meleset jauh (4-8x lipat).
+12m7s vs ~12 menit) — cuma hop 3.4.0→4.0 dan 4.0→5.0 yang meleset jauh (4-8x lipat).
 
 **Temuan penting dari penelusuran ini:** log menunjukkan hop 3.4.0→4.0 (traceID sama
 untuk 3 span "exporting to image") dan hop 4.0→5.0 (3 traceID BERBEDA, masing-masing
@@ -51,7 +51,8 @@ disadari dan diperbaiki di hop 6.0→7.0 (lihat [hop-6.0-to-7.0/NOTES.md](hop-6.
 Insiden 4) — bukan masalah baru khusus hop terakhir, tapi sudah ada sejak hop pertama.
 Hop 5.0→6.0 kelihatan sudah lebih efisien (beberapa span "exporting to image" berbagi
 traceID yang sama, tanda cache Docker terpakai across service), menjelaskan kenapa
-durasinya jauh lebih pendek dari hop 1-2 meski base image-nya lebih besar/baru.
+durasinya jauh lebih pendek dari hop 3.4.0→4.0 dan 4.0→5.0 meski base image-nya lebih
+besar/baru.
 
 **Catatan transparansi metode pengukuran** — angka reindex ES di tabel ini didapat
 dengan cara yang **sama untuk keempat hop**: menjumlahkan baris "done in X seconds"
@@ -78,13 +79,13 @@ dicatat jumlahnya di dokumentasi manapun; 5.0→6.0 — **~150+ migrasi** (estim
 lihat [hop-5.0-to-6.0/NOTES.md](hop-5.0-to-6.0/NOTES.md)); 6.0→7.0 — **151 migrasi**
 (lihat di atas).
 
-**Migrasi schema hop 1-3 (`1m33s`/`1m31s`/`9m25s`) TERBUKTI tidak bisa ditelusuri
+**Migrasi schema hop 3.4.0→4.0, 4.0→5.0, dan 5.0→6.0 (`1m33s`/`1m31s`/`9m25s`) TERBUKTI tidak bisa ditelusuri
 ulang** — dicek 15 Sept 2026 lewat `docker ps -a` dan `/var/lib/docker/containers/`,
 cuma ada 1 container `zammad-app` yang tersisa (dibuat 14 Sept, punya hop 6.0→7.0 ini).
 Beda dari waktu build (tercatat di *daemon* Docker level host, bertahan lintas
 penggantian container) atau migrasi hop 6.0→7.0 (tercatat di `log/production.log`,
-kebetulan container-nya masih hidup saat ditelusuri), log migrasi hop 1-3 tersimpan di
-filesystem container HOP ITU SENDIRI yang sudah lama diganti/dihapus oleh build hop
+kebetulan container-nya masih hidup saat ditelusuri), log migrasi ketiga hop tersebut
+tersimpan di filesystem container HOP ITU SENDIRI yang sudah lama diganti/dihapus oleh build hop
 berikutnya (`docker compose up -d` untuk image baru otomatis stop+hapus container
 lama beserta seluruh filesystem-nya, termasuk `log/`, karena tidak ada satu pun
 docker-compose.yml yang me-mount `log/` ke volume persisten). Ini kesimpulan final,
@@ -98,7 +99,7 @@ akurat, tapi tidak seragam prosesnya:
   bawaan rake task Zammad sendiri.
 - Migrasi schema hop 6.0→7.0: hitung selisih timestamp `Rails.logger` di
   `log/production.log`.
-- Migrasi schema hop 1-3: metode tidak terdokumentasikan, dan **terbukti tidak bisa
+- Migrasi schema hop 3.4.0→4.0, 4.0→5.0, dan 5.0→6.0: metode tidak terdokumentasikan, dan **terbukti tidak bisa
   ditelusuri ulang lagi** — sumbernya (`log/production.log` di container hop tersebut)
   sudah dihapus permanen sejak container itu diganti oleh build hop berikutnya (detail
   di atas).
@@ -161,10 +162,12 @@ tidak lengkap/kosong sampai reindex tuntas).
 
 **Rekomendasi strategi maintenance window:**
 1. Window "keras" (user benar-benar tidak bisa akses): untuk tahap build + migrate
-   → **berkisar 18-64 menit per hop** (bukan "~10 menit" seperti perkiraan sebelumnya
-   yang ternyata tidak berdasar — lihat koreksi Build image di atas). Pastikan
+   → **berkisar 18-64 menit untuk hop 3.4.0→4.0 sampai 6.0→7.0** (bukan "~10 menit"
+   seperti perkiraan sebelumnya yang ternyata tidak berdasar — lihat koreksi Build
+   image di atas). **Pengecualian: hop 7.0→7.1.3 jauh di bawah rentang ini (~4,5
+   menit)** — hop paling ringan di seluruh proyek, lihat tabel di atas. Pastikan
    `docker compose build` sudah dites dulu di staging untuk hop yang sama sebelum
-   menetapkan angka window produksi, jangan asumsikan cepat.
+   menetapkan angka window produksi, jangan asumsikan cepat atau lambat.
 2. Reindex ES (~3-6 jam) bisa dijalankan **setelah** akses dibuka kembali, sebagai proses
    background — informasikan ke user bahwa pencarian tiket mungkin belum akurat 100%
    sampai beberapa jam ke depan
