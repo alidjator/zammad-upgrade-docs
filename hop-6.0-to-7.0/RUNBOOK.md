@@ -146,7 +146,7 @@ tripel jika langkah 4 di atas tidak diikuti). Urutan pembersihan aman standar ad
 [../ROADMAP.md § "Pelajaran operasional
 lintas-hop"](../ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source).
 
-## Jika gagal / perlu mundur
+## Jika perlu mundur (rollback)
 
 `zammad-mariadb-legacy` tidak lagi dipakai service manapun di hop ini, tapi datanya
 masih utuh sebagai jaring pengaman terakhir. Untuk mundur satu langkah (ke image
