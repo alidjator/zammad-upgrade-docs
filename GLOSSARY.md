@@ -27,15 +27,16 @@ namanya berubah-ubah antar versi Zammad — lihat [INCIDENT_INDEX.md](INCIDENT_I
 Biasanya tahap paling lama dari seluruh proses upgrade — lihat
 [DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md).
 
-**Flood-stage watermark** — ambang batas disk Elasticsearch (default 95% penggunaan)
-yang membuat ES otomatis mengunci index jadi read-only (`read_only_allow_delete`).
-Block ini **TIDAK otomatis lepas** hanya karena disk dibersihkan — harus dibuka manual
-lewat `_cluster/settings` API, dan baru benar-benar tidak muncul lagi jika disk di
-bawah *high watermark* (90%, bukan 95%).
+**Flood-stage watermark** — istilah resmi Elasticsearch: ambang batas disk (default
+95% penggunaan) yang membuat ES otomatis mengunci index jadi read-only
+(`read_only_allow_delete`). Block ini **TIDAK otomatis lepas** hanya karena disk
+dibersihkan — harus dibuka manual lewat `_cluster/settings` API, dan baru benar-benar
+tidak muncul lagi jika disk di bawah *high watermark* (90%, bukan 95%). Definisi resmi:
+[Disk-based shard allocation, dokumentasi Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-cluster.html#disk-based-shard-allocation).
 
-**High/low watermark** — ambang disk Elasticsearch yang lebih longgar (default
-90%/85%) yang mengatur alokasi shard baru — beda dari flood-stage watermark, tidak
-mengunci index jadi read-only.
+**High/low watermark** — istilah resmi Elasticsearch (lihat link di atas): ambang
+disk yang lebih longgar (default 90%/85%) yang mengatur alokasi shard baru — beda
+dari flood-stage watermark, tidak mengunci index jadi read-only.
 
 **`screen` / `tmux`** — terminal multiplexer, dipakai untuk proses panjang (build
 image, reindex ES) supaya tidak terputus jika koneksi SSH bermasalah. Lihat
