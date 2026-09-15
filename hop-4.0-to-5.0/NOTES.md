@@ -83,7 +83,7 @@ dilakukan nanti, di titik ketika Zammad sudah mencapai versi ≥5.3 (pakai tool 
 `rake zammad:db:pgloader`), sebelum hop ke 7.0 — sekarang sumbernya MariaDB 10.11 ini,
 bukan lagi MariaDB 11.8.3.
 
-## Insiden disk penuh (2x, lebih parah dari hop sebelumnya)
+## Insiden 3 — Disk penuh (2x, lebih parah dari hop sebelumnya)
 
 Disk sempat mencapai **100% penuh (911MB tersisa)** di tengah proses — lebih parah dari
 hop 1 (94-95%). Penyebab utama kali ini: **build cache Docker menumpuk sampai 11.43GB**
@@ -103,7 +103,7 @@ setelah beberapa kali build gagal berturut-turut selama debugging — jangan tun
 disk kritis. Volume ES versi lama yang sudah tidak dipakai (setelah pindah ke image ES
 baru) juga harus dihapus segera, bukan dibiarkan menumpuk.
 
-## Rebuild search index — masalah index nyangkut dari percobaan gagal
+## Insiden 4 — Rebuild search index: masalah index nyangkut dari percobaan gagal
 
 Setelah disk dibereskan dan watermark dibuka lagi, retry `searchindex:rebuild` gagal lagi
 dengan `resource_already_exists_exception` untuk index `user` — sisa index dari percobaan
