@@ -46,9 +46,10 @@ checklist tersebut.
 2. **Go/no-go checklist final untuk cutover produksi** — terpisah dari checklist
    verifikasi staging per-hop yang sudah ada.
 3. **Kriteria KEPUTUSAN rollback** (bukan cuma langkah teknisnya) — pola nyata sejauh
-   ini selalu "tambal di tempat lalu lanjut" (8 insiden hop 6.0→7.0 semua di-fix-forward,
-   belum pernah rollback sungguhan); tanpa ambang eksplisit, berisiko debugging tanpa
-   batas jika terjadi di produksi asli.
+   ini selalu "tambal di tempat lalu lanjut" (semua 32 insiden lintas-hop — lihat
+   [INCIDENT_INDEX.md](INCIDENT_INDEX.md) — di-fix-forward, belum pernah rollback
+   sungguhan); tanpa ambang eksplisit, berisiko debugging tanpa batas jika terjadi di
+   produksi asli.
 4. **Verifikasi fungsi bisnis inti** — email kirim/terima, trigger/automation, minimal
    satu cek kolom yang sudah berganti nama (CHANGELOG hop 6.0→7.0 sendiri sudah
    memperingatkan ini tapi belum ada langkah verifikasi yang menutup peringatan itu).

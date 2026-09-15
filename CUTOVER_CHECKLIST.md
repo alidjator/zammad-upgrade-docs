@@ -84,7 +84,8 @@ sandbox yang WAJIB diperhatikan (ringkasan — detail lengkap di NOTES.md tiap h
 
 ## 2. Kriteria KEPUTUSAN rollback (bukan cuma langkah teknisnya)
 
-Pola nyata di sandbox: **semua 8+ insiden selalu ditangani dengan fix-forward**
+Pola nyata di sandbox: **semua 32 insiden di seluruh proyek** (lihat
+[INCIDENT_INDEX.md](INCIDENT_INDEX.md)) **selalu ditangani dengan fix-forward**
 (tambal di tempat, lanjut), belum pernah ada rollback sungguhan. Itu valid di sandbox
 (risiko rendah, bisa dicoba berkali-kali), tapi **tidak boleh jadi default di produksi
 nyata** tanpa batas waktu. Tetapkan ambang ini SEBELUM mulai, bukan diputuskan di
