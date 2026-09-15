@@ -131,6 +131,32 @@ jalan bersamaan), bukan cuma keputusan proaktif — kronologi lengkap di
   pakai `corepack`).
 - Reverse proxy: nginx di host (bukan container), config di `/etc/nginx/conf.d/helpdesk.satu.solutions.conf`.
 
+**Diagram komponen (kondisi final, pasca hop 7.1.3):**
+
+```mermaid
+graph TD
+    nginx["nginx (host)<br/>helpdesk.satu.solutions"]
+    app["zammad-app<br/>(container)"]
+    ws["zammad-websocket<br/>(container)"]
+    sched["zammad-scheduler<br/>(container)"]
+    pg[("PostgreSQL 16.13<br/>(host, shared)")]
+    es["Elasticsearch 7.17.28<br/>(container)"]
+    redis["Redis 7-alpine<br/>(container)"]
+    legacy[("zammad-mariadb-legacy<br/>(stopped — rollback safety net,<br/>tidak dipakai lagi sejak hop 6.0→7.0)")]
+
+    nginx --> app
+    nginx -->|"/cable, /ws"| ws
+    app --> pg
+    app --> es
+    app --> redis
+    ws --> redis
+    sched --> pg
+    sched --> es
+    sched --> redis
+
+    style legacy fill:#666,stroke:#333,color:#ccc,stroke-dasharray: 5 5
+```
+
 ## Lokasi kerja di server
 
 - Produksi (mati sementara): `/usr/local/src/zammad-audit`
@@ -138,10 +164,20 @@ jalan bersamaan), bukan cuma keputusan proaktif — kronologi lengkap di
 
 ## Roadmap upgrade
 
-Zammad **tidak boleh loncat major version** — urutan wajib:
+Zammad **tidak boleh loncat major version** — urutan wajib (semua sudah ✅ selesai &
+tervalidasi di sandbox ini):
 
-```
-3.4.0 → 4.0 → 5.0 → 6.0 → [migrasi MariaDB→PostgreSQL, wajib ≥5.3] → 7.0 → 7.1.3 (latest)
+```mermaid
+flowchart LR
+    A["3.4.0"] --> B["4.0"]
+    B --> C["5.0"]
+    C --> D["6.0"]
+    D --> E["Migrasi DB<br/>MariaDB → PostgreSQL"]
+    E --> F["7.0"]
+    F --> G["7.1.3<br/>(latest)"]
+
+    classDef done fill:#2e7d32,stroke:#1b5e20,color:#fff
+    class A,B,C,D,E,F,G done
 ```
 
 Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
