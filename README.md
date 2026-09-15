@@ -1,5 +1,10 @@
 # Zammad Upgrade Project — 3.4.0 → 7.1.3 (latest)
 
+**Status: ✅ Upgrade staging 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA**
+(seluruh 4 hop + migrasi database, lihat tabel Status di bawah). Yang belum
+dikerjakan: kesiapan cutover ke produksi asli — lihat
+[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md).
+
 ## Skill set yang dibutuhkan
 
 Bukan checklist formal — ini kemampuan yang **benar-benar terpakai** selama proses hop
@@ -82,7 +87,7 @@ Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
 | 5.0 → 6.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-5.0-to-6.0/NOTES.md) (Redis hard dependency, Vite/Node.js 18) · [CHANGELOG.md](hop-5.0-to-6.0/CHANGELOG.md) · [RUNBOOK.md](hop-5.0-to-6.0/RUNBOOK.md) |
 | Migrasi MariaDB → PostgreSQL | ✅ **Selesai & tervalidasi** | [NOTES.md](postgres-migration/NOTES.md) (0 error, 11,3 juta baris) · [RUNBOOK.md](postgres-migration/RUNBOOK.md) |
 | 6.0 → 7.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-6.0-to-7.0/NOTES.md) (9 insiden: pkg-config, pnpm CI=true, krisis disk, Redis ≥6, bug urutan migrasi `recent_closes`, asset pipeline 500, ES flood-stage watermark) · [CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md) · [RUNBOOK.md](hop-6.0-to-7.0/RUNBOOK.md) |
-| 7.0 → 7.1.3 | 🔜 Riset requirement selesai, eksekusi belum dimulai | [NOTES.md](hop-7.0-to-7.1.3/NOTES.md) (Node.js ≥24, Ruby/Rails patch bump saja — hop paling ringan) · [CHANGELOG.md](hop-7.0-to-7.1.3/CHANGELOG.md) · [RUNBOOK.md](hop-7.0-to-7.1.3/RUNBOOK.md) |
+| 7.0 → 7.1.3 | ✅ **Selesai & tervalidasi — HOP TERAKHIR** | [NOTES.md](hop-7.0-to-7.1.3/NOTES.md) (hop paling ringan: build ~4,5 menit, migrasi 4 detik, tidak perlu reindex) · [CHANGELOG.md](hop-7.0-to-7.1.3/CHANGELOG.md) · [RUNBOOK.md](hop-7.0-to-7.1.3/RUNBOOK.md) |
 
 ## Penanda milestone (git tag)
 

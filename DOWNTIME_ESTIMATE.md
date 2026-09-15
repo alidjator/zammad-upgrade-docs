@@ -14,9 +14,16 @@ kemungkinan bisa lebih cepat dari angka ini.
 | 4.0 → 5.0 | 62m2s | 1m31s | ~4,3 jam | **~5,4 jam** |
 | 5.0 → 6.0 | 12m0s | 9m25s | ~5,6 jam | **~6,0 jam** |
 | 6.0 → 7.0 | 12m7s | 6m11s | ~3,1 jam | **~3,4 jam** |
+| 7.0 → 7.1.3 | 4m36s | 4s | tidak perlu | **~4m40s** |
 
 *(Format konsisten: durasi utama saja di tiap sel. Rincian tambahan — jumlah migrasi,
 breakdown detik per model, dll — ada di catatan prosa di bawah, bukan di dalam tabel.)*
+
+**Hop 7.0 → 7.1.3 adalah hop TERAKHIR proyek ini** — jauh lebih ringan dari semua hop
+sebelumnya: tidak perlu `searchindex:rebuild` sama sekali (tidak ada perubahan skema
+index di `BREAKING_CHANGES.md` 7.1), migrasi cuma 20 migrasi/4 detik, build ~4,5 menit.
+Total downtime keras (build+migrate) untuk hop ini **di bawah 5 menit** — kontras
+tajam dengan hop 4.0→5.0 yang butuh lebih dari 1 jam untuk tahap yang sama.
 
 ⚠️ **Angka Build image untuk hop 3.4.0→4.0 dan 4.0→5.0 dikoreksi tanggal 15 Sept 2026** —
 sebelumnya tertulis "~8 menit" untuk keduanya, tidak berdasarkan sumber terverifikasi

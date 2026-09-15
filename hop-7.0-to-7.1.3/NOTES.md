@@ -1,4 +1,4 @@
-# Hop 7.0 → 7.1.3 — Catatan (Status: 🔧 Uji bundle/pnpm install tervalidasi, build image belum)
+# Hop 7.0 → 7.1.3 — Catatan (Status: ✅ Selesai & Tervalidasi — HOP TERAKHIR PROYEK INI)
 
 ## Verifikasi `bundle install` + `pnpm install` di container sementara (tervalidasi)
 
@@ -140,4 +140,31 @@ juga tidak berubah (tetap 7.17.28, ≥7.8,<10). Kemungkinan besar `searchindex:r
 penuh TIDAK diperlukan untuk hop ini — cukup verifikasi search masih berfungsi dengan
 index yang sudah ada dari hop 6.0→7.0. Akan dikonfirmasi lewat verifikasi UI.
 
-<!-- Lanjutkan bagian ini dengan hasil verifikasi UI final. -->
+## Verifikasi UI final
+
+- ✅ Admin → System → Version menampilkan **"This is Zammad version 7.1.3"**
+- ✅ Pencarian tiket (kata kunci "pengajuan") mengembalikan **10.000 hasil** dengan
+  data lengkap dan benar — mengonfirmasi index lama dari hop 6.0→7.0 tetap berfungsi
+  normal pasca-migrasi skema, **tanpa perlu `searchindex:rebuild`** sama sekali,
+  sesuai dugaan (tidak ada perubahan skema index di `BREAKING_CHANGES.md` 7.1)
+- ✅ Situs tetap `200 OK` sepanjang proses
+
+## Durasi build (dari log Docker Buildx sendiri, `build-hop7.1.3.log`)
+
+Step `exporting to image` (step terakhir, menunggu semua step lain selesai) mencatat
+`DONE 276.2s` → total build **≈276 detik (~4 menit 36 detik)** — jauh lebih cepat dari
+hop 6.0→7.0 (727 detik), karena base image `ruby:3.4.9-bookworm` sudah ter-cache dan
+hop ini jauh lebih ringan (cuma bump patch Ruby/Rails + Node.js).
+
+## Status validasi hop ini — SEMUA SELESAI
+
+- ✅ `pnpm install` + `bundle install` — 0 error (127 dependencies/250 gems)
+- ✅ Build image (strategi 1 image dipakai 3 service) — sukses, ~4m36s
+- ✅ Boot container — bersih, TIDAK crash-loop sama sekali (beda dari hop 6.0→7.0)
+- ✅ `assets:precompile` — sukses otomatis di boot pertama, tidak perlu manual
+- ✅ `db:migrate` — 20 migrasi sukses, 4 detik total
+- ✅ Search index — TIDAK perlu rebuild, index lama tetap berfungsi
+- ✅ Verifikasi UI/search penuh — versi 7.1.3 tampil benar, search 10.000 hasil valid
+
+**Hop 7.0 → 7.1.3: SELESAI & TERVALIDASI. Ini menandai selesainya seluruh proyek
+upgrade Zammad 3.4.0 → 7.1.3 di staging.**
