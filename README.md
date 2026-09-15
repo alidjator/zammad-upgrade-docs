@@ -161,8 +161,11 @@ graph TD
 
 ## Lokasi kerja di server
 
-- Produksi (mati sementara): `/usr/local/src/zammad-audit`
-- Staging (working copy, project name `zammad-staging`): `/usr/local/src/zammad-staging`
+(Kedua stack ini adalah simulasi di sandbox riset — lihat [§ Konteks](#konteks) —
+bukan environment produksi nyata.)
+
+- Stack "produksi" simulasi (mati sementara): `/usr/local/src/zammad-audit`
+- Stack staging (working copy, project name `zammad-staging`): `/usr/local/src/zammad-staging`
 
 ## Roadmap upgrade
 
