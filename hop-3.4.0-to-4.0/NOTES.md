@@ -14,21 +14,19 @@ data asli produksi.
   database `zammad_staging`, user `zammad_staging` (privilege HANYA ke `zammad_staging.*`)
 - Sumber Zammad 4.0.0: `git clone --branch 4.0.0 --depth 1 https://github.com/zammad/zammad.git app`
 
-## Masalah yang ditemukan & fix-nya (urutan kejadian)
-
-### 1. `mysql`/`mysqldump` client tidak ditemukan di container MariaDB
+## Insiden 1 — `mysql`/`mysqldump` client tidak ditemukan di container MariaDB
 MariaDB 10.6+/11.x mengganti nama binary client dari `mysql` → `mariadb` (rebranding).
 **Fix:** pakai `mariadb` bukan `mysql` saat exec ke container MariaDB.
 
-### 2. Bash history expansion pada password mengandung `!`
+## Insiden 2 — Bash history expansion pada password mengandung `!`
 `-p"pass!word"` di dalam double-quote masih diproses bash sebagai history substitution.
 **Fix:** selalu pakai single-quote untuk password: `-p'pass!word'`.
 
-### 3. Password salah: pakai password `zammad_audit` untuk login `root`
+## Insiden 3 — Password salah: pakai password `zammad_audit` untuk login `root`
 Contoh compose yang dipakai punya 2 password berbeda (root vs user aplikasi) — tertukar saat
 testing manual. **Fix:** selalu double-check password mana yang dipakai untuk user mana.
 
-### 4. `mimemagic (0.3.5)` sudah di-yank dari rubygems.org
+## Insiden 4 — `mimemagic (0.3.5)` sudah di-yank dari rubygems.org
 Build gagal di `bundle install` karena versi lama sudah dihapus total dari RubyGems (masalah
 lisensi GPL). `bundle lock --update mimemagic --conservative` juga GAGAL (Bundler 1.17.3 tidak
 bisa "melompat" dari versi yang sudah sama sekali tidak bisa di-fetch).
@@ -41,7 +39,7 @@ sed -i '/^    mimemagic (0.3.10)$/a\      nokogiri (~> 1)\n      rake' app/Gemfi
 (dependency 0.3.10 dikonfirmasi via `https://rubygems.org/api/v2/rubygems/mimemagic/versions/0.3.10.json`
 → butuh `nokogiri (~> 1)` dan `rake`)
 
-### 5. Gem `tcr` — git commit sudah hilang dari repo `zammad-deps/tcr`
+## Insiden 5 — Gem `tcr` — git commit sudah hilang dari repo `zammad-deps/tcr`
 ```
 fatal: Could not parse object 'ddc8caf9d57a991c8af850d2870969e7a265ec59'.
 ```
@@ -56,7 +54,7 @@ sed -i "/gem 'tcr', git:/d" app/Gemfile
 bundle lock --conservative
 ```
 
-### 6. Proses fix di atas dijalankan via container sementara (bukan langsung di Dockerfile)
+## Insiden 6 — Proses fix di atas dijalankan via container sementara (bukan langsung di Dockerfile)
 Supaya `Gemfile`/`Gemfile.lock` yang sudah diperbaiki **persisten di disk** (bukan hilang tiap
 build ulang), semua fix dijalankan lewat container temporer dengan bind-mount:
 ```bash
@@ -71,7 +69,7 @@ docker run --rm -v /usr/local/src/zammad-staging/app:/opt/zammad -w /opt/zammad 
 Setelah `Bundle complete!` muncul di container sementara ini, baru `docker compose build` di
 compose project yang sebenarnya (hasilnya sukses karena Gemfile.lock sudah bersih).
 
-### 7. MariaDB user hanya bisa login dari `localhost`, bukan dari IP container
+## Insiden 7 — MariaDB user hanya bisa login dari `localhost`, bukan dari IP container
 ```
 Access denied for user 'zammad_staging'@'172.30.0.x' (using password: YES)
 ```
@@ -82,7 +80,7 @@ GRANT ALL PRIVILEGES ON zammad_staging.* TO 'zammad_staging'@'%';
 FLUSH PRIVILEGES;
 ```
 
-### 8. Asset belum pernah di-precompile → HTTP 500 di semua halaman
+## Insiden 8 — Asset belum pernah di-precompile → HTTP 500 di semua halaman
 ```
 The asset "application.css" is not present in the asset pipeline.
 ```
@@ -100,14 +98,14 @@ docker compose restart zammad-app
 `bundle exec rake assets:precompile RAILS_ENV=production` sebagai RUN step setelah
 `bundle install` — sudah dimasukkan ke `Dockerfile` di folder ini.
 
-### 9. Nama rake task search index rebuild berbeda dari dokumentasi resmi terbaru
+## Insiden 9 — Nama rake task search index rebuild berbeda dari dokumentasi resmi terbaru
 Dokumentasi resmi (versi terbaru) pakai `zammad:searchindex:rebuild`, tapi di 4.0.0 namespace-nya
 `searchindex` langsung (tanpa prefix `zammad:`).
 **Fix:** cek dulu dengan `bundle exec rake --tasks | grep -i -E "index|search"` sebelum asumsi
 nama task — source-nya ada di `lib/tasks/search_index_es.rake` (task: `drop`, `create`,
 `create_pipeline`, `reload`, `refresh`, `rebuild`, semua di namespace `searchindex:`).
 
-### 10. Disk host mendekati penuh (94-95%) → Elasticsearch mengunci index jadi read-only
+## Insiden 10 — Disk host mendekati penuh (94-95%) → Elasticsearch mengunci index jadi read-only
 ```
 cluster_block_exception: blocked by: [FORBIDDEN/12/index read-only / allow delete (api)]
 ```

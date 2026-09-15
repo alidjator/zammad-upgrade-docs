@@ -24,9 +24,7 @@ sendiri sudah memperbaikinya di Gemfile.lock 5.0.0 (mimemagic dihapus total dari
 dependency tree, tcr diambil dari rubygems.org resmi bukan git fork). `bundle install`
 langsung sukses tanpa patch apa pun.
 
-## Masalah yang ditemukan & fix-nya (urutan kejadian)
-
-### 1. `config/database.yml` tidak ada saat build (assets:precompile gagal)
+## Insiden 1 — `config/database.yml` tidak ada saat build (assets:precompile gagal)
 ```
 Could not load database configuration. No such file - ["config/database.yml"]
 ```
@@ -39,7 +37,7 @@ di docker-compose.yml (runtime)** — dijalankan tiap kali container start, sete
 `database.yml` asli ter-mount. Konsekuensi: startup jadi lebih lambat (perlu re-precompile
 tiap restart), tapi ini satu-satunya cara robust karena DB baru bisa diakses saat runtime.
 
-### 2. MariaDB 11.8.3 terlalu baru untuk Rails 6.0's mysql2 adapter — 3 bug berbeda
+## Insiden 2 — MariaDB 11.8.3 terlalu baru untuk Rails 6.0's mysql2 adapter — 3 bug berbeda
 
 **Bug 2a:** `mysql_variable('version').split('-')` gagal karena `@@version` ke-parse
 sebagai Integer, bukan String.

@@ -16,15 +16,13 @@ Ruby sama sekali (`bundle install` mulus dari awal, beda dari hop 1).
   Zammad 6.0.0 mensyaratkan `"node": ">=16"`)
 - Elasticsearch, Database: tidak berubah (tetap ES 7.17.28, MariaDB 10.11 legacy)
 
-## Masalah yang ditemukan & fix-nya (urutan kejadian)
-
-### 1. Lupa transfer file Dockerfile/docker-compose.yml baru ke server
+## Insiden 1 — Lupa transfer file Dockerfile/docker-compose.yml baru ke server
 Kesalahan proses, bukan bug Zammad — file baru cuma tersimpan di laptop, server masih
 pakai Dockerfile hop sebelumnya (`ruby:2.7.4-buster`). **Pelajaran:** selalu berikan
 command `cat > ... << 'EOF'` eksplisit untuk menulis file di server, jangan asumsikan
 sudah tersalin.
 
-### 2. `script/scheduler.rb` di-rename jadi `script/background-worker.rb`
+## Insiden 2 — `script/scheduler.rb` di-rename jadi `script/background-worker.rb`
 Command CLI juga berubah dari `run` jadi `start`. Arsitektur background job jadi lebih
 terpusat (`BackgroundServices::Cli`, mengelola beberapa service sekaligus, bukan cuma
 scheduler tunggal).
@@ -36,7 +34,7 @@ command: ["bash", "-c", "bundle exec ruby script/background-worker.rb start"]
 Juga perlu env var `BACKGROUND_SERVICES_LOG_TO_STDOUT: '1'` — defaultnya sekarang TIDAK
 log ke stdout (beda dari versi lama), jadi `docker compose logs` akan kosong tanpa ini.
 
-### 3. Redis jadi hard dependency — gagal connect ke `localhost:6379`
+## Insiden 3 — Redis jadi hard dependency — gagal connect ke `localhost:6379`
 ```
 Redis::CannotConnectError: Error connecting to Redis on localhost:6379
 ```
@@ -47,7 +45,7 @@ langsung mencoba connect ke Redis saat startup, dan defaultnya mengarah ke `loca
 **Fix:** tambahkan `REDIS_URL: redis://zammad-redis:6379` ke environment tiap service
 (app, websocket, scheduler).
 
-### 4. Vite build gagal — `Errno::ENOENT: yarn`
+## Insiden 4 — Vite build gagal — `Errno::ENOENT: yarn`
 Zammad 6.0 mengadopsi Vite sebagai build tool JS tambahan (selain Sprockets yang sudah
 ada). `assets:precompile` sekarang juga menjalankan task `vite:build_all`, yang butuh:
 - **Node.js ≥16** (Buster bawaan cuma 10.x) — install via NodeSource:
@@ -61,19 +59,19 @@ ada). `assets:precompile` sekarang juga menjalankan task `vite:build_all`, yang 
   install` tidak butuh koneksi database, jadi aman di Dockerfile langsung, mempercepat
   startup container)
 
-### 5. Nama rake task search index berubah LAGI (3 kali berubah, 3 hop berturut-turut)
+## Insiden 5 — Nama rake task search index berubah LAGI (3 kali berubah, 3 hop berturut-turut)
 Sekarang balik ke `zammad:searchindex:` (dengan prefix `zammad:`), dan sekarang PUNYA
 deskripsi jadi muncul normal di `rake --tasks` (di hop 1 & 2 harus cek source langsung
 karena tidak muncul). **Pelajaran permanen:** jangan pernah asumsikan nama/namespace task
 ini sama antar versi — selalu cek ulang tiap hop.
 
-### 6. Disk penuh lagi (95% → butuh cleanup 6,5GB build cache)
+## Insiden 6 — Disk penuh lagi (95% → butuh cleanup 6,5GB build cache)
 Pola yang sama seperti 2 hop sebelumnya. Kali ini build image jauh lebih besar dari
 biasanya karena `node_modules` (proses build image ada baris "transferring context:
 1.11GB" — jauh lebih besar dari hop-hop sebelumnya yang cuma puluhan-ratusan MB).
 **Fix:** `docker builder prune -af` (membebaskan 6,5GB).
 
-### 7. Index ES nyangkut lagi dari percobaan gagal (partial reload)
+## Insiden 7 — Index ES nyangkut lagi dari percobaan gagal (partial reload)
 Setelah retry pertama gagal karena disk, index `ticket` menunjukkan **743.560 dokumen**
 (jauh dari 161.884 tiket asli) sementara `user` masih 0 — indikasi reload berhenti di
 tengah proses `Ticket` (kemungkinan termasuk nested document `ticket_article` yang
