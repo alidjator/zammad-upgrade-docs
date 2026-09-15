@@ -122,8 +122,8 @@ jalan bersamaan), bukan cuma keputusan proaktif — kronologi lengkap di
   masih dipakai sampai hop 3). **Catatan penamaan index**: semua index ES tetap
   berprefix `zammad_production` (bukan `zammad_staging`) meski ini sandbox riset —
   ini nama internal default Zammad untuk `RAILS_ENV=production` (environment Rails,
-  BUKAN indikasi lingkungan produksi sungguhan), jadi jangan salah kira `DELETE`
-  terhadap index ini menyentuh data produksi nyata.
+  BUKAN indikasi lingkungan produksi sungguhan), sehingga `DELETE` terhadap index ini
+  tidak boleh disalahartikan sebagai menyentuh data produksi nyata.
 - Node.js: bawaan Debian per hop 1-2, **mulai hop 3 (Zammad 6.0) wajib Node.js 18.x via
   NodeSource** karena adopsi Vite (build tool JS baru) yang mensyaratkan Node ≥16.
   **Mulai hop 6.0→7.0, naik lagi ke Node.js 20.x, dan package manager JS berganti dari
@@ -211,61 +211,46 @@ kriteria keputusan rollback, rencana komunikasi stakeholder, dsb.), bukan kerapi
 yang sudah ada. Perlu ditangani sebelum cutover produksi asli, tidak harus menunggu
 hop 7.1.3 selesai.
 
-## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi)
+## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi) — ✅ SELESAI
 
-Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokumentasi
-"catat sambil eksekusi" selama upgrade masih berjalan. Setelah seluruh proses sampai
-7.1.3 selesai dan tervalidasi, terapkan:
+Daftar asli (dibuat sebelum dikerjakan) beserta status penyelesaiannya:
 
-1. Migrasi semua `CHANGELOG.md` per-hop ke format standar
-   [Keep a Changelog](https://keepachangelog.com) (kategori Added/Changed/Fixed/Removed)
-   — saat ini masih pakai heading bebas per topik.
-2. Tambahkan daftar isi/ringkasan singkat di awal `NOTES.md` yang sudah panjang
-   (terutama hop 6.0→7.0 dengan 8 insiden), supaya lebih cepat dinavigasi.
-3. Review duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/`CHANGELOG.md`
-   per hop — pertimbangkan apakah perlu dipangkas atau dibiarkan (audiens beda-beda).
-4. Bakukan bahasa di seluruh dokumen — saat ini masih semi-formal/informal teknis
-   (mis. "jika" → "jika/apabila", "kita" dihindari atau diganti kalimat pasif,
-   "makanya"/"jadi" sebagai penghubung → "sehingga"/"oleh karena itu").
-5. Tambahkan visualisasi di README.md: **Mermaid flowchart** untuk bagian "Roadmap
-   upgrade" (gantikan teks panah polos, warnai per status selesai/berjalan/belum) dan
-   **Mermaid diagram komponen** (`graph TD`) untuk bagian "Arsitektur" (gantikan bullet
-   list prosa, gambarkan hubungan app/DB/ES/Redis/reverse-proxy — penting karena
-   arsitektur sudah berubah beberapa kali, mis. MariaDB container → PostgreSQL host).
-   Tidak berlaku untuk `RUNBOOK.md` (ordered list step-by-step sudah tepat, jangan
-   diubah ke diagram) maupun `NOTES.md` (naratif insiden lebih jelas sebagai prosa).
-6. Tambahkan tabel kecil "urutan normal vs. urutan fix" di
-   `hop-6.0-to-7.0/NOTES.md` Insiden 6 (bug urutan migrasi `recent_closes`) untuk
-   memperjelas — prioritas rendah/nice-to-have, prosa yang ada sekarang sudah cukup
-   jelas.
-7. **Istilah ambigu** (hasil audit lintas-dokumen): tambahkan catatan kenapa index
-   Elasticsearch untuk staging tetap berprefix `zammad_production` (bukan
-   `zammad_staging`) — belum pernah dijelaskan di mana pun; ganti header kolom "Hop" di
-   tabel Status README jadi "Tahap" supaya konsisten dengan pemisahan yang sudah
-   dilakukan di penamaan git tag (migrasi Postgres eksplisit BUKAN hop); tambahkan satu
-   kalimat pengingat di awal `DOWNTIME_ESTIMATE.md` bahwa "staging" yang dimaksud saat
-   ini sedang melayani trafik user nyata (cross-reference ke README § Konteks);
-   tambahkan tabel kecil "penamaan resource" yang memetakan tiga nama mirip
-   (`zammad-staging` project Compose vs `zammad_staging` DB MariaDB vs
-   `zammad_staging_pg` DB PostgreSQL).
-8. **Boilerplate tersebar** — pindahkan nasihat manajemen disk generik (saat ini
-   diulang di RUNBOOK hop 4.0→5.0, 5.0→6.0, dan 6.0→7.0) ke `ROADMAP.md` §"Masalah yang
-   berulang tiap hop", tiap RUNBOOK cukup cross-reference + angka spesifik hop
-   tersebut. Pola serupa untuk boilerplate rollback di RUNBOOK 3 hop pertama —
-   pertimbangkan satu section umum (di README atau `ROLLBACK.md` baru) yang
-   di-cross-reference tiap RUNBOOK.
-9. **Redundansi `TODO.md` per-hop** (`hop-4.0-to-5.0/TODO.md`,
-   `hop-5.0-to-6.0/TODO.md`) — section "langkah yang terbukti perlu diulang tiap hop"
-   pada dasarnya menyalin ulang `ROADMAP.md` §"Masalah yang berulang tiap hop" dengan
-   kalimat berbeda; ganti jadi cross-reference + poin yang benar-benar spesifik hop
-   tersebut. `ROADMAP.md` §"Titik kritis" poin 1-2 juga merestate isi kolom "Catatan
-   wajib" di tabel yang sama persis di atasnya — pertimbangkan dipangkas jadi highlight
-   di tabel saja.
-10. **(Minor)** README § Konteks membingkai penghentian produksi sebagai keputusan
-    proaktif ("membebaskan resource"), padahal `hop-3.4.0-to-4.0/NOTES.md` mencatatnya
-    sebagai reaksi darurat setelah produksi sempat down 500 karena tekanan memori —
-    tidak kontradiktif, tapi tambahkan satu klausa di README yang mengarah ke NOTES.md
-    untuk kronologi lengkap.
+1. ✅ **Selesai.** Semua `CHANGELOG.md` per-hop dimigrasikan ke format standar
+   [Keep a Changelog](https://keepachangelog.com) (kategori Added/Changed/Removed/
+   Deprecated/Security).
+2. ✅ **Selesai.** Daftar isi ditambahkan di awal `NOTES.md` yang panjang (terutama
+   hop 6.0→7.0 dengan 9 insiden).
+3. ✅ **Selesai.** Duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/
+   `CHANGELOG.md` ditinjau dan dipangkas (mis. bagian disk di `RUNBOOK.md` di-
+   cross-reference ke `ROADMAP.md`, bukan diulang).
+4. ✅ **Selesai.** Bahasa dibakukan di seluruh dokumen: "kalau" → "jika" (78
+   kemunculan, mekanis lewat script, seluruh 21 file markdown), lalu "kita" dan
+   penghubung "jadi"/"makanya" (bermakna "sehingga") diganti manual → "sehingga"/
+   kalimat pasif — diterapkan khusus di dokumen rujukan resmi (README.md,
+   ROADMAP.md, DOWNTIME_ESTIMATE.md, CUTOVER_CHECKLIST.md,
+   PRODUCTION_READINESS_TODO.md, BACKUP_RESTORE.md). `NOTES.md`/`RUNBOOK.md`/
+   `CHANGELOG.md` per-hop sengaja **tidak** disentuh — sifatnya catatan naratif
+   historis, register semi-formal di sana tidak mengurangi kejelasan.
+5. ✅ **Selesai.** Mermaid flowchart untuk "Roadmap upgrade" dan Mermaid `graph TD`
+   untuk "Arsitektur" ditambahkan di README.md.
+6. ✅ **Selesai.** Tabel "urutan normal vs. urutan fix" ditambahkan di
+   `hop-6.0-to-7.0/NOTES.md` Insiden 6.
+7. ✅ **Selesai.** Istilah ambigu diperjelas: catatan prefix index ES
+   `zammad_production` ditambahkan; header kolom "Hop" di tabel Status README
+   diganti "Tahap"; framing "staging" dikoreksi total setelah klarifikasi user
+   (lihat § Konteks — sandbox riset terpisah, bukan trafik produksi nyata); tabel
+   "penamaan resource" (`zammad-staging` vs `zammad_staging` vs
+   `zammad_staging_pg`) ditambahkan.
+8. ✅ **Selesai.** Boilerplate manajemen disk dipusatkan di `ROADMAP.md` §"Pelajaran
+   operasional lintas-hop", RUNBOOK per-hop tinggal cross-reference. Boilerplate
+   backup/restore dan rollback dipusatkan di [BACKUP_RESTORE.md](BACKUP_RESTORE.md).
+9. ✅ **Selesai.** `hop-4.0-to-5.0/TODO.md` dan `hop-5.0-to-6.0/TODO.md` dihapus
+   (redundan dengan `ROADMAP.md` §"Masalah yang berulang tiap hop", mengikuti
+   preseden `postgres-migration/TODO.md`). `ROADMAP.md` §"Titik kritis" dipangkas
+   jadi pointer ke tabel requirement (⚠️ langsung di baris tabel).
+10. ✅ **Selesai.** § Konteks README kini menyertakan framing reaksi darurat
+    (bukan cuma "membebaskan resource") dengan cross-reference ke
+    `hop-3.4.0-to-4.0/NOTES.md` untuk kronologi lengkap.
 
 ## Catatan keamanan
 

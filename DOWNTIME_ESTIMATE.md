@@ -1,14 +1,14 @@
 # Estimasi Downtime — Referensi untuk Perencanaan Maintenance Window
 
 Angka di bawah adalah **hasil pengukuran nyata** dari eksekusi di sandbox riset
-(bukan perkiraan teoritis), jadi cukup representatif untuk perencanaan window
+(bukan perkiraan teoritis), sehingga cukup representatif untuk perencanaan window
 produksi nyata nanti — dengan 2 catatan penting:
 1. Performa sandbox ini berbagi resource server dengan banyak service lain (OCR, CI
-   runner, dll), jadi di server produksi yang lebih lega, kemungkinan bisa lebih
+   runner, dll), sehingga di server produksi yang lebih lega, kemungkinan bisa lebih
    cepat dari angka ini.
 2. **Data yang diuji adalah snapshot produksi yang diambil di masa lalu** (lihat
    README.md § Konteks), bukan volume data produksi yang berjalan saat ini — durasi
-   reindex ES terbukti berbanding lurus dengan jumlah tiket, jadi jika data produksi
+   reindex ES terbukti berbanding lurus dengan jumlah tiket, sehingga jika data produksi
    nyata sudah jauh lebih banyak, **skalakan ulang angka di bawah**, jangan pakai
    langsung apa adanya. Lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0.
 
@@ -46,7 +46,7 @@ Hop 5.0→6.0 dan 6.0→7.0 ternyata SUDAH dekat dengan angka lama (12m0s vs ~11
 **Temuan penting dari penelusuran ini:** log menunjukkan hop 3.4.0→4.0 (traceID sama
 untuk 3 span "exporting to image") dan hop 4.0→5.0 (3 traceID BERBEDA, masing-masing
 ~12-17 menit terpisah) **SAMA-SAMA kena masalah "build 3 image terpisah"** yang baru
-kita sadari dan perbaiki di hop 6.0→7.0 (lihat [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md)
+disadari dan diperbaiki di hop 6.0→7.0 (lihat [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md)
 Insiden 4) — bukan masalah baru khusus hop terakhir, tapi sudah ada sejak hop pertama.
 Hop 5.0→6.0 kelihatan sudah lebih efisien (beberapa span "exporting to image" berbagi
 traceID yang sama, tanda cache Docker terpakai across service), menjelaskan kenapa

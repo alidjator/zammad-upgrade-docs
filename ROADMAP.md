@@ -50,14 +50,14 @@ proxy nginx perlu disesuaikan sebelum hop 6.0.
 
 ## Masalah yang berulang tiap hop (build from source)
 
-Karena kita selalu `git clone` source code resmi per tag (bukan pakai image resmi/tarball rilis),
+Karena proyek ini selalu `git clone` source code resmi per tag (bukan pakai image resmi/tarball rilis),
 beberapa masalah generik cenderung muncul lagi di tiap hop — cek dulu sebelum build:
 
 - **Gem yang di-yank dari rubygems.org** (seperti `mimemagic 0.3.5`) — perlu dicek per-versi apakah
   masih ada gem lama yang sudah tidak bisa diinstall, lalu patch `Gemfile.lock` manual.
 - **Gem git-sourced dengan commit yang sudah hilang** (seperti `tcr` dari `zammad-deps/tcr`) — cek
   apakah masih bisa di-fetch sebelum build; jika gem itu cuma dipakai untuk testing (grup `test`),
-  aman dihapus dari `Gemfile` karena kita build dengan `--without development test`.
+  aman dihapus dari `Gemfile` karena build dilakukan dengan `--without development test`.
 - **Asset belum pernah di-precompile** — git clone TIDAK menyertakan hasil compile CSS/JS.
   Selalu tambahkan `bundle exec rake assets:precompile RAILS_ENV=production` di Dockerfile.
 - **Nama rake task search index berubah-ubah antar versi** — cek dulu dengan
