@@ -46,3 +46,38 @@ beberapa masalah generik cenderung muncul lagi di tiap hop — cek dulu sebelum 
   Selalu cek `docker-compose.yml` hop baru sudah pakai pola `image:` bersama sebelum
   build (lihat [hop-6.0-to-7.0/docker-compose.yml](hop-6.0-to-7.0/docker-compose.yml)
   sebagai contoh).
+
+## Pelajaran operasional lintas-hop (bukan cuma build-from-source)
+
+Pola di atas semuanya soal build dari source. Ada pola berulang lain yang sifatnya
+lebih operasional/runtime, ditemukan di beberapa hop terpisah tapi baru disatukan di
+sini — cek semuanya sebelum eksekusi hop manapun berikutnya:
+
+- **Index Elasticsearch stale/nyangkut memblokir `searchindex:rebuild`** — terjadi
+  berulang di hop 4.0→5.0, 5.0→6.0, dan 6.0→7.0 (Insiden 8), masing-masing dengan
+  gejala sama: task rebuild gagal dengan `resource_already_exists_exception` padahal
+  tahap drop index sebelumnya melaporkan sukses (kemungkinan race condition dengan
+  background job, atau index lazy-created oleh model baru yang tidak ikut ter-drop).
+  **Fix standar**: cek `_cat/indices` sebelum rebuild, hapus manual index
+  `zammad_production_*` yang seharusnya sudah tidak ada (JANGAN hapus
+  `.geoip_databases` — itu index sistem ES), baru rebuild dari kondisi bersih.
+- **Kejutan versi runtime dependency yang tidak terdeteksi dari riset dokumentasi
+  resmi/`.ruby-version`** — Redis jadi hard dependency (hop 5.0→6.0) dan lonjakan
+  requirement ke Redis ≥6 (hop 6.0→7.0) sama-sama baru ketahuan lewat **crash loop
+  nyata saat boot**, bukan dari riset `.ruby-version`/`Gemfile.lock` di awal.
+  **Pelajaran**: riset requirement dari file dependency itu perlu, tapi tidak cukup —
+  selalu siap diagnosis cepat kalau container crash-loop pasca-boot dengan pesan error
+  yang jelas menyebut versi service pendukung (Redis, DB, dst.), jangan asumsikan
+  riset awal sudah menangkap semua requirement.
+- **"Container Up ≠ sehat"** — pelajaran eksplisit dari Insiden 7 hop 6.0→7.0:
+  `assets:precompile` bisa gagal diam-diam saat boot (misal karena race dengan crash
+  loop dependency lain), tapi `rails server` tetap bisa berjalan independen sehingga
+  container berstatus "Up" — padahal SEMUA halaman menampilkan 500. **Selalu
+  verifikasi `public/assets/` benar-benar berisi `application-*.css` dan
+  `manifest.json`** setelah container pertama kali `Up`, jangan asumsikan sukses
+  cuma dari status container atau `docker compose ps`.
+- **Krisis disk berulang di hampir setiap hop** — sudah dicatat sebagai pola berulang
+  sejak lama, tapi baru dikonfirmasi lewat `journalctl` bahwa akar masalah "build 3
+  image terpisah" (poin di atas) sudah ada sejak hop pertama. Selalu cek
+  `df -h` / `docker system df` sebelum DAN selama proses panjang (build, reindex) —
+  jangan tunggu sampai kritis untuk mulai membersihkan.

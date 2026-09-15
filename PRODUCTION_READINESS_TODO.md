@@ -189,6 +189,11 @@ untuk dipakai ulang). Poin di bawah disimpan sebagai catatan asal-usul gap.
 
 ## 8. Sintesis Lintas-Hop / Lessons Learned
 
+✅ **Sudah ditangani** — lihat [ROADMAP.md](ROADMAP.md) § "Pelajaran operasional
+lintas-hop" (ditambahkan 15 Sept 2026): index ES stale, kejutan versi Redis, "Container
+Up ≠ sehat", dan krisis disk berulang sekarang disatukan jadi satu referensi. Poin di
+bawah disimpan sebagai catatan asal-usul gap.
+
 ROADMAP.md § "Masalah yang berulang tiap hop" secara eksplisit hanya mencakup isu
 build-from-source (gem yang di-yank, asset belum precompile, nama rake task berubah).
 Ini sempit dibanding pola operasional yang benar-benar berulang lintas hop:
