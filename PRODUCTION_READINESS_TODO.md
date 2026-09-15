@@ -173,6 +173,11 @@ Satu baris di README ("Dikelola oleh [nama], pertanyaan lewat [kanal]").
 
 ## 7. Kebersihan Repo Publik
 
+✅ **Sudah ditangani** — kutipan pembuka "Untuk pengunjung baru" ditambahkan di
+puncak README.md (15 Sept 2026), termasuk penegasan tanpa lisensi eksplisit untuk
+LICENSE (dianggap cukup untuk konten dokumentasi proses ini, bukan kode yang dimaksud
+untuk dipakai ulang). Poin di bawah disimpan sebagai catatan asal-usul gap.
+
 - **Tidak ada pernyataan tujuan/audiens** untuk pengunjung acak GitHub — README
   langsung masuk ke detail teknis tanpa kalimat pembuka semacam "ini log teknis
   pribadi/internal, dibagikan sebagai referensi, bukan panduan upgrade Zammad

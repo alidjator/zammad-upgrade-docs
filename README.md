@@ -1,5 +1,13 @@
 # Zammad Upgrade Project — 3.4.0 → 7.1.3 (latest)
 
+> **Untuk pengunjung baru:** ini **log teknis pribadi/internal** dari satu proyek
+> riset upgrade Zammad tertentu, dibagikan sebagai referensi — **bukan panduan umum**
+> yang dijamin berlaku untuk instance Zammad lain. Banyak detail di sini spesifik ke
+> satu server tertentu (keterbatasan disk, resource dibagi banyak layanan lain) yang
+> mungkin tidak relevan di lingkungan Anda — jangan diterapkan mentah-mentah tanpa
+> disesuaikan. Konten dibagikan apa adanya untuk referensi, **tanpa lisensi eksplisit
+> untuk digunakan ulang** (bukan open-source).
+
 **Status: ✅ Playbook upgrade 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA di
 sandbox riset** (seluruh 4 hop + migrasi database, lihat tabel Status di bawah).
 Sandbox ini terpisah dari produksi nyata (lihat § Konteks). Yang belum dikerjakan:
