@@ -190,3 +190,25 @@ Belum dikerjakan sekarang secara sengaja — supaya tidak mengganggu ritme dokum
 adalah **template** dengan placeholder — password sebenarnya hanya ada di server
 (`/usr/local/src/zammad-staging/database.yml` dan `/usr/local/src/zammad-audit/database.yml`),
 tidak digandakan ke laptop/Desktop ini.
+
+**Data di sandbox ini adalah snapshot data produksi ASLI (mengandung PII sungguhan —
+nama, email, isi tiket pelanggan nyata), meski server tempatnya berjalan
+(`Koi-Server-Dev`) terpisah dari environment produksi.** "Sandbox" di sini berarti
+terisolasi dari sistem produksi LIVE, bukan berarti datanya sintetis/aman dibagikan
+bebas. Perlakukan dengan kehati-hatian yang sama seperti data produksi sungguhan:
+
+- **Kebijakan retensi file dump database** (`.sql.gz`, dan sejenisnya): file-file ini
+  berisi PII lengkap (email, nama, isi tiket). Setelah suatu proses (migrasi, backup
+  pre-flight hop) selesai dan diverifikasi berhasil, **hapus dump-nya** — jangan
+  dibiarkan menumpuk di server (juga jadi penyebab disk penuh berkali-kali di proyek
+  ini). Kalau perlu disimpan sebagai arsip, jangan simpan di luar server tanpa
+  enkripsi, dan batasi siapa yang punya akses ke lokasi penyimpanannya.
+- **Kontrol akses ke server & database sandbox**: catat siapa saja yang punya akses
+  SSH ke `Koi-Server-Dev` dan siapa yang bisa query database `zammad_staging_pg`
+  secara langsung — data di dalamnya tetap PII nyata. (Catatan ini sengaja tidak diisi
+  detail nama/kredensial di file publik ini — isi secara internal/terpisah dari repo
+  kalau perlu didokumentasikan lebih lanjut.)
+- Kalau nanti bekerja dengan **data produksi TERKINI** (lihat
+  [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0), kebijakan yang sama berlaku —
+  bahkan lebih ketat, karena itu representasi langsung dari data produksi yang sedang
+  berjalan, bukan snapshot historis.

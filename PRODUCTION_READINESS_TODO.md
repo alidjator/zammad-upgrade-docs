@@ -112,14 +112,20 @@ disatukan di sana. Poin di bawah ini disimpan sebagai catatan asal-usul gap.
 
 ## 3. Penanganan Data & Keamanan Selama Migrasi
 
+✅ **Sudah ditangani** — lihat README.md § "Catatan keamanan" (diperluas 15 Sept
+2026): kebijakan retensi dump database dan catatan kontrol akses sekarang eksplisit
+di sana, termasuk penegasan bahwa data snapshot di sandbox ini tetap PII sungguhan
+meski server-nya terpisah dari produksi live. Poin di bawah disimpan sebagai catatan
+asal-usul gap.
+
 - **Tidak ada kebijakan retensi/pembersihan untuk file dump database** (`.sql.gz`)
   yang berisi data tiket/email/nama pelanggan asli — kapan dihapus, di mana boleh
   disimpan sementara, siapa boleh akses. (Beberapa dump nyata sempat jadi penyebab
   disk hampir penuh di hop-hop awal.)
-- **Tidak ada catatan kontrol akses** ke environment staging yang sekarang melayani
-  trafik pelanggan nyata (siapa punya SSH ke server, siapa bisa query database
-  staging). "Catatan keamanan" di README cuma soal tidak menyimpan password di repo —
-  topik berbeda dari kontrol akses server.
+- **Tidak ada catatan kontrol akses** ke environment sandbox yang berisi data
+  pelanggan nyata (siapa punya SSH ke server, siapa bisa query database sandbox).
+  "Catatan keamanan" di README cuma soal tidak menyimpan password di repo — topik
+  berbeda dari kontrol akses server.
 
 ## 4. Dokumentasi Disaster Recovery / Backup
 
