@@ -26,28 +26,19 @@ Sumber: CHANGELOG resmi Zammad (github.com/zammad/zammad, tag `7.0.0`) + riset
 - Yarn → **pnpm ≥10** (dipin ke `pnpm@10.29.1` lewat field `packageManager`)
 - Base image Docker: Debian Buster → **Debian Bookworm** (tidak ada lagi tag Ruby
   untuk Buster)
-- **Redis ≥6 wajib saat boot** — ditemukan lewat crash loop nyata di staging
-  (`Error: incompatible Redis version (6+ required; 5.0.14 found)`), bukan dari riset
-  dokumentasi resmi/`.ruby-version` di awal (ROADMAP.md sebelumnya mencatat requirement
-  ini cuma di baris 7.1.3). Berlaku juga untuk task `assets:precompile` karena task itu
-  turut mem-boot environment Rails penuh. Lihat [NOTES.md](NOTES.md) Insiden 5 & 7.
+- **Redis ≥6 wajib saat boot** (bukan cuma di 7.1.3 seperti dugaan awal ROADMAP.md) —
+  berlaku juga untuk task `assets:precompile`. Lihat [NOTES.md](NOTES.md) Insiden 5 & 7.
 - **Skema ASCII-folding index Elasticsearch berubah**, mewajibkan
-  `searchindex:rebuild` penuh setelah upgrade meski versi ES-nya sendiri tidak naik
-  (requirement tetap ≥7.8, <10, tetap 7.17.28). Rebuild otomatis (task rake)
-  melakukan drop index lama, tapi bisa meninggalkan index stale kalau ada race
-  condition dengan background job — verifikasi `_cat/indices` bersih sebelum rebuild
-  kalau task gagal dengan `resource_already_exists_exception`. Lihat
-  [NOTES.md](NOTES.md) Insiden 8.
+  `searchindex:rebuild` penuh meski versi ES-nya sendiri tidak naik (tetap 7.17.28,
+  ≥7.8,<10). Lihat [NOTES.md](NOTES.md) Insiden 8 untuk isu index stale yang ditemukan
+  saat rebuild.
 - Repo paket resmi berpindah skema dari `dl.packager.io` ke `go.packager.io` — tidak
   berdampak ke kita karena build dari source, bukan lewat repo paket OS.
-- **Perhatian urutan migrasi**: migrasi `20241106073757 TaskbarAddUniquenessIndex`
-  (November 2024, jauh lebih awal) sudah memicu callback yang butuh tabel
-  `recent_closes` lewat kode model 7.0.0 — migrasi `CreateRecentCloses` harus
-  dijalankan LEBIH DULU secara manual (`db:migrate:up VERSION=20251106095318`)
-  sebelum `db:migrate` normal, kalau tidak migrasi akan gagal dengan
-  `PG::UndefinedTable`. Ini bug urutan/desain di source Zammad sendiri, muncul karena
-  kita menjalankan puluhan migrasi historis sekaligus. Lihat [NOTES.md](NOTES.md)
-  Insiden 6 untuk analisis lengkap.
+- **Perhatian urutan migrasi**: `CreateRecentCloses` (migrasi Nov 2025) harus
+  dijalankan LEBIH DULU secara manual sebelum `db:migrate` normal, karena migrasi
+  jauh lebih lama (`TaskbarAddUniquenessIndex`, Nov 2024) sudah butuh tabelnya lewat
+  kode model 7.0.0. Bug urutan/desain di source Zammad sendiri — lihat
+  [NOTES.md](NOTES.md) Insiden 6 untuk analisis lengkap.
 
 ## Removed
 
