@@ -162,6 +162,10 @@ dengan pengujian fungsional konkret, bukan cuma visual UI.
 
 ## 6. Metadata Kepemilikan & Governance
 
+✅ **Sudah ditangani** — baris "Dikelola oleh" ditambahkan di awal README.md (15 Sept
+2026) dengan kontak GitHub dan email. Poin di bawah disimpan sebagai catatan
+asal-usul gap.
+
 Tidak ada pernyataan di mana pun soal siapa memelihara proyek ini, siapa punya akses
 ke kredensial produksi, atau kontak untuk pertanyaan. Sesuai dugaan untuk usaha solo,
 tapi karena repo publik, tetap dicatat — relevan kalau nanti perlu serah terima. →

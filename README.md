@@ -7,6 +7,9 @@ kesiapan menerapkan playbook ini ke produksi nyata — lihat
 [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md) (gap analysis) dan
 [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) (checklist eksekusi saat hari-H nanti).
 
+**Dikelola oleh:** [alidjator](https://github.com/alidjator) — pertanyaan lewat
+alidjator@gmail.com atau [issue di repo ini](https://github.com/alidjator/zammad-upgrade-docs/issues).
+
 ## Skill set yang dibutuhkan
 
 Bukan checklist formal — ini kemampuan yang **benar-benar terpakai** selama proses hop
