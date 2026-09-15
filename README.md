@@ -34,13 +34,32 @@ di GitHub, cross-check dengan dokumentasi resmi) saat menemukan bug baru.
 
 ## Konteks
 
-Self-hosted Zammad di server `Koi-Server-Dev` (CentOS Stream 9), berjalan via Docker Compose
-custom (bukan install native, bukan image resmi Zammad). Domain produksi: `helpdesk.satu.solutions`
-(reverse proxy nginx, SSL Let's Encrypt sudah ada).
+⚠️ **PENTING — koreksi framing (15 Sept 2026):** Seluruh environment di server
+`Koi-Server-Dev` (baik `zammad-audit` maupun `zammad-staging`) adalah **mesin
+riset/simulasi untuk merehearsal proses upgrade**, **TIDAK terhubung sama sekali**
+dengan environment produksi nyata (yang berjalan di infrastruktur terpisah, tidak
+dikelola lewat proyek dokumentasi ini). Data yang dipakai di sini adalah **snapshot
+data produksi yang diambil di suatu titik waktu** (bukan trafik pelanggan langsung) —
+data produksi asli terus bertambah secara independen dan kemungkinan besar sudah lebih
+banyak dari snapshot yang dipakai di sini saat ini. Kalimat-kalimat di bawah yang
+menyebut "produksi" merujuk ke **peran simulasi domain/stack di dalam sandbox riset
+ini**, bukan sistem produksi sungguhan.
 
-**Selama proses upgrade ini berlangsung (sampai hop 7 selesai), domain produksi sengaja
-diarahkan ke environment staging.** Produksi asli (project Docker Compose `zammad-audit` di
-`/usr/local/src/zammad-audit`) dimatikan sementara untuk membebaskan resource server.
+**Tujuan proyek ini:** memvalidasi dan mendokumentasikan **playbook upgrade** (RUNBOOK
+per hop) sampai terbukti berhasil dieksekusi ulang secara konsisten, supaya siap
+diterapkan ke environment produksi nyata nanti — dengan data produksi yang sudah
+diperbarui saat itu, bukan snapshot yang dipakai di sandbox ini.
+
+Self-hosted Zammad simulasi di server `Koi-Server-Dev` (CentOS Stream 9), berjalan via
+Docker Compose custom (bukan install native, bukan image resmi Zammad). Domain yang
+dipakai untuk simulasi: `helpdesk.satu.solutions` (reverse proxy nginx, SSL Let's
+Encrypt sudah ada) — domain ini bagian dari sandbox riset, bukan endpoint yang
+menerima trafik pelanggan produksi nyata.
+
+**Selama proses upgrade ini berlangsung, domain simulasi sengaja diarahkan ke
+environment staging.** Stack "produksi" simulasi (project Docker Compose `zammad-audit`
+di `/usr/local/src/zammad-audit`) dimatikan sementara untuk membebaskan resource
+server — ini juga bagian dari sandbox, bukan sistem produksi sungguhan.
 
 ## Arsitektur
 

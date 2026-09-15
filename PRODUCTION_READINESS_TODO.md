@@ -1,5 +1,13 @@
 # Kesiapan Produksi — Gap Analysis (belum dikerjakan)
 
+⚠️ **Koreksi konteks (15 Sept 2026):** seluruh proyek ini (termasuk `zammad-audit` dan
+`zammad-staging` di `Koi-Server-Dev`) adalah **sandbox riset/simulasi upgrade**, tidak
+terhubung ke environment produksi nyata (yang berjalan di infrastruktur terpisah,
+dengan data yang terus bertambah independen dari snapshot yang dipakai sandbox ini).
+"Cutover produksi" di file ini berarti: **menerapkan playbook upgrade yang sudah
+tervalidasi di sandbox ini ke environment produksi sungguhan nanti**, bukan
+mengalihkan domain di dalam sandbox `Koi-Server-Dev` itu sendiri.
+
 Hasil gap analysis terhadap seluruh dokumentasi (README, ROADMAP, DOWNTIME_ESTIMATE,
 NOTES/CHANGELOG/RUNBOOK/TODO tiap hop) dibandingkan dengan best practice runbook,
 incident management, dan kesiapan cutover produksi.
@@ -7,13 +15,13 @@ incident management, dan kesiapan cutover produksi.
 **Beda dengan "TODO — polish dokumentasi" di README.md:** file itu soal kerapian teks
 yang SUDAH ADA (format, bahasa, duplikasi). File ini soal konten yang **belum ada sama
 sekali**, dan sifatnya bukan kosmetik — ini tentang kesiapan operasional sebelum
-domain `helpdesk.satu.solutions` benar-benar dialihkan balik ke produksi asli
-(`zammad-audit`) yang sudah di-upgrade, dengan data pelanggan sungguhan terlibat.
+playbook upgrade ini diterapkan ke environment produksi sungguhan, dengan data
+pelanggan asli yang sudah bertambah sejak snapshot yang dipakai di sandbox ini.
 
 **Kapan dikerjakan:** tidak harus menunggu hop 7.1.3 selesai seperti TODO polish —
 sebagian item di sini (terutama kategori 3 soal keamanan data) sebaiknya mulai
-dipertimbangkan lebih awal. Prioritaskan sebelum tanggal cutover produksi asli
-ditetapkan, bukan sebelum hop terakhir selesai.
+dipertimbangkan lebih awal. Prioritaskan sebelum tanggal penerapan ke produksi nyata
+ditetapkan, bukan sebelum hop terakhir sandbox selesai.
 
 ## Penilaian singkat
 
@@ -44,6 +52,15 @@ satu pun hop.
 5. **Rencana komunikasi ke stakeholder/user nyata** — `DOWNTIME_ESTIMATE.md` menghitung
    angka downtime detail, tapi tidak ada rencana memberi tahu agent/customer sungguhan
    soal maintenance window produksi asli.
+6. **(Ditambahkan setelah koreksi konteks) Rencana pengambilan data produksi TERKINI**
+   — seluruh pengujian di proyek ini pakai snapshot data produksi yang diambil di masa
+   lalu, bukan data produksi yang berjalan saat ini. Sebelum playbook diterapkan nyata,
+   perlu langkah eksplisit: ekspor ulang data produksi PALING BARU, verifikasi
+   integritasnya (pelajaran dari insiden dump corrupt di `postgres-migration/NOTES.md`),
+   baru jalankan playbook di atasnya — jangan asumsikan volume/karakteristik data akan
+   sama persis dengan yang sudah diuji di sandbox (durasi reindex ES di
+   `DOWNTIME_ESTIMATE.md` misalnya sangat bergantung jumlah tiket, yang kemungkinan
+   sudah lebih banyak di produksi asli sekarang).
 
 *(Kebijakan retensi dump backup berisi PII — kategori 3 di bawah — juga layak ditangani
 segera meski tidak masuk 5 besar; ini lebih ke kepatuhan data daripada penghalang
@@ -72,17 +89,17 @@ teknis langsung.)*
 - **Tidak ada rencana monitoring pasca-cutover** — apa yang dipantau (error rate, log
   email channel, job scheduler, disk/ES health), berapa lama observasi, ambang yang
   memicu rollback pasca-live. → Dokumen singkat "Monitoring pasca-cutover".
-- **Tidak ada go/no-go checklist final** yang menyatukan: seluruh hop tervalidasi ulang
-  mendekati kondisi produksi, rollback plan sudah diuji, stakeholder sudah diberi tahu,
-  DNS/reverse-proxy switch sudah direncanakan. → `CUTOVER_CHECKLIST.md` terpisah dari
-  checklist staging per-hop.
-- **Tidak ada rencana komunikasi stakeholder/user nyata** soal maintenance window
-  produksi asli. → Section di `DOWNTIME_ESTIMATE.md` atau file terpisah: siapa perlu
-  diberi tahu, kapan, lewat kanal apa.
-- **Tidak ada rencana dekomisioning `zammad-audit`** (instance produksi lama) setelah
-  cutover nyata dikonfirmasi stabil — kapan/bagaimana dimatikan permanen, retensi
-  datanya. Ada preseden pola serupa untuk `zammad-mariadb-legacy` di staging, tapi
-  belum ada versi untuk produksi asli.
+- **Tidak ada go/no-go checklist final** yang menyatukan: playbook sudah tervalidasi
+  ulang, rollback plan sudah jelas, stakeholder sudah diberi tahu, data produksi
+  terkini (bukan snapshot sandbox) sudah disiapkan/diverifikasi integritasnya. →
+  `CUTOVER_CHECKLIST.md` terpisah dari checklist per-hop di sandbox.
+- **Tidak ada rencana komunikasi stakeholder/user nyata** soal maintenance window saat
+  playbook ini benar-benar diterapkan ke produksi. → Section di `DOWNTIME_ESTIMATE.md`
+  atau file terpisah: siapa perlu diberi tahu, kapan, lewat kanal apa.
+- **Belum ada rencana konkret untuk mengambil & memverifikasi data produksi TERKINI**
+  saat penerapan nyata nanti — data di sandbox ini cuma snapshot lama, produksi asli
+  sudah bertambah. Perlu langkah eksplisit: ekspor data terbaru, verifikasi integritas,
+  baru jalankan playbook di atasnya (bukan asumsi data sandbox = data final).
 
 ## 3. Penanganan Data & Keamanan Selama Migrasi
 
