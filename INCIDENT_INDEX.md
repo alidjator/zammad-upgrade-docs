@@ -25,8 +25,8 @@ lengkap) selalu ada di link masing-masing.
 |---|---|---|
 | 1 | `config/database.yml` tidak ada saat build (`assets:precompile` gagal) | [NOTES.md](hop-4.0-to-5.0/NOTES.md#insiden-1--configdatabaseyml-tidak-ada-saat-build-assetsprecompile-gagal) |
 | 2 | MariaDB 11.8.3 terlalu baru untuk Rails 6.0's mysql2 adapter — 3 bug berbeda | [NOTES.md](hop-4.0-to-5.0/NOTES.md#insiden-2--mariadb-1183-terlalu-baru-untuk-rails-60s-mysql2-adapter--3-bug-berbeda) |
-| 3 | Disk penuh 2x, lebih parah dari hop sebelumnya (build cache 11,43GB) | [NOTES.md](hop-4.0-to-5.0/NOTES.md#insiden-disk-penuh-2x-lebih-parah-dari-hop-sebelumnya) |
-| 4 | Rebuild search index gagal — index nyangkut dari percobaan sebelumnya | [NOTES.md](hop-4.0-to-5.0/NOTES.md#rebuild-search-index--masalah-index-nyangkut-dari-percobaan-gagal) |
+| 3 | Disk penuh 2x, lebih parah dari hop sebelumnya (build cache 11,43GB) | [NOTES.md](hop-4.0-to-5.0/NOTES.md#insiden-3--disk-penuh-2x-lebih-parah-dari-hop-sebelumnya) |
+| 4 | Rebuild search index gagal — index nyangkut dari percobaan sebelumnya | [NOTES.md](hop-4.0-to-5.0/NOTES.md#insiden-4--rebuild-search-index-masalah-index-nyangkut-dari-percobaan-gagal) |
 
 ## Hop 5.0 → 6.0 (7 insiden)
 
