@@ -73,8 +73,9 @@ untuk penjelasan kenapa hitungan awal keliru). Jeda diagnosis manual Insiden 6
 signifikan menambah durasi.
 
 **Jumlah migrasi per hop** (jika tercatat): 3.4.0→4.0 — **33 migrasi**
-([hop-3.4.0-to-4.0/RUNBOOK.md](hop-3.4.0-to-4.0/RUNBOOK.md)); 4.0→5.0 dan 5.0→6.0 —
-tidak pernah dicatat jumlahnya di dokumentasi manapun; 6.0→7.0 — **151 migrasi**
+([hop-3.4.0-to-4.0/RUNBOOK.md](hop-3.4.0-to-4.0/RUNBOOK.md)); 4.0→5.0 — tidak pernah
+dicatat jumlahnya di dokumentasi manapun; 5.0→6.0 — **~150+ migrasi** (estimasi,
+lihat [hop-5.0-to-6.0/NOTES.md](hop-5.0-to-6.0/NOTES.md)); 6.0→7.0 — **151 migrasi**
 (lihat di atas).
 
 **Migrasi schema hop 1-3 (`1m33s`/`1m31s`/`9m25s`) TERBUKTI tidak bisa ditelusuri
