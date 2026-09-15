@@ -73,11 +73,39 @@ andalkan buffer `screen`):
 - Reindex: `... rake zammad:searchindex:rebuild 2>&1 | tee reindex-hop7.1.3.log`
   ("done in X seconds" cuma ke STDOUT, wajib di-tee)
 
-## Rencana verifikasi sebelum build penuh
+## Insiden 1 — Disk 100% penuh tepat saat `docker compose up -d`
 
-Uji `bundle install` + `pnpm install` dulu di container sementara berbasis
-`ruby:3.4.9-bookworm` sebelum build image penuh — pola yang selalu dipakai di setiap
-hop untuk menangkap masalah gem/paket lebih awal.
+Build image (`docker compose build zammad-app`) sukses penuh tanpa error, tapi disk
+sempat **100% penuh (356MB tersisa)** tepat setelah `up -d` — kombinasi build cache
+baru (~5,87GB) menumpuk di atas disk yang sudah mepet sejak awal (95% sebelum build).
+**Fix bertingkat:**
+1. `docker builder prune -af` — bebaskan 5,87GB build cache
+2. Hapus image `zammad-staging-app:7.0.0` (5,43GB, sudah tidak dipakai container
+   manapun setelah pindah ke `7.1.3`) — rollback tetap mungkin lewat rebuild ulang
+   dari source (~12 menit), cuma tidak instan lagi
+3. Sebelum itu, hapus 2 file dump backup lama yang sudah redundan dengan data di
+   `zammad-mariadb-legacy` (`zammad_production_backup.sql.gz` 743MB,
+   `zammad_staging_pre_postgres_backup.sql.gz` 695MB) — total ~1,4GB, disetujui
+   eksplisit oleh user karena datanya tetap ada di volume mariadb-legacy
 
-<!-- Lanjutkan bagian ini dengan hasil eksekusi nyata setelah hop ini benar-benar
-dijalankan di server. -->
+**Temuan tambahan:** `zammad-mariadb-legacy` yang sebelumnya sengaja di-`stop` (bukan
+dihapus) untuk hemat resource **otomatis ter-start lagi** oleh `docker compose up -d`
+— perilaku normal Compose (menyalakan SEMUA service yang terdaftar di file, tidak
+mengingat status manual sebelumnya). Perlu di-`stop` ulang setelah tiap `up -d` kalau
+memang ingin dibiarkan mati.
+
+## Verifikasi build & boot
+
+- ✅ `docker compose build zammad-app` — sukses penuh, tanpa error (lihat
+  `build-hop7.1.3.log` di server untuk timing detail dari output Docker Buildx sendiri)
+- ✅ Container boot bersih, **TIDAK crash-loop sama sekali** — beda dari hop 6.0→7.0
+  yang langsung kena masalah Redis lama. `redis:7-alpine` sudah benar sejak awal
+  karena template Dockerfile/compose sudah mewarisi fix dari hop sebelumnya.
+- ✅ `assets:precompile` (Sprockets + Vite) sukses di boot pertama, tanpa perlu
+  precompile manual — beda dari hop 6.0→7.0 (Insiden 7). Ada beberapa warning build
+  Vite yang tidak berbahaya (lightningcss `::highlight` pseudo-element belum
+  dikenali, beberapa chunk JS >500kB, opsi `inlineDynamicImports` deprecated) — semua
+  cuma peringatan, bukan error.
+- ✅ `curl -sI http://localhost:3010/` → **`200 OK`**
+
+<!-- Lanjutkan bagian ini dengan hasil migrasi database dan reindex setelah dijalankan. -->
