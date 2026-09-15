@@ -201,15 +201,16 @@ penanda supaya bisa langsung `git checkout <tag>` untuk lihat kondisi dokumentas
 persis saat milestone itu divalidasi, tanpa menelusuri histori commit. Lihat daftar
 lengkap di [halaman tags GitHub](https://github.com/alidjator/zammad-upgrade-docs/tags).
 
-## Kesiapan produksi (belum dikerjakan)
+## Kesiapan produksi — ✅ SELESAI (9/9 kategori)
 
 Gap analysis terhadap seluruh dokumentasi dibandingkan best practice runbook, incident
 management, dan kesiapan cutover produksi — lihat
-[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md). Beda dari TODO polish di
-bawah: ini soal konten yang **belum ada sama sekali** (monitoring pasca-cutover,
-kriteria keputusan rollback, rencana komunikasi stakeholder, dsb.), bukan kerapian teks
-yang sudah ada. Perlu ditangani sebelum cutover produksi asli, tidak harus menunggu
-hop 7.1.3 selesai.
+[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md), semua 9 kategori sudah
+ditangani dengan artefak konkret ([CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md),
+[BACKUP_RESTORE.md](BACKUP_RESTORE.md), dan berbagai bagian README/ROADMAP ini). Beda
+dari TODO polish di bawah: ini soal konten yang tadinya **belum ada sama sekali**
+(monitoring pasca-cutover, kriteria keputusan rollback, rencana komunikasi
+stakeholder, dsb.), bukan kerapian teks yang sudah ada.
 
 ## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi) — ✅ SELESAI
 
