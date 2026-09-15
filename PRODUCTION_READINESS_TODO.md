@@ -12,11 +12,10 @@ Hasil gap analysis terhadap seluruh dokumentasi (README, ROADMAP, DOWNTIME_ESTIM
 NOTES/CHANGELOG/RUNBOOK/TODO tiap hop) dibandingkan dengan best practice runbook,
 incident management, dan kesiapan cutover produksi.
 
-**Beda dengan "TODO — polish dokumentasi" di README.md:** file itu soal kerapian teks
-yang SUDAH ADA (format, bahasa, duplikasi). File ini soal konten yang **belum ada sama
-sekali**, dan sifatnya bukan kosmetik — ini tentang kesiapan operasional sebelum
-playbook upgrade ini diterapkan ke environment produksi sungguhan, dengan data
-pelanggan asli yang sudah bertambah sejak snapshot yang dipakai di sandbox ini.
+File ini soal konten yang tadinya **belum ada sama sekali**, dan sifatnya bukan
+kosmetik — ini tentang kesiapan operasional sebelum playbook upgrade ini diterapkan
+ke environment produksi sungguhan, dengan data pelanggan asli yang sudah bertambah
+sejak snapshot yang dipakai di sandbox ini.
 
 **Kapan dikerjakan:** tidak harus menunggu hop 7.1.3 selesai seperti TODO polish —
 sebagian item di sini (terutama kategori 3 soal keamanan data) sebaiknya mulai

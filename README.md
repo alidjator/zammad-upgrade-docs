@@ -35,8 +35,7 @@ benar-benar diterapkan ke produksi nyata nanti (lihat
 - [Roadmap upgrade](#roadmap-upgrade)
 - [Status](#status)
 - [Penanda milestone (git tag)](#penanda-milestone-git-tag)
-- [Kesiapan produksi](#kesiapan-produksi---selesai-99-kategori)
-- [TODO — polish dokumentasi](#todo--polish-dokumentasi-setelah-hop-713-selesai--tervalidasi---selesai)
+- [Kesiapan produksi](#kesiapan-produksi)
 - [Catatan keamanan](#catatan-keamanan)
 
 ## Tutorial (orientasi ~10 menit)
@@ -256,60 +255,12 @@ penanda supaya bisa langsung `git checkout <tag>` untuk lihat kondisi dokumentas
 persis saat milestone itu divalidasi, tanpa menelusuri histori commit. Lihat daftar
 lengkap di [halaman tags GitHub](https://github.com/alidjator/zammad-upgrade-docs/tags).
 
-## Kesiapan produksi — ✅ SELESAI (9/9 kategori)
+## Kesiapan produksi
 
-Gap analysis terhadap seluruh dokumentasi dibandingkan best practice runbook, incident
-management, dan kesiapan cutover produksi — lihat
-[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md), semua 9 kategori sudah
-ditangani dengan artefak konkret ([CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md),
-[BACKUP_RESTORE.md](BACKUP_RESTORE.md), dan berbagai bagian README/ROADMAP ini). Beda
-dari TODO polish di bawah: ini soal konten yang tadinya **belum ada sama sekali**
-(monitoring pasca-cutover, kriteria keputusan rollback, rencana komunikasi
-stakeholder, dsb.), bukan kerapian teks yang sudah ada.
-
-## TODO — polish dokumentasi (setelah hop 7.1.3 selesai & tervalidasi) — ✅ SELESAI
-
-Daftar asli (dibuat sebelum dikerjakan) beserta status penyelesaiannya:
-
-1. ✅ **Selesai.** Semua `CHANGELOG.md` per-hop dimigrasikan ke format standar
-   [Keep a Changelog](https://keepachangelog.com) (kategori Added/Changed/Removed/
-   Deprecated/Security).
-2. ✅ **Selesai.** Daftar isi ditambahkan di awal `NOTES.md` yang panjang (terutama
-   hop 6.0→7.0 dengan 9 insiden).
-3. ✅ **Selesai.** Duplikasi penjelasan insiden antara `NOTES.md`/`RUNBOOK.md`/
-   `CHANGELOG.md` ditinjau dan dipangkas (mis. bagian disk di `RUNBOOK.md` di-
-   cross-reference ke `ROADMAP.md`, bukan diulang).
-4. ✅ **Selesai.** Bahasa dibakukan di seluruh dokumen: "kalau" → "jika" (78
-   kemunculan, mekanis lewat script, seluruh 21 file markdown), lalu "kita" dan
-   penghubung "jadi"/"makanya" (bermakna "sehingga") diganti manual → "sehingga"/
-   kalimat pasif — diterapkan khusus di dokumen rujukan resmi (README.md,
-   ROADMAP.md, DOWNTIME_ESTIMATE.md, CUTOVER_CHECKLIST.md,
-   PRODUCTION_READINESS_TODO.md, BACKUP_RESTORE.md). `NOTES.md`/`RUNBOOK.md`/
-   `CHANGELOG.md` per-hop sengaja **tidak** disentuh — sifatnya catatan naratif
-   historis, register semi-formal di sana tidak mengurangi kejelasan.
-5. ✅ **Selesai.** Mermaid flowchart untuk "Roadmap upgrade" dan Mermaid `graph TD`
-   untuk "Arsitektur" ditambahkan di README.md.
-6. ✅ **Selesai.** Tabel "urutan normal vs. urutan fix" ditambahkan di
-   `hop-6.0-to-7.0/NOTES.md` Insiden 6.
-7. ✅ **Selesai.** Istilah ambigu diperjelas: catatan prefix index ES
-   `zammad_production` ditambahkan; header kolom "Hop" di tabel Status README
-   diganti "Tahap"; framing "staging" dikoreksi total setelah klarifikasi user
-   (lihat [§ Konteks](#konteks) — sandbox riset terpisah, bukan trafik produksi nyata); tabel
-   "penamaan resource" (`zammad-staging` vs `zammad_staging` vs
-   `zammad_staging_pg`) ditambahkan.
-8. ✅ **Selesai.** Boilerplate manajemen disk dipusatkan di [ROADMAP.md § "Pelajaran
-   operasional lintas-hop"](ROADMAP.md#pelajaran-operasional-lintas-hop-bukan-cuma-build-from-source),
-   RUNBOOK per-hop tinggal cross-reference. Boilerplate
-   backup/restore dan rollback dipusatkan di [BACKUP_RESTORE.md](BACKUP_RESTORE.md).
-9. ✅ **Selesai.** `hop-4.0-to-5.0/TODO.md` dan `hop-5.0-to-6.0/TODO.md` dihapus
-   (redundan dengan [ROADMAP.md § "Masalah yang berulang tiap
-   hop"](ROADMAP.md#masalah-yang-berulang-tiap-hop-build-from-source), mengikuti
-   preseden `postgres-migration/TODO.md`). [ROADMAP.md § "Titik
-   kritis"](ROADMAP.md#titik-kritis) dipangkas jadi pointer ke tabel requirement
-   (⚠️ langsung di baris tabel).
-10. ✅ **Selesai.** [§ Konteks](#konteks) README kini menyertakan framing reaksi darurat
-    (bukan cuma "membebaskan resource") dengan cross-reference ke
-    `hop-3.4.0-to-4.0/NOTES.md` untuk kronologi lengkap.
+✅ Gap analysis kesiapan cutover produksi (9/9 kategori) sudah selesai ditangani —
+lihat [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md) untuk detail dan
+artefak yang dihasilkan ([CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md),
+[BACKUP_RESTORE.md](BACKUP_RESTORE.md)).
 
 ## Catatan keamanan
 
