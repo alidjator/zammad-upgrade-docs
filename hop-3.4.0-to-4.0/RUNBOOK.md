@@ -11,7 +11,8 @@ tahap tercantum inline di tiap langkah di bawah; rincian lengkap di
 
 ## Pre-flight
 
-- [ ] Backup database produksi (`mysqldump`), **verifikasi integritasnya** (`gzip -t`
+- [ ] Backup database produksi (`mariadb-dump` — bukan `mysqldump`, lihat Masalah #1
+  di [NOTES.md](NOTES.md)), **verifikasi integritasnya** (`gzip -t`
   atau setara — JANGAN lanjut jika gagal), simpan di luar server jika memungkinkan.
   Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 20GB bebas sebelum mulai (lihat insiden disk di
