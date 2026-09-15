@@ -217,8 +217,8 @@ operasional lintas-hop") dengan 3 poin di atas.
 
 ## 9. Kelengkapan Gaya Diátaxis
 
-✅ **Sudah ditangani** — [README.md § "Mulai di
-sini"](README.md#mulai-di-sini-orientasi-10-menit) (orientasi 10 menit) dan
+✅ **Sudah ditangani** — [README.md § "Tutorial"](README.md#tutorial-orientasi-10-menit)
+(orientasi 10 menit) dan
 [ROADMAP.md § "Ringkasan perubahan besar 3.4.0 →
 7.1.3"](ROADMAP.md#ringkasan-perubahan-besar-340--713-agregat-lintas-hop) (agregat
 lintas-hop) sudah ditambahkan (15 Sept 2026). Poin di bawah disimpan sebagai catatan

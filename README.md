@@ -19,7 +19,7 @@ sudah ditangani** — lihat [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_
 **Dikelola oleh:** [alidjator](https://github.com/alidjator) — pertanyaan lewat
 alidjator@gmail.com atau [issue di repo ini](https://github.com/alidjator/zammad-upgrade-docs/issues).
 
-## Mulai di sini (orientasi ~10 menit)
+## Tutorial (orientasi ~10 menit)
 
 Baru pertama kali buka repo ini (termasuk jika ini "diri sendiri di masa depan" yang
 lupa detailnya)? Urutan baca yang disarankan:
