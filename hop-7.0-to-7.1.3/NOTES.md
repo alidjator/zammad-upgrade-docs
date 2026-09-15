@@ -108,4 +108,36 @@ memang ingin dibiarkan mati.
   cuma peringatan, bukan error.
 - ✅ `curl -sI http://localhost:3010/` → **`200 OK`**
 
-<!-- Lanjutkan bagian ini dengan hasil migrasi database dan reindex setelah dijalankan. -->
+## Insiden 2 — Error 500 transisional saat kode baru jalan sebelum migrasi (normal, bukan bug)
+
+Sesaat setelah container 7.1.3 boot (sebelum `db:migrate` dijalankan), UI menampilkan
+500: `undefined method 'analytics_stats_reset_at' for an instance of AI::TextTool`.
+**Ini bukan insiden nyata** — cuma jeda wajar antara kode baru (7.1.3) aktif dan skema
+database yang masih di versi lama (7.0.0). Kolom itu ditambahkan migrasi
+`Issue5762AddAnalyticsStatsResetAtToAITextTools`, yang baru jalan setelah `db:migrate`
+dieksekusi. Dicatat di sini sebagai pengingat pola, bukan sebagai insiden baru yang
+perlu ditambal — solusinya cuma "jalankan migrasi", bukan riset lebih lanjut.
+
+## Verifikasi migrasi database
+
+- ✅ `db:migrate` — **20 migrasi**, semua sukses tanpa error, `db:migrate:status`
+  bersih (tidak ada baris `down`)
+- **Durasi terukur presisi dari timestamp `log/production.log`**: migrasi pertama
+  (`AddAIKbAnswerSettings`) `00:56:13`, migrasi terakhir
+  (`UpdateMicrosoftOffice365RequireVerifiedEmailDomainHelp`) `00:56:17` → total
+  **4 detik** untuk 20 migrasi — jauh lebih cepat dari hop-hop sebelumnya, konsisten
+  dengan sifat hop ini yang paling ringan di seluruh proyek.
+- Migrasi mencakup fitur AI Analytics (reset stats AI Text Tool), notifikasi
+  standalone baru, penyesuaian permission Text Module/KB Answer, dan beberapa
+  penyesuaian setting Microsoft Office 365/postmaster.
+- ✅ `curl -sI http://localhost:3010/` tetap `200 OK` setelah migrasi
+
+## Search index — kemungkinan TIDAK perlu rebuild penuh
+
+Beda dari hop 6.0→7.0, `BREAKING_CHANGES.md` Zammad 7.1 **tidak menyebutkan**
+perubahan skema/ASCII-folding index apa pun untuk rilis ini, dan requirement versi ES
+juga tidak berubah (tetap 7.17.28, ≥7.8,<10). Kemungkinan besar `searchindex:rebuild`
+penuh TIDAK diperlukan untuk hop ini — cukup verifikasi search masih berfungsi dengan
+index yang sudah ada dari hop 6.0→7.0. Akan dikonfirmasi lewat verifikasi UI.
+
+<!-- Lanjutkan bagian ini dengan hasil verifikasi UI final. -->
