@@ -217,6 +217,8 @@ operasional lintas-hop") dengan 3 poin di atas.
 
 ## 9. Kelengkapan Gaya Diátaxis
 
+Framework: [diataxis.fr](https://diataxis.fr) (Tutorial/How-to guide/Reference/Explanation).
+
 ✅ **Sudah ditangani** — [README.md § "Tutorial"](README.md#tutorial-orientasi-10-menit)
 (orientasi 10 menit) dan
 [ROADMAP.md § "Ringkasan perubahan besar 3.4.0 →
