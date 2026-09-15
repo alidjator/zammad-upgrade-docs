@@ -1,5 +1,20 @@
 # Hop 6.0 → 7.0 — Catatan Lengkap (Status: ✅ Selesai & Tervalidasi)
 
+**Daftar isi** (9 insiden — hop paling banyak insiden di seluruh proyek):
+
+- [Ringkasan requirement](#ringkasan-requirement-hasil-riset-awal-tervalidasi-lewat-eksekusi-nyata)
+- [Insiden 1](#insiden-1--bundle-install-gagal-gem-rszr-butuh-pkg-config) — gem `rszr` butuh `pkg-config`
+- [Insiden 2](#insiden-2--debian-bookworm-tidak-butuh-workaround-archivedebianorg) — Bookworm tidak butuh workaround archive.debian.org
+- [Insiden 3](#insiden-3--pnpm-install-gagal-di-docker-build-butuh-citrue) — `pnpm install` butuh `CI=true`
+- [Insiden 4](#insiden-4--krisis-disk-berulang-selama-build-paling-parah-di-hop-ini) — krisis disk berulang (paling parah)
+- [Insiden 5](#insiden-5--redis-5-tidak-lagi-didukung-ditemukan-lewat-crash-loop) — Redis 5 tidak lagi didukung
+- [Insiden 6](#insiden-6--bug-urutan-migrasi-resmi-zammad-recent_closes-belum-ada-saat-dibutuhkan) — bug urutan migrasi `recent_closes`
+- [Insiden 7](#insiden-7--error-500-pasca-migrasi-asset-pipeline-tidak-pernah-ter-precompile) — error 500, asset pipeline gagal diam-diam
+- [Insiden 8](#insiden-8--index-elasticsearch-stale-menghalangi-searchindexrebuild) — index ES stale menghalangi rebuild
+- [Insiden 9](#insiden-9--elasticsearch-masuk-mode-read_only_allow_delete-di-tengah-reload-data) — ES masuk mode read-only saat disk penuh
+- [Verifikasi migrasi database](#verifikasi-migrasi-database)
+- [Status validasi hop ini](#status-validasi-hop-ini)
+
 ## Ringkasan requirement (hasil riset awal, tervalidasi lewat eksekusi nyata)
 
 | Item | Versi | Perubahan dari hop 6.0 |
