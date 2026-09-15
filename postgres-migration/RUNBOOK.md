@@ -102,7 +102,7 @@ jangan buru-buru, ini jaring pengaman rollback termudah selama masa transisi.
 
 **Update 15 Sept 2026** — container sudah di-`stop` (bukan dihapus) saat disk mepet di
 hop 7.0→7.1.3. Seluruh proyek upgrade (sampai 7.1.3) sudah selesai & tervalidasi di
-atas PostgreSQL lewat 2 hop major version penuh dengan trafik nyata, tanpa insiden
+atas PostgreSQL lewat 2 hop major version penuh di sandbox riset ini, tanpa insiden
 integritas data — tapi secara kalender baru ~4 hari sejak migrasi. **Keputusan
 eksplisit user: tunggu beberapa hari lagi (bukan hapus sekarang)** sebelum
 mempertimbangkan hapus total container+volume (~6,7GB). Catatan penting: 2 file dump
