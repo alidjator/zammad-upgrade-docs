@@ -21,8 +21,10 @@ MariaDB 11.x.
   setara — JANGAN lanjut jika gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas (hop ini paling boros disk dari semua
   hop sejauh ini — build cache + 2 database MariaDB berjalan bersamaan)
-- [ ] jika eksekusi ke produksi: siapkan window ~10 menit untuk tahap 1-8 (build+migrate),
-  reindex ES (~4 jam) bisa jalan di background setelah UI kembali bisa diakses
+- [ ] jika eksekusi ke produksi: siapkan window **~64 menit** untuk tahap 1-8
+  (build 62m2s + migrate 1m31s, angka nyata dari sandbox — lihat
+  [../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md)), reindex ES (~4 jam) bisa
+  jalan di background setelah UI kembali bisa diakses
 
 ## Langkah eksekusi
 
