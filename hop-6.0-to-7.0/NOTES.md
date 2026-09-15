@@ -105,6 +105,15 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake db:migr
 Setelah itu seluruh 78 migrasi tersisa (rentang November 2024 - Februari 2026) berjalan
 lancar tanpa error lain.
 
+**Ringkasan urutan (normal vs. fix):**
+
+| | Urutan normal (gagal) | Urutan fix (berhasil) |
+|---|---|---|
+| 1 | `db:migrate` jalan biasa, sampai `TaskbarAddUniquenessIndex` (Nov 2024) | `db:migrate:up VERSION=20251106095318` (`CreateRecentCloses`) dijalankan LEBIH DULU, di luar urutan |
+| 2 | Migrasi memicu callback yang butuh tabel `recent_closes` | Tabel `recent_closes` sudah ada saat callback terpicu nanti |
+| 3 | ❌ Gagal: `PG::UndefinedTable` | `db:migrate` normal dijalankan, lanjut ke `TaskbarAddUniquenessIndex` dst. |
+| 4 | — | ✅ Semua 78 migrasi sisanya sukses |
+
 ## Insiden 7 — Error 500 pasca-migrasi: asset pipeline tidak pernah ter-precompile
 
 Setelah migrasi selesai dan container `zammad-app` akhirnya bisa boot (pasca fix Redis),

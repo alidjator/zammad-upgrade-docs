@@ -92,9 +92,21 @@ menerima trafik pelanggan produksi nyata.
 **Selama proses upgrade ini berlangsung, domain simulasi sengaja diarahkan ke
 environment staging.** Stack "produksi" simulasi (project Docker Compose `zammad-audit`
 di `/usr/local/src/zammad-audit`) dimatikan sementara untuk membebaskan resource
-server — ini juga bagian dari sandbox, bukan sistem produksi sungguhan.
+server — ini juga bagian dari sandbox, bukan sistem produksi sungguhan. Keputusan ini
+awalnya reaksi darurat (server berbagi RAM 7,5GB dengan banyak layanan lain, sempat
+membuat stack "produksi" simulasi error 500 karena tekanan memori saat 2 stack Zammad
+jalan bersamaan), bukan cuma keputusan proaktif — kronologi lengkap di
+[hop-3.4.0-to-4.0/NOTES.md](hop-3.4.0-to-4.0/NOTES.md) § "Insiden operasional".
 
 ## Arsitektur
+
+**Penamaan resource** (3 nama mirip yang gampang tertukar):
+
+| Nama | Apa itu |
+|---|---|
+| `zammad-staging` | Nama project Docker Compose (folder `/usr/local/src/zammad-staging`) |
+| `zammad_staging` | Nama database di MariaDB legacy container (era hop 4.0→6.0) |
+| `zammad_staging_pg` | Nama database di PostgreSQL host (sejak migrasi Postgres) |
 
 - App: custom Dockerfile (base image Ruby berubah per hop sesuai requirement) + source Zammad
   dari git clone per versi
@@ -107,7 +119,11 @@ server — ini juga bagian dari sandbox, bukan sistem produksi sungguhan.
   Database produksi asli (`zammad_production` di MariaDB 11.8.3 host) tidak disentuh sama sekali.
 - Elasticsearch: container terpisah per hop (`Dockerfile.elasticsearch`), base image official Elastic.
   Versi naik seiring hop: ES 6.8.23 (hop 1) → ES 7.17.28 (hop 2, wajib karena requirement Zammad 5.0,
-  masih dipakai sampai hop 3).
+  masih dipakai sampai hop 3). **Catatan penamaan index**: semua index ES tetap
+  berprefix `zammad_production` (bukan `zammad_staging`) meski ini sandbox riset —
+  ini nama internal default Zammad untuk `RAILS_ENV=production` (environment Rails,
+  BUKAN indikasi lingkungan produksi sungguhan), jadi jangan salah kira `DELETE`
+  terhadap index ini menyentuh data produksi nyata.
 - Node.js: bawaan Debian per hop 1-2, **mulai hop 3 (Zammad 6.0) wajib Node.js 18.x via
   NodeSource** karena adopsi Vite (build tool JS baru) yang mensyaratkan Node ≥16.
   **Mulai hop 6.0→7.0, naik lagi ke Node.js 20.x, dan package manager JS berganti dari
@@ -132,7 +148,7 @@ Detail requirement per hop ada di [ROADMAP.md](ROADMAP.md).
 
 ## Status
 
-| Hop | Status | Catatan |
+| Tahap | Status | Catatan |
 |---|---|---|
 | 3.4.0 → 4.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-3.4.0-to-4.0/NOTES.md) · [CHANGELOG.md](hop-3.4.0-to-4.0/CHANGELOG.md) · [RUNBOOK.md](hop-3.4.0-to-4.0/RUNBOOK.md) |
 | 4.0 → 5.0 | ✅ **Selesai & tervalidasi** | [NOTES.md](hop-4.0-to-5.0/NOTES.md) (keputusan pindah ke MariaDB 10.11) · [CHANGELOG.md](hop-4.0-to-5.0/CHANGELOG.md) · [RUNBOOK.md](hop-4.0-to-5.0/RUNBOOK.md) |

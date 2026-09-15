@@ -1,10 +1,16 @@
 # Estimasi Downtime — Referensi untuk Perencanaan Maintenance Window
 
-Angka di bawah adalah **hasil pengukuran nyata** dari eksekusi di staging (bukan
-perkiraan teoritis), jadi cukup representatif untuk perencanaan window produksi —
-dengan catatan: performa staging server ini juga berbagi resource dengan banyak
-service lain (OCR, CI runner, dll), jadi di server produksi yang lebih lega,
-kemungkinan bisa lebih cepat dari angka ini.
+Angka di bawah adalah **hasil pengukuran nyata** dari eksekusi di sandbox riset
+(bukan perkiraan teoritis), jadi cukup representatif untuk perencanaan window
+produksi nyata nanti — dengan 2 catatan penting:
+1. Performa sandbox ini berbagi resource server dengan banyak service lain (OCR, CI
+   runner, dll), jadi di server produksi yang lebih lega, kemungkinan bisa lebih
+   cepat dari angka ini.
+2. **Data yang diuji adalah snapshot produksi yang diambil di masa lalu** (lihat
+   README.md § Konteks), bukan volume data produksi yang berjalan saat ini — durasi
+   reindex ES terbukti berbanding lurus dengan jumlah tiket, jadi kalau data produksi
+   nyata sudah jauh lebih banyak, **skalakan ulang angka di bawah**, jangan pakai
+   langsung apa adanya. Lihat [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) § 0.
 
 ## Ringkasan per hop
 
