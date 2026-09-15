@@ -11,7 +11,8 @@ nodejs` biasa yang cuma dapat versi lama dari Debian Buster), plus `yarn`.
 
 ## Pre-flight
 
-- [ ] Backup database
+- [ ] Backup database, **verifikasi integritasnya** (`gzip -t` atau setara — JANGAN
+  lanjut kalau gagal). Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 25GB bebas — image hop ini jauh lebih besar dari
   sebelumnya karena `node_modules` (build context ~1.1GB, vs puluhan-ratusan MB di hop lain)
 - [ ] Kalau eksekusi ke produksi: window ~15 menit untuk build+migrate, reindex (~5,6 jam)

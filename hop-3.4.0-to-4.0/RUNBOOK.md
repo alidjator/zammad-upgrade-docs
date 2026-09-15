@@ -11,7 +11,9 @@ tahap tercantum inline di tiap langkah di bawah; rincian lengkap di
 
 ## Pre-flight
 
-- [ ] Backup database produksi (`mysqldump`), simpan di luar server kalau memungkinkan
+- [ ] Backup database produksi (`mysqldump`), **verifikasi integritasnya** (`gzip -t`
+  atau setara — JANGAN lanjut kalau gagal), simpan di luar server kalau memungkinkan.
+  Detail lengkap: [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 - [ ] Konfirmasi disk tersedia minimal 20GB bebas sebelum mulai (lihat insiden disk di
   NOTES.md — build cache Docker gampang menumpuk banyak selama proses)
 - [ ] Kalau ini eksekusi ke **produksi sungguhan** (bukan staging): jadwalkan maintenance

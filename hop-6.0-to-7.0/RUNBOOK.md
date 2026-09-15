@@ -12,7 +12,9 @@ selesai & tervalidasi (staging sudah berjalan di atas PostgreSQL host, bukan Mar
 - [ ] Cek disk space (`df -h /`, `docker system df`) — kalau di bawah ~15GB tersisa,
       bersihkan dulu SEBELUM mulai build (lihat bagian Disk di bawah). Hop ini adalah
       yang paling boros disk dari semua hop sejauh ini.
-- [ ] Backup database PostgreSQL staging (`pg_dump`) sebelum mulai.
+- [ ] Backup database PostgreSQL staging (`pg_dump`), **verifikasi integritasnya**
+      (`gzip -t` atau setara — JANGAN lanjut kalau gagal). Detail lengkap:
+      [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 
 ## Langkah eksekusi
 

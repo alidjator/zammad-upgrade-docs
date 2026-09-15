@@ -129,6 +129,11 @@ asal-usul gap.
 
 ## 4. Dokumentasi Disaster Recovery / Backup
 
+✅ **Sudah ditangani** — lihat [BACKUP_RESTORE.md](BACKUP_RESTORE.md) (dibuat 15 Sept
+2026): referensi darurat tunggal untuk backup/restore, plus verifikasi integritas
+sekarang jadi langkah wajib eksplisit di SEMUA RUNBOOK (sebelumnya cuma di
+`postgres-migration`). Poin di bawah disimpan sebagai catatan asal-usul gap.
+
 - **Tidak ada satu referensi backup/restore darurat** — langkah backup tersebar
   sebagai bullet pre-flight di 5 RUNBOOK berbeda. Kalau kondisi darurat produksi nyata
   butuh restore cepat, orang harus menelusuri RUNBOOK mana dulu. → `BACKUP_RESTORE.md`

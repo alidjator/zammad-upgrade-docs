@@ -9,6 +9,10 @@ Ini migrasi database, BUKAN hop upgrade Zammad — tidak ada `assets:precompile`
 versi itu). Kalau eksekusi ke produksi nanti, pastikan PostgreSQL target sudah disiapkan
 dan reachable dari container SEBELUM memulai.
 
+Langkah backup di § Pre-flight ini adalah SUMBER ASLI pelajaran verifikasi integritas
+yang sekarang jadi standar di semua RUNBOOK proyek ini — lihat
+[../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) untuk referensi cepat lintas hop.
+
 ## Pre-flight
 
 - [ ] PostgreSQL target sudah terpasang, versi ≥13 (dicek: `psql --version`)

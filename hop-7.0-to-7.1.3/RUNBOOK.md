@@ -11,8 +11,8 @@ sebelumnya. Perbarui bagian yang berubah setelah eksekusi nyata.
       ~15GB tersisa. Riwayat proyek ini menunjukkan krisis disk terjadi di HAMPIR
       SETIAP hop — jangan asumsikan aman.
 - [ ] Backup database PostgreSQL staging (`pg_dump`), verifikasi integritasnya
-      (jangan cuma asumsikan sukses dari tidak adanya error — lihat pelajaran
-      `postgres-migration/NOTES.md`).
+      (jangan cuma asumsikan sukses dari tidak adanya error). Detail lengkap:
+      [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md)
 
 ## Langkah eksekusi
 
