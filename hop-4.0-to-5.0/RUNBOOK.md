@@ -86,16 +86,15 @@ docker compose exec zammad-elasticsearch curl -X DELETE "http://localhost:9200/l
 
 ## Kalau perlu mundur (rollback)
 
-Sebelum tahap 6: hapus container/image hop ini, database `zammad-mariadb-legacy` masih
-berisi data hasil restore hop 4.0 (belum ter-migrate ke 5.0), aman dipakai ulang.
+Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
+per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 6** — sebelum itu tinggal
+hapus container/image (database `zammad-mariadb-legacy` masih berisi data hasil
+restore hop 4.0, belum ter-migrate, aman dipakai ulang), setelah itu wajib restore
+dari backup pre-flight ke database legacy.
 
-Setelah tahap 6: restore ulang dari backup pre-flight ke database legacy — jangan
-mencoba downgrade schema secara manual.
+## Manajemen disk
 
-## Manajemen disk (pelajaran dari insiden 2x di hop ini)
-
-Jalankan ini **sebelum** memulai hop berikutnya, jangan tunggu sampai disk kritis:
-```bash
-docker builder prune -af
-docker volume ls   # cek volume ES/DB versi lama yang sudah tidak dipakai, hapus manual
-```
+Insiden disk penuh 2x terjadi di hop ini (100% penuh, 911MB tersisa — lihat
+[NOTES.md](NOTES.md)). Urutan pembersihan aman standar ada di
+[../ROADMAP.md](../ROADMAP.md) § "Pelajaran operasional lintas-hop" — jalankan
+**sebelum** memulai hop berikutnya, jangan tunggu sampai disk kritis.

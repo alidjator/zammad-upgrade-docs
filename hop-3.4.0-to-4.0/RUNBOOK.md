@@ -72,8 +72,6 @@ docker compose exec zammad-app env RAILS_ENV=production bundle exec rake searchi
 
 ## Kalau perlu mundur (rollback)
 
-Sebelum tahap 6 (migrate): tinggal hapus container/image hop ini, versi lama tidak
-tersentuh sama sekali (aman, tidak ada perubahan data).
-
-Setelah tahap 6 (migrate schema sudah jalan): **restore dari backup pre-flight** adalah
-satu-satunya jalan mundur yang aman — migrasi schema tidak didesain untuk di-reverse.
+Pola umum ada di [../BACKUP_RESTORE.md](../BACKUP_RESTORE.md) § "Pola umum rollback
+per hop upgrade". Untuk hop ini: titik baginya adalah **tahap 6 (migrate)** — sebelum
+itu tinggal hapus container/image, setelah itu wajib restore dari backup pre-flight.

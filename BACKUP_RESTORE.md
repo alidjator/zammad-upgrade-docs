@@ -64,6 +64,21 @@ valid). Detail lengkap di [postgres-migration/NOTES.md](postgres-migration/NOTES
 **Pelajaran:** selalu verifikasi, jangan asumsikan selesai = valid — terutama untuk
 proses panjang yang rentan terputus (jalankan di dalam `screen` untuk backup besar).
 
+## Pola umum rollback per hop upgrade
+
+Semua hop upgrade (3.4.0→4.0, 4.0→5.0, 5.0→6.0, dst.) punya pola rollback yang SAMA —
+RUNBOOK per hop cross-reference ke sini, cuma sebut detail spesifik hop (nomor tahap
+migrate, nama container/database yang relevan):
+
+- **Sebelum tahap migrate schema dijalankan**: rollback selalu aman & sederhana —
+  cukup hapus container/image hop yang sedang dikerjakan. Database/versi sebelumnya
+  TIDAK tersentuh sama sekali (build & boot container baru tidak mengubah data apa
+  pun sampai `db:migrate` benar-benar dijalankan).
+- **Setelah tahap migrate schema dijalankan**: rollback TIDAK sesederhana itu lagi —
+  migrasi Rails tidak didesain untuk di-reverse otomatis. **Satu-satunya jalan mundur
+  yang aman adalah restore dari backup pre-flight** (§ Restore di atas), bukan
+  mencoba downgrade schema manual.
+
 ## Kalau butuh restore SEKARANG (kondisi darurat)
 
 1. Cari backup TERAKHIR yang lolos verifikasi `gzip -t` — jangan pakai backup yang

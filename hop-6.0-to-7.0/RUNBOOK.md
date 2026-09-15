@@ -139,18 +139,11 @@ atas dan coba lagi dari kondisi benar-benar bersih.
 - [ ] WebSocket real-time update jalan (cek `/cable` di browser devtools)
 - [ ] `db:migrate:status` semua `up`
 
-## Disk — pembersihan aman sebelum/selama hop ini
+## Disk — pembersihan sebelum/selama hop ini
 
 Hop ini paling boros disk dari semua hop (base image lebih besar + Vite build + build
-tripel kalau langkah 4 di atas tidak diikuti). Urutan pembersihan aman yang terbukti:
-
-```bash
-docker builder prune -af
-docker rmi <image-lama-yang-sudah-dikonfirmasi-tidak-dipakai>   # cek dulu docker ps -a
-docker volume rm <volume-anonymous-kosong>                       # cek dulu docker volume inspect
-```
-**Jangan** pakai `docker image prune -af` (hapus SEMUA image tak terpakai tanpa
-pandang bulu) di server bersama — selalu hapus by-name setelah verifikasi manual.
+tripel kalau langkah 4 di atas tidak diikuti). Urutan pembersihan aman standar ada di
+[../ROADMAP.md](../ROADMAP.md) § "Pelajaran operasional lintas-hop".
 
 ## Kalau gagal / perlu mundur
 

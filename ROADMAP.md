@@ -108,3 +108,14 @@ sini — cek semuanya sebelum eksekusi hop manapun berikutnya:
   image terpisah" (poin di atas) sudah ada sejak hop pertama. Selalu cek
   `df -h` / `docker system df` sebelum DAN selama proses panjang (build, reindex) —
   jangan tunggu sampai kritis untuk mulai membersihkan.
+
+  **Urutan pembersihan aman yang terbukti** (referensi tunggal — RUNBOOK per hop
+  cross-reference ke sini, jangan duplikasi ulang isinya):
+  ```bash
+  docker builder prune -af
+  docker rmi <image-lama-yang-sudah-dikonfirmasi-tidak-dipakai>   # cek dulu docker ps -a
+  docker volume rm <volume-anonymous-kosong>                       # cek dulu docker volume inspect
+  ```
+  **Jangan** pakai `docker image prune -af` (hapus SEMUA image tak terpakai tanpa
+  pandang bulu) di server bersama — selalu hapus by-name setelah verifikasi manual
+  (pernah menghapus image yang baru dibuild karena dianggap "belum terpakai").
