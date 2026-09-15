@@ -1,8 +1,8 @@
 # Hop 7.0 → 7.1.3 — Changelog
 
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/) (kategori
-Changed/Deprecated), diadaptasi untuk konteks upgrade infrastruktur — bukan rilis
-versi aplikasi sendiri.
+Added/Changed/Deprecated dipakai di hop ini), diadaptasi untuk konteks upgrade
+infrastruktur — bukan rilis versi aplikasi sendiri.
 
 Sumber: `Gemfile.lock`, `package.json`, `BREAKING_CHANGES.md` langsung di tag `7.1.3`
 GitHub `zammad/zammad`.

@@ -1,8 +1,8 @@
 # Hop 3.4.0 → 4.0 — Changelog
 
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/) (kategori
-Added/Changed/Removed/Security), diadaptasi untuk konteks upgrade infrastruktur —
-bukan rilis versi aplikasi sendiri.
+Added/Changed/Removed dipakai di hop ini), diadaptasi untuk konteks upgrade
+infrastruktur — bukan rilis versi aplikasi sendiri.
 
 Cakupan: rilis 3.5.0, 3.6.0, 4.0.0 (kita loncat langsung dari 3.4.0 ke 4.0.0, jadi
 perubahan di 3.5.0/3.6.0 ikut termasuk). Sumber: `CHANGELOG.md` resmi tiap tag di

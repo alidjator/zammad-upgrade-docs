@@ -1,8 +1,8 @@
 # Hop 5.0 → 6.0 — Changelog
 
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/) (kategori
-Added/Changed/Removed/Security), diadaptasi untuk konteks upgrade infrastruktur —
-bukan rilis versi aplikasi sendiri.
+Added/Changed/Removed dipakai di hop ini), diadaptasi untuk konteks upgrade
+infrastruktur — bukan rilis versi aplikasi sendiri.
 
 Cakupan: rilis 5.1.0 sampai 5.4.1, dan 6.0.0 (kita loncat langsung dari 5.0.0 ke
 6.0.0, jadi seluruh rilis minor 5.x ikut termasuk). Karena rentangnya panjang (5
