@@ -14,6 +14,33 @@ serta `.ruby-version` & `Gemfile` di tiap tag GitHub `zammad/zammad`.
 | 7.0 (rilis Maret 2026) | 3.4.8 | ≥7.8, <10 (ES7 mulai deprecated) | **MySQL/MariaDB dihapus total** — PostgreSQL satu-satunya opsi | **Redis ≥6 wajib saat boot** (ditemukan lewat crash loop nyata di hop 6.0→7.0, BUKAN dari `.ruby-version`/dokumentasi resmi — lihat [hop-6.0-to-7.0/NOTES.md](hop-6.0-to-7.0/NOTES.md) Insiden 5). Rebuild search index wajib (perubahan ASCII-folding). Repo paket berganti skema baru (`dl.packager.io` → `go.packager.io`) |
 | 7.1.3 (latest) | 3.4.9 | ≥7.8, <10 | PostgreSQL ≥13 | Redis ≥6 (sudah wajib sejak 7.0, lihat baris di atas) |
 
+## Ringkasan perubahan besar 3.4.0 → 7.1.3 (agregat lintas-hop)
+
+Tabel di atas fokus ke *requirement infrastruktur*. Ini agregat *perubahan
+fitur/skema* terbesar per hop — bukan daftar lengkap (tiap `CHANGELOG.md` per hop
+punya detail penuh), cuma highlight untuk gambaran cepat "apa yang berubah total":
+
+- **3.4.0 → 4.0**: Rails 5.2.4.5. Fondasi awal, belum ada perubahan skema besar.
+- **4.0 → 5.0**: pindah database ke MariaDB 10.11 (isu kompatibilitas versi-gap dengan
+  Rails 6.0's mysql2 adapter — lihat [hop-4.0-to-5.0/CHANGELOG.md](hop-4.0-to-5.0/CHANGELOG.md)).
+- **5.0 → 6.0**: Rails 6.1, adopsi Vite (build tool JS baru, gantikan Sprockets murni),
+  **Redis jadi hard dependency**, WebSocket/ActionCable butuh config nginx baru — lihat
+  [hop-5.0-to-6.0/CHANGELOG.md](hop-5.0-to-6.0/CHANGELOG.md).
+- **Migrasi database**: MariaDB → PostgreSQL (11,3 juta baris, 0 error) — lihat
+  [postgres-migration/NOTES.md](postgres-migration/NOTES.md).
+- **6.0 → 7.0**: Rails 8.0, **MySQL/MariaDB dihapus total**, Yarn→pnpm, Node.js ≥20,
+  **Redis ≥6 wajib**, 151 migrasi termasuk fitur AI Assistance, penghapusan Twitter/Slack,
+  perubahan skema ASCII-folding search index — lihat
+  [hop-6.0-to-7.0/CHANGELOG.md](hop-6.0-to-7.0/CHANGELOG.md) (perubahan terbesar di
+  seluruh proyek).
+- **7.0 → 7.1.3**: Node.js ≥24, 20 migrasi minor (AI Analytics, notifikasi standalone) —
+  lihat [hop-7.0-to-7.1.3/CHANGELOG.md](hop-7.0-to-7.1.3/CHANGELOG.md) (hop paling
+  ringan, tidak ada perubahan skema/index besar).
+
+**Benang merah terbesar**: proyek ini pada dasarnya adalah 2 migrasi besar (database
+MariaDB→PostgreSQL, dan build tool Sprockets→Vite/Yarn→pnpm) dibungkus di antara 4
+lompatan major version Ruby/Rails standar.
+
 ## Titik kritis
 
 1. **Sebelum hop ke 5.0**: Elasticsearch harus dinaikkan ke ≥7.8 (versi saat ini `6.8.23` sudah

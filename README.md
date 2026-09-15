@@ -10,13 +10,33 @@
 
 **Status: ✅ Playbook upgrade 3.4.0 → 7.1.3 SELESAI & TERVALIDASI SEPENUHNYA di
 sandbox riset** (seluruh 4 hop + migrasi database, lihat tabel Status di bawah).
-Sandbox ini terpisah dari produksi nyata (lihat § Konteks). Yang belum dikerjakan:
-kesiapan menerapkan playbook ini ke produksi nyata — lihat
-[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md) (gap analysis) dan
-[CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md) (checklist eksekusi saat hari-H nanti).
+Sandbox ini terpisah dari produksi nyata (lihat § Konteks). **Kesiapan produksi juga
+sudah ditangani** — lihat [PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md)
+(gap analysis, 9/9 kategori selesai) dan [CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)
+(checklist eksekusi saat playbook ini benar-benar diterapkan ke produksi nyata nanti).
 
 **Dikelola oleh:** [alidjator](https://github.com/alidjator) — pertanyaan lewat
 alidjator@gmail.com atau [issue di repo ini](https://github.com/alidjator/zammad-upgrade-docs/issues).
+
+## Mulai di sini (orientasi ~10 menit)
+
+Baru pertama kali buka repo ini (termasuk kalau ini "diri sendiri di masa depan" yang
+lupa detailnya)? Urutan baca yang disarankan:
+
+1. **Konteks** (di bawah) — pahami dulu ini sandbox riset, bukan produksi nyata.
+2. **Status** (tabel di bawah) — lihat hop mana yang sudah selesai, cek link ke
+   `NOTES.md` (insiden nyata + fix), `CHANGELOG.md` (perubahan skema/environment),
+   `RUNBOOK.md` (langkah eksekusi tervalidasi) untuk hop yang menarik.
+3. **[ROADMAP.md](ROADMAP.md)** — matriks requirement per versi + pelajaran operasional
+   lintas-hop (index ES stale, kejutan versi dependency, dsb).
+4. **[DOWNTIME_ESTIMATE.md](DOWNTIME_ESTIMATE.md)** — kalau butuh angka durasi nyata
+   untuk perencanaan.
+5. Mau eksekusi ulang salah satu hop? Buka `hop-X-to-Y/RUNBOOK.md` langsung — sudah
+   berisi langkah final yang terbukti berhasil, tidak perlu baca `NOTES.md` dulu
+   kecuali ingin tahu detail insiden di baliknya.
+6. Mau menerapkan ke produksi nyata? Baca
+   **[PRODUCTION_READINESS_TODO.md](PRODUCTION_READINESS_TODO.md)** dan
+   **[CUTOVER_CHECKLIST.md](CUTOVER_CHECKLIST.md)** dulu sebelum RUNBOOK per hop.
 
 ## Skill set yang dibutuhkan
 
