@@ -1,7 +1,7 @@
 # Runbook — Hop 6.0 → 7.0
 
 Langkah final yang terbukti benar di staging, hasil saringan dari [NOTES.md](NOTES.md)
-(8 insiden ditemukan & diperbaiki selama eksekusi nyata). Ikuti urutan ini persis jika
+(9 insiden ditemukan & diperbaiki selama eksekusi nyata). Ikuti urutan ini persis jika
 mengulang hop ini dari awal.
 
 **Prasyarat:** hop 5.0→6.0 sudah selesai & tervalidasi, migrasi PostgreSQL sudah
