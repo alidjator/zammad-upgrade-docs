@@ -4,8 +4,8 @@ Langkah final yang terbukti benar, hasil saringan dari [NOTES.md](NOTES.md) (yan
 seluruh proses debugging, termasuk 3 bug versi-gap MariaDB yang akhirnya diatasi dengan
 pindah database, bukan ditambal satu-satu).
 
-**Estimasi total waktu eksekusi:** ~4,5 jam (didominasi reindex ES ~4,3 jam). Lihat juga
-[../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md).
+**Estimasi total waktu eksekusi:** ~5,4 jam (build 62m2s + migrasi 1m31s + reindex ES
+~4,3 jam, angka terkoreksi — lihat [../DOWNTIME_ESTIMATE.md](../DOWNTIME_ESTIMATE.md)).
 
 **PENTING — prasyarat database:** hop ini **WAJIB** jalan di atas MariaDB era 2021-2023
 (10.6/10.11), BUKAN MariaDB 11.x. Jika dijalankan di MariaDB 11.x, kemungkinan besar akan
